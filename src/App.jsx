@@ -22,6 +22,7 @@ import Reset from "./pages/reset-password.jsx";
 import WhoWeAre from "./pages/who-we-are.jsx";
 import MembershipPackages from "./pages/membership-packages.jsx";
 import NotFound from "./pages/not-found.jsx";
+// import Footer from "./components/footer.jsx";
 
 
 const router = createBrowserRouter(
