@@ -8,11 +8,11 @@ import "swiper/css/pagination";
 import { Link } from "react-router";
 
 
-import hero1 from "../assets/images/hero1.png";
-import hero2 from "../assets/images/hero.png";
-import hero3 from "../assets/images/hero1.png";
-import hero4 from "../assets/images/hero.png";
-import hero5 from "../assets/images/hero1.png";
+import hero1 from "../assets/images/hero.jpg";
+import hero2 from "../assets/images/hero1.jpg";
+import hero3 from "../assets/images/hero2.jpg";
+import hero4 from "../assets/images/hero3.jpg";
+import hero5 from "../assets/images/hero4.jpg";
 
 const HeroSection = () => {
   const slides = [hero1, hero2, hero3, hero4, hero5];
