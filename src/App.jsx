@@ -22,7 +22,13 @@ import Reset from "./pages/reset-password.jsx";
 import WhoWeAre from "./pages/who-we-are.jsx";
 import MembershipPackages from "./pages/membership-packages.jsx";
 import NotFound from "./pages/not-found.jsx";
-// import Footer from "./components/footer.jsx";
+import FormA from "./pages/onboarding-forms/form-a.jsx";
+import FormB from "./pages/onboarding-forms/form-b.jsx";
+import FormC from "./pages/onboarding-forms/form-c.jsx";
+import FormD from "./pages/onboarding-forms/form-d.jsx";
+import FormE from "./pages/onboarding-forms/form-e.jsx";
+import FormF from "./pages/onboarding-forms/form-f.jsx";
+import Terms from "./pages/terms.jsx";
 
 
 const router = createBrowserRouter(
@@ -47,6 +53,13 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<Signup />} />
       <Route path="/reset" element={<Reset />} />
       <Route path="/membership" element={<MembershipPackages />} />
+      <Route path="/onboarding/form-a" element={<FormA />} />
+      <Route path="/onboarding/form-b" element={<FormB />} />
+      <Route path="/onboarding/form-c" element={<FormC />} />
+      <Route path="/onboarding/form-d" element={<FormD />} />
+      <Route path="/onboarding/form-e" element={<FormE />} />
+      <Route path="/onboarding/form-f" element={<FormF />} />
+      <Route path="/terms" element={<Terms />} />
       <Route path="*" element={<NotFound />} />
     </>
   )
