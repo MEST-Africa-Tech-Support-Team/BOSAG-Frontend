@@ -16,8 +16,8 @@ const Navbar = () => {
       dropdown: [
         { name: "Industry Overview", path: "/about/industry-overview" },
         { name: "Who We Are", path: "/about/who-we-are" },
-        { name: "Board Members", path: "/about/board-members" },
-        { name: "Governance", path: "/about/governance" },
+        { name: "Governance Structure", path: "/about/governance-structure" },
+        { name: "Board & Management", path: "/about/board-management" },
       ],
     },
     { name: "Sector Reports", path: "/sector-reports" },
@@ -33,19 +33,14 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav
-      className="bg-white shadow-sm sticky top-0 z-50"
-      role="navigation"
-      aria-label="Main navigation"
-    >
+    <nav className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 sm:px-10">
         <div className="flex items-center justify-between h-16">
-         
-          <Link to="/" className="flex items-center" aria-label="BOSAG Home">
-            <img src={Logo} alt="BOSAG" className="h-25 sm:h-35" />
+
+          <Link to="/" className="flex items-center">
+            <img src={Logo} alt="BOSAG" className="h-20 sm:h-30" />
           </Link>
 
-          
           <ul className="hidden md:flex items-center gap-8 text-[16px] font-medium">
             {navLinks.map((link) => (
               <li
@@ -67,28 +62,20 @@ const Navbar = () => {
                   {link.dropdown && <ChevronDown size={18} />}
                 </Link>
 
+                {/*  About Dropdown */}
                 {link.dropdown && showAboutDropdown && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 border border-blue-100">
-                    <ul role="menu">
+                  <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-[#f8f9ff] shadow-md text-center z-50">
+                    <ul className="divide-y divide-[#191970]/30">
                       {link.dropdown.map((item) => (
-                        <li
-                          key={item.name}
-                          role="none"
-                          className="border-b border-blue-100 last:border-b-0"
-                        >
+                        <li key={item.name}>
                           <Link
                             to={item.path}
                             onClick={() => handleNavClick(item.path)}
-                            role="menuitem"
-                            className={`block px-4 py-3 text-[15px] transition-colors ${
-                              isActive(item.path)
-                                ? "text-[#0a0a3a] font-semibold"
-                                : "text-[#191970]"
+                            className={`block py-3 text-[15px] text-[#191970] hover:bg-[#f8f9ff] transition-colors ${
+                              isActive(item.path) ? "font-semibold" : ""
                             }`}
                           >
-                            <span className="block border-b-2 border-[#0066ff] pb-1">
-                              {item.name}
-                            </span>
+                            {item.name}
                           </Link>
                         </li>
                       ))}
@@ -99,14 +86,13 @@ const Navbar = () => {
             ))}
           </ul>
 
-          
-          <Link to="/get-involved" className="hidden md:block ml-4">
+          <Link to="/onboarding/form-a" className="hidden md:block ml-4">
             <button className="bg-[#191970] hover:bg-[#0a0a3a] text-white text-[15px] font-medium px-6 py-2.5 rounded-lg transition-colors">
               GET INVOLVED
             </button>
           </Link>
 
-          
+          {/* Mobile Menu Toggle */}
           <button
             className="md:hidden text-[#191970]"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -116,7 +102,6 @@ const Navbar = () => {
           </button>
         </div>
 
-      
         {menuOpen && (
           <div className="md:hidden mt-2 bg-white border-t border-gray-200 rounded-b-lg shadow-md">
             <ul className="flex flex-col text-[16px] font-medium">
@@ -134,9 +119,8 @@ const Navbar = () => {
                     {link.name}
                   </Link>
 
-                  
                   {link.dropdown && (
-                    <div className="pl-8">
+                    <div className="pl-8 border-l border-[#191970]/30">
                       {link.dropdown.map((item) => (
                         <Link
                           key={item.name}
@@ -156,7 +140,7 @@ const Navbar = () => {
                 </li>
               ))}
               <li className="px-6 py-4">
-                <Link to="/get-involved" onClick={() => setMenuOpen(false)}>
+                <Link to="/onboarding/form-a" onClick={() => setMenuOpen(false)}>
                   <button className="w-full bg-[#191970] hover:bg-[#0a0a3a] text-white text-[15px] font-medium px-6 py-2 rounded-lg transition-colors">
                     GET INVOLVED
                   </button>
