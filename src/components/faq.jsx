@@ -46,10 +46,7 @@ const FAQSection = () => {
     <section className="py-16 px-6 bg-gray-50" aria-labelledby="faq-heading">
       <div className="max-w-3xl mx-auto">
         <header className="text-center mb-12">
-          <h2
-            id="faq-heading"
-            className="text-4xl font-bold text-[#191970] mb-3"
-          >
+          <h2 id="faq-heading" className="text-4xl font-bold text-[#191970] mb-3">
             FAQs
           </h2>
           <p className="text-gray-600">
@@ -58,36 +55,45 @@ const FAQSection = () => {
         </header>
 
         <div className="space-y-4">
-          {faqs.map((faq, index) => (
-            <article
-              key={index}
-              className="bg-white rounded-lg border border-gray-200 overflow-hidden transition-shadow hover:shadow-md"
-            >
-              <button
-                onClick={() => toggleFAQ(index)}
-                className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors"
-                aria-expanded={openIndex === index}
-                aria-controls={`faq-answer-${index}`}
+          {faqs.map((faq, index) => {
+            const isOpen = openIndex === index;
+            return (
+              <article
+                key={index}
+                className={`rounded-lg border border-gray-200 overflow-hidden transition-all duration-300 ${
+                  isOpen
+                    ? "bg-indigo-50 shadow-md border-indigo-200"
+                    : "bg-white hover:shadow-md"
+                }`}
               >
-                <span className="text-sm text-gray-800 pr-4 flex-1">
-                  {index + 1}. {faq.question}
-                </span>
-                <span className="flex-shrink-0 text-[#191970]">
-                  {openIndex === index ? <Minus size={20} /> : <Plus size={20} />}
-                </span>
-              </button>
-
-              {openIndex === index && (
-                <div
-                  id={`faq-answer-${index}`}
-                  className="px-5 pb-5 pt-2 text-gray-700 text-sm leading-relaxed border-t border-gray-100"
-                  role="region"
+                <button
+                  onClick={() => toggleFAQ(index)}
+                  className={`w-full flex items-center justify-between p-5 text-left transition-colors ${
+                    isOpen ? "text-[#191970] font-semibold" : "text-gray-800"
+                  }`}
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${index}`}
                 >
-                  {faq.answer}
-                </div>
-              )}
-            </article>
-          ))}
+                  <span className="text-sm pr-4 flex-1">
+                    {index + 1}. {faq.question}
+                  </span>
+                  <span className="flex-shrink-0 text-[#191970]">
+                    {isOpen ? <Minus size={20} /> : <Plus size={20} />}
+                  </span>
+                </button>
+
+                {isOpen && (
+                  <div
+                    id={`faq-answer-${index}`}
+                    className="px-5 pb-5 pt-2 text-gray-700 text-sm leading-relaxed border-t border-indigo-100"
+                    role="region"
+                  >
+                    {faq.answer}
+                  </div>
+                )}
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
