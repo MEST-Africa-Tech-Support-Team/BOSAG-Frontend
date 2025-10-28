@@ -1,13 +1,17 @@
 import React from "react";
 import { Check, Crown } from "lucide-react";
+import Navbar from "./navbar";
+import Footer from "./footer";
 
 const MembershipCategories = () => {
   return (
+    <>
+    <Navbar/>
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <div className="bg-white shadow-md rounded-2xl p-6 max-w-md border border-gray-100">
         {/* Header Section */}
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-500 flex items-center justify-center shadow-sm">
+          <div className="w-10 h-10 rounded-lg bg-linear-to-r from-yellow-400 to-yellow-500 flex items-center justify-center shadow-sm">
             <Crown className="w-5 h-5 text-white fill-white" />
           </div>
           <h3 className="text-xl font-semibold text-[#1c1c57]">
@@ -44,6 +48,8 @@ const MembershipCategories = () => {
         </ul>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

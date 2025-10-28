@@ -22,7 +22,8 @@ import Reset from "./pages/reset-password.jsx";
 import WhoWeAre from "./pages/who-we-are.jsx";
 import MembershipPackages from "./pages/membership-packages.jsx";
 import NotFound from "./pages/not-found.jsx";
-// import Footer from "./components/footer.jsx";
+
+
 
 
 const router = createBrowserRouter(
@@ -47,7 +48,9 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<Signup />} />
       <Route path="/reset" element={<Reset />} />
       <Route path="/membership" element={<MembershipPackages />} />
+      <Route path="/governance" element={<Governance/>} />
       <Route path="*" element={<NotFound />} />
+      
     </>
   )
 );
