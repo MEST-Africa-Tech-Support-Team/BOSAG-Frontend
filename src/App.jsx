@@ -22,6 +22,8 @@ import Reset from "./pages/reset-password.jsx";
 import WhoWeAre from "./pages/who-we-are.jsx";
 import MembershipPackages from "./pages/membership-packages.jsx";
 import NotFound from "./pages/not-found.jsx";
+
+
 import FormA from "./pages/onboarding-forms/form-a.jsx";
 import FormB from "./pages/onboarding-forms/form-b.jsx";
 import FormC from "./pages/onboarding-forms/form-c.jsx";
@@ -53,6 +55,7 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<Signup />} />
       <Route path="/reset" element={<Reset />} />
       <Route path="/membership" element={<MembershipPackages />} />
+      <Route path="/governance" element={<Governance/>} />
       <Route path="/onboarding/form-a" element={<FormA />} />
       <Route path="/onboarding/form-b" element={<FormB />} />
       <Route path="/onboarding/form-c" element={<FormC />} />
@@ -61,6 +64,7 @@ const router = createBrowserRouter(
       <Route path="/onboarding/form-f" element={<FormF />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="*" element={<NotFound />} />
+      
     </>
   )
 );
