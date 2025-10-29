@@ -1,7 +1,5 @@
 import React from "react";
-import { Check, Crown } from "lucide-react";
-import Navbar from "./navbar";
-import Footer from "./footer";
+import { useNavigate } from "react-router";
 import {
   Crown,
   Shield,
@@ -11,7 +9,8 @@ import {
   Eye,
   Check,
 } from "lucide-react";
-import { useNavigate } from "react-router";
+import Navbar from "./navbar";
+import Footer from "./footer";
 
 const categories = [
   {
@@ -93,70 +92,60 @@ const MembershipCategories = () => {
 
   return (
     <>
-    <Navbar/>
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
-      <div className="bg-white shadow-md rounded-2xl p-6 max-w-md border border-gray-100">
-        {/* Header Section */}
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-lg bg-linear-to-r from-yellow-400 to-yellow-500 flex items-center justify-center shadow-sm">
-            <Crown className="w-5 h-5 text-white fill-white" />
+      <Navbar />
+      <section className="py-20 bg-gray-50 min-h-screen">
+        <div className="max-w-6xl mx-auto px-6">
+          {/* Header */}
+          <div className="text-center mb-14">
+            <h2 className="text-4xl font-bold text-[#1c1c57] mb-4">
+              Membership Tiers & Categories
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+              Choose the membership tier that best fits your organization's
+              profile and needs.
+            </p>
           </div>
-          <h3 className="text-xl font-semibold text-[#1c1c57]">
-            Platinum Full Members
-          </h3>
-        </div>
-    <section className="py-16 bg-gray-50">
-      <div className="max-w-6xl mx-auto px-6">
-        <header className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-[#1c1c57] mb-3">
-            Membership Tiers & Categories
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Choose the membership tier that best fits your organization’s
-            profile and needs
-          </p>
-        </header>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {categories.map((cat, index) => (
-            <article
-              key={index}
-              onClick={() => navigate("/membership")}
-              className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 cursor-pointer transition-transform hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div
-                  className={`w-10 h-10 rounded-lg bg-gradient-to-r ${cat.gradient} flex items-center justify-center shadow-sm`}
-                >
-                  {cat.icon}
+          {/* Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {categories.map((cat, index) => (
+              <article
+                key={index}
+                onClick={() => navigate("/membership")}
+                className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 cursor-pointer transition-all hover:-translate-y-2 hover:shadow-2xl hover:border-[#191970]/40"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div
+                    className={`w-10 h-10 rounded-lg bg-gradient-to-r ${cat.gradient} flex items-center justify-center shadow-sm`}
+                  >
+                    {cat.icon}
+                  </div>
+                  <h3 className="text-lg font-semibold text-[#1c1c57]">
+                    {cat.title}
+                  </h3>
                 </div>
-                <h3 className="text-lg font-semibold text-[#1c1c57]">
-                  {cat.title}
-                </h3>
-              </div>
 
-              <p className="text-gray-600 text-sm mb-5 leading-relaxed">
-                {cat.description}
-              </p>
+                <p className="text-gray-600 text-sm mb-5 leading-relaxed">
+                  {cat.description}
+                </p>
 
-              <ul className="space-y-2 text-sm text-gray-700">
-                {cat.points.map((point, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full bg-orange-500 text-white mt-[2px]">
-                      <Check className="w-3 h-3" />
-                    </div>
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
+                <ul className="space-y-2 text-sm text-gray-700">
+                  {cat.points.map((point, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full bg-orange-500 text-white mt-[2px]">
+                        <Check className="w-3 h-3" />
+                      </div>
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
         </div>
-      </div>
-    </div>
-    <Footer/>
+      </section>
+      <Footer />
     </>
-    </section>
   );
 };
 
