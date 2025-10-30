@@ -9,8 +9,7 @@ import {
   Eye,
   Check,
 } from "lucide-react";
-import Navbar from "./navbar";
-import Footer from "./footer";
+
 
 const categories = [
   {
@@ -92,11 +91,10 @@ const MembershipCategories = () => {
 
   return (
     <>
-      <Navbar />
-      <section className="py-20 bg-gray-50 min-h-screen">
+      <section className="py-10 bg-gray-50 min-h-screen">
         <div className="max-w-6xl mx-auto px-6">
           {/* Header */}
-          <div className="text-center mb-14">
+          <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-[#1c1c57] mb-4">
               Membership Tiers & Categories
             </h2>
@@ -144,7 +142,7 @@ const MembershipCategories = () => {
           </div>
         </div>
       </section>
-      <Footer />
+     
     </>
   );
 };

@@ -56,8 +56,8 @@ const StrategicPillars = () => {
               key={pillar.id}
               className="group flex flex-col items-center text-center bg-white rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg p-4"
             >
-              
-              <div className="bg-orange-500 p-5 rounded-full flex items-center justify-center mb-4 shadow-md group-hover:brightness-110 transition-all duration-300">
+
+              <div className="w-12 h-12 flex items-center justify-center rounded-full bg-orange-500 mb-5 shadow-md group-hover:brightness-110 transition-all duration-300">
                 {pillar.icon}
               </div>
 
