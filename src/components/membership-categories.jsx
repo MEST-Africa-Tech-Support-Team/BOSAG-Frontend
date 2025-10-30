@@ -10,7 +10,6 @@ import {
   Check,
 } from "lucide-react";
 
-
 const categories = [
   {
     title: "Platinum Full Members",
