@@ -9,8 +9,8 @@ const AboutSection = () => {
 
           {/* Left Content */}
           <article>
-            <h2 className="text-xl md:text-2xl font-extrabold text-[#191970] mb-3">
-              About Us: <span className="text-[#191970] font-extrabold">Driving Ghana's Digital Future</span>
+            <h2 className="text-xl md:text-2xl font-bold text-[#191970] mb-3">
+              About Us: <span className="text-[#191970] font-bold">Driving Ghana's Digital Future</span>
             </h2>
 
             <p className="text-[#000] font-semibold text-sm leading-relaxed mb-4">
