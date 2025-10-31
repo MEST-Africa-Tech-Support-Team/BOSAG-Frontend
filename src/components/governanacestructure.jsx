@@ -1,6 +1,5 @@
 import React from 'react';
 import { Download } from 'lucide-react';
-import Bosag from "../document/Bosag-Governance-Structure.pdf";
 
 export default function GovernanceStructure() {
   return (
@@ -142,7 +141,7 @@ export default function GovernanceStructure() {
 
         {/* Download Button */}
         <div className="flex justify-center relative mt-12">
-            <a href={Bosag} download>
+            <a href="/Bosag_Governance_Structure.pdf" download="Bosag_Governance_Structure.pdf">
           <button className="bg-orange-500 hover:bg-orange-600 text-white absolute top-200 left-120  font-bold py-4 px-12 rounded-lg transition duration-300 inline-flex items-center gap-3 shadow-lg">
             <Download className="w-5 h-5" />
             Download Document
