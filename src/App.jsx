@@ -36,7 +36,7 @@ import Terms from "./pages/terms.jsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-     
+       
       <Route path="/" element={<Home />} />
 
       
