@@ -2,8 +2,8 @@ import React from 'react'
 import { Users, Shield, Briefcase, Lightbulb, TrendingUp, Download ,UserCheck, Network} from 'lucide-react';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
-import GovernanceStructure from '../components/governanacestructure';
-import MembershipAccountability from '../components/membershipaccountability';
+import GovernanceStructure from '../components/governace-structure';
+import MembershipAccountability from '../components/membership-accountability';
 
 const governance = () => {
   const components = [
