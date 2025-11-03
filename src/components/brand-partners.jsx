@@ -87,7 +87,7 @@ const BrandPartners = () => {
        
         <header className="mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-[#191970] mb-2">
-            Brand Partners
+            Members & Collaborators
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
             Trusted by leading brands to deliver exceptional experiences and drive
@@ -95,7 +95,7 @@ const BrandPartners = () => {
           </p>
         </header>
 
-       
+
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-5 items-center justify-center">
           {brands.map((brand) => (
             <a
@@ -113,6 +113,31 @@ const BrandPartners = () => {
             </a>
           ))}
         </div>
+
+         <header className="mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#191970] mb-2">
+            Strategic Partners
+          </h2>
+        </header>
+
+         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-5 items-center justify-center">
+          {brands.map((brand) => (
+            <a
+              key={brand.id}
+              href={brand.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105 hover:bg-gray-50 group"
+            >
+              <img
+                src={brand.logo}
+                alt={brand.name}
+                className="w-26 h-10 object-contain transition-all duration-300 group-hover:brightness-110"
+              />
+            </a>
+          ))}
+        </div>
+
       </div>
     </section>
   );
