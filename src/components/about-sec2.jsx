@@ -1,20 +1,19 @@
 import React from "react";
-import TeamImage from "../assets/images/hero7.jpg"; // replace with your image path
+import TeamImage from "../assets/images/hero7.jpg"; 
 
 const AboutSection = () => {
   return (
     <section className="bg-white py-10 px-6 sm:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto">
-        {/* Centered heading spanning both columns */}
+
         <header className="text-center mb-12">
           <h2 className="text-[#1c1c57] text-2xl sm:text-3xl lg:text-4xl font-bold">
             Positioning Ghana as the Premier Digital Services Hub
           </h2>
         </header>
 
-        {/* Two-column layout: text (left) + image (right) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-          {/* LEFT: paragraphs + stats */}
+
           <div>
             <p className="text-gray-700 leading-relaxed mb-6 text-[15px] sm:text-base">
               BOSAG’s mandate extends far beyond traditional Business Process
@@ -32,7 +31,7 @@ const AboutSection = () => {
               international investment in the digital economy.
             </p>
 
-            {/* STATS: horizontal on desktop, wraps on small screens */}
+
             <div className="flex flex-wrap gap-8 md:gap-12">
               <div>
                 <p className="text-orange-500 text-2xl sm:text-3xl font-bold">
@@ -53,7 +52,6 @@ const AboutSection = () => {
             </div>
           </div>
 
-          {/* RIGHT: image */}
           <div className="flex justify-center md:justify-end">
             <img
               src={TeamImage}
