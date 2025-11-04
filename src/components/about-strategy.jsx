@@ -58,12 +58,11 @@ const StrategicPlan = () => {
   return (
     <section className="bg-white py-10 px-6 sm:px-10 lg:px-24 text-center">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
+
         <h2 className="text-[#1c1c57] text-2xl sm:text-3xl lg:text-4xl font-bold mb-10">
           BOSAG 5-Year Strategic Plan (2025–2030)
         </h2>
 
-        {/* Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 justify-center">
           {strategies.map((item) => (
             <div
@@ -86,16 +85,16 @@ const StrategicPlan = () => {
           ))}
         </div>
 
-        {/* Download Button */}
         <div className="mt-12">
-      <a
-        // href={StrategicPlanPDF}
-        download="BOSAG_5_Year_Strategic_Plan_2025-2030.pdf"
-        className="flex items-center justify-center gap-2 mx-auto bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-3 rounded-md shadow-md transition-colors w-fit"
-      >
-        <Download size={18} /> Download Full Strategic Plan (PDF)
-      </a>
-    </div>
+          <a
+            href="/BOSAG 5 YR STRATEGIC PLAN_final.pdf"
+            download="BOSAG 5 YR STRATEGIC PLAN_final.pdf"
+            className="flex items-center justify-center gap-2 mx-auto bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-3 rounded-md shadow-md transition-colors w-fit"
+          >
+            <Download size={18} /> Download Full Strategic Plan (PDF)
+          </a>
+
+        </div>
       </div>
 
       {/* Modal */}

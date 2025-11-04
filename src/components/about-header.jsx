@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
-import BackgroundImage from "../assets/images/hero.jpg"; // replace with your actual banner background image
+import BackgroundImage from "../assets/images/about.png"; 
 
 const AboutHeader = () => {
   return (
@@ -8,13 +8,13 @@ const AboutHeader = () => {
       className="relative bg-cover bg-center text-white"
       style={{
         backgroundImage: `url(${BackgroundImage})`,
-        minHeight: "30vh", // reduced from 60vh to 30vh for a compact banner feel
+        minHeight: "20vh",
       }}
     >
-      {/* Overlay for better text contrast */}
+     
       <div className="absolute inset-0 bg-[#0a0a3a]/70"></div>
 
-      {/* Content */}
+     
       <div className="relative z-10 flex flex-col justify-center items-start px-6 sm:px-12 lg:px-24 py-12 sm:py-16 max-w-4xl">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 leading-snug">
           Industry Overview Of BOSAG
