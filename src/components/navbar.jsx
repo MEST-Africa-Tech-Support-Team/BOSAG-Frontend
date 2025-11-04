@@ -16,8 +16,8 @@ const Navbar = () => {
       dropdown: [
         { name: "Industry Overview", path: "/about/industry-overview" },
         { name: "Who We Are", path: "/about/who-we-are" },
-        { name: "Governance Structure", path: "/about/governance-structure" },
-        { name: "Board & Management", path: "/about/board-management" },
+        { name: "Governance Structure", path: "/about/governance" },
+        { name: "Board & Management", path: "/about/board" },
       ],
     },
     { name: "Sector Reports", path: "/sector-reports" },
