@@ -1,19 +1,18 @@
  import React from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { Link } from "react-router";
-import logof from "../assets/images/logof.png"
+import image from "../assets/images/image.png";
 
 export default function Footer() {
   return (
     <footer className="bg-[#191970] text-gray-300 py-12 px-6 md:px-16">
       <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-8 border-gray-500 pb-10">
         <div >
-          {/* <img src={logof} alt="BOSAG Logo" className="w-32 mb-4" /> */}
-          <div className="mt-19">
-          <p className="text-sm leading-relaxed">
-            Leading Ghana's Outsourcing Future
-          </p>
-          <p className="text-sm mt-3 ">
+          <img src={image} alt="BOSAG Logo" className="w-32 mb-4" />
+          <div className="">
+            
+          <p className="text-sm mt-7">
+             Leading Ghana's Outsourcing Future <br className="mb-2"/>
             The authoritative voice for Ghana's Business Process Outsourcing
             sector, driving transformation and growth.
           </p>

@@ -2,11 +2,7 @@ import React from 'react'
 import { Users, Shield, Briefcase, Lightbulb, TrendingUp, Download ,UserCheck, Network} from 'lucide-react';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
-<<<<<<< HEAD
-import GovernanceStructure from '../components/governace-structure';
-=======
 import GovernanceStructure from '../components/governance-structure';
->>>>>>> 7e97b50e489305b1b19633e38b8c45178357d31e
 import MembershipAccountability from '../components/membership-accountability';
 
 const governance = () => {
