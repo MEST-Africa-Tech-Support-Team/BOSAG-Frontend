@@ -5,36 +5,117 @@ const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState(null);
 
   const faqs = [
+    // ABOUT BOSAG
     {
-      question: "What is BOSAG and what is its primary role?",
+      question: "What is BOSAG?",
       answer:
-        "BOSAG (Banking and Other Financial Services Association Ghana) is a premier industry association representing banks, insurance companies, and other financial institutions in Ghana. Our primary role is to advocate for industry interests, promote best practices, facilitate policy dialogue with regulators, and support the development of a robust financial services sector that serves the needs of all Ghanaians.",
+        "BOSAG (Business Outsourcing Services Association of Ghana) is the national apex body representing Ghana’s Business Process Outsourcing (BPO), IT Enabled Services (ITES), and Global Business Services (GBS) sector.",
     },
     {
-      question: "What is BOSAG's main strategic goal for the sector?",
+      question: "What is BOSAG’s mission?",
       answer:
-        "Our main strategic goal is to foster a competitive, innovative, and inclusive financial services sector in Ghana. We aim to enhance industry collaboration, drive digital transformation, promote financial literacy, strengthen regulatory frameworks, and position Ghana as a leading financial hub in West Africa through sustainable growth and development initiatives.",
+        "To empower global commerce by facilitating trade and investment in BPO, ITES, and GBS, while advocating for public-sector support and sector-wide development.",
     },
     {
-      question: "How is BOSAG structured and governed?",
+      question: "What is BOSAG’s vision?",
+      answer: "To transform Ghana into Africa’s premier services hub and economic gateway.",
+    },
+
+    // MEMBERSHIP
+    {
+      question: "Who can become a member of BOSAG?",
       answer:
-        "BOSAG operates under a democratic governance structure with a Board of Directors elected from member institutions. The organization is structured into various committees including Policy and Advocacy, Professional Development, and Member Relations. Our governance framework ensures transparency, accountability, and representation of diverse stakeholder interests within the financial services industry.",
+        "Membership is open to companies, institutions, and individuals operating in or supporting the BPO/ITES/GBS sector in Ghana.",
     },
     {
-      question: "How can my company become a member?",
+      question: "What are the membership categories?",
       answer:
-        "Companies can become members by meeting our eligibility criteria, which includes being a licensed financial institution operating in Ghana. The membership process involves submitting an application form, providing required documentation including business registration and regulatory licenses, paying membership fees, and approval by the Board of Directors. Visit our Membership page or contact our secretariat for detailed information.",
+        "BOSAG operates six membership tiers: Platinum Full Members, Gold Full Members, Vendors & Affiliate Members, Start-ups & Associate Members, Government Members, and Honorary & Observer Members.",
     },
     {
-      question:
-        "Which membership tiers have voting rights in the General Assembly?",
+      question: "What benefits do members receive?",
       answer:
-        "Full corporate members have voting rights in the General Assembly. This includes banks, insurance companies, and primary financial institutions that hold full membership status. Associate members, while enjoying most benefits of membership including networking and professional development opportunities, do not have voting rights in the General Assembly but may participate in committee work and industry initiatives.",
+        "Benefits include sector visibility, access to market intelligence, participation in events, advocacy representation, shared resources, and executive education.",
     },
     {
-      question: "When will the new website and member portal be fully live?",
+      question: "Do all members have voting rights?",
       answer:
-        "The new website and member portal are currently in the final phases of development and testing. We anticipate a full launch in the coming quarter. The portal will provide members with exclusive access to industry reports, networking tools, event management, professional development resources, and real-time industry data. Members will receive detailed onboarding materials and training sessions upon launch.",
+        "Only Platinum and Gold Full Members have voting rights at the General Assembly and are eligible for governance roles.",
+    },
+
+    // GOVERNANCE & LEADERSHIP
+    {
+      question: "How is BOSAG governed?",
+      answer:
+        "BOSAG’s governance structure includes the General Assembly, Governing Council, Executive Secretariat, Advisory Board, and Specialised Committees.",
+    },
+    {
+      question: "What is the role of the Governing Council?",
+      answer:
+        "The Council provides strategic leadership, approves budgets and plans, appoints the CEO, and ensures alignment with national and sectoral priorities.",
+    },
+    {
+      question: "Who leads BOSAG operationally?",
+      answer:
+        "The Executive Secretariat, headed by a full-time CEO, manages day-to-day operations, member services, stakeholder engagement, and programme delivery.",
+    },
+
+    // STRATEGIC FOCUS & SERVICES
+    {
+      question: "What are BOSAG’s strategic pillars?",
+      answer:
+        "Key pillars include Policy Advocacy, Skills Development, International Promotion, SME Capacity Building, and Research.",
+    },
+    {
+      question: "How does BOSAG support investment promotion?",
+      answer:
+        "Through global outreach campaigns, investor engagement, sector branding, and collaboration with partners like GIPC.",
+    },
+    {
+      question: "Does BOSAG offer training or certification?",
+      answer:
+        "Yes. BOSAG supports industry-aligned training, certification schemes, and partnerships with academic institutions.",
+    },
+
+    // COMPLIANCE & ETHICS
+    {
+      question: "Is BOSAG a legally registered entity?",
+      answer:
+        "Yes. BOSAG is registered as a non-profit company limited by guarantee under Ghana’s Companies Act, 2019 (Act 992).",
+    },
+    {
+      question: "What ethical standards does BOSAG uphold?",
+      answer:
+        "All members and leaders must adhere to BOSAG’s Code of Conduct, which includes principles of integrity, fairness, transparency, and compliance.",
+    },
+    {
+      question: "How are conflicts of interest managed?",
+      answer:
+        "Governance members must declare conflicts of interest. The Membership, Ethics & Governance Committee oversees compliance and disciplinary actions.",
+    },
+
+    // EVENTS & ENGAGEMENT
+    {
+      question: "What events does BOSAG host?",
+      answer:
+        "BOSAG hosts AGMs, Sector Dialogues, Training Workshops, the Ghana GBS/BPO Awards, and International Roadshows.",
+    },
+    {
+      question: "How can members participate in committees?",
+      answer:
+        "Members can join Specialised Committees aligned with BOSAG’s strategic pillars. Platinum and Gold Members may chair or vote; others may contribute as non-voting participants.",
+    },
+
+    // CONTACT & SUPPORT
+    {
+      question: "How can I contact BOSAG?",
+      answer:
+        "You can reach BOSAG via the contact form on www.bosag.org, or email the Secretariat directly at info@bosag.org.",
+    },
+    {
+      question: "How do I apply for membership?",
+      answer:
+        "Visit the membership section on the BOSAG website to complete the application form and submit required documentation.",
     },
   ];
 
@@ -43,18 +124,19 @@ const FAQSection = () => {
   };
 
   return (
-    <section className="py-16 px-6 bg-gray-50" aria-labelledby="faq-heading">
-      <div className="max-w-3xl mx-auto">
-        <header className="text-center mb-12">
-          <h2 id="faq-heading" className="text-4xl font-bold text-[#191970] mb-3">
+    <section className="py-12 px-4 bg-gray-50" aria-labelledby="faq-heading">
+      <div className="max-w-6xl mx-auto">
+        <header className="text-center mb-10">
+          <h2 id="faq-heading" className="text-3xl font-bold text-[#191970] mb-2">
             FAQs
           </h2>
-          <p className="text-gray-600">
-            Get quick answers to common questions about our platform.
+          <p className="text-gray-600 text-sm">
+            Get quick answers to common questions about BOSAG, membership, governance, and more.
           </p>
         </header>
 
-        <div className="space-y-4">
+        {/* 2-Column Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
@@ -62,30 +144,28 @@ const FAQSection = () => {
                 key={index}
                 className={`rounded-lg border border-gray-200 overflow-hidden transition-all duration-300 ${
                   isOpen
-                    ? "bg-indigo-50 shadow-md border-indigo-200"
-                    : "bg-white hover:shadow-md"
+                    ? "bg-indigo-50 shadow-sm border-indigo-200"
+                    : "bg-white hover:shadow-sm"
                 }`}
               >
                 <button
                   onClick={() => toggleFAQ(index)}
-                  className={`w-full flex items-center justify-between p-5 text-left transition-colors ${
-                    isOpen ? "text-[#191970] font-semibold" : "text-gray-800"
+                  className={`w-full flex items-center justify-between px-4 py-3 text-left transition-colors ${
+                    isOpen ? "text-[#191970] font-medium" : "text-gray-800"
                   }`}
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${index}`}
                 >
-                  <span className="text-sm pr-4 flex-1">
-                    {index + 1}. {faq.question}
-                  </span>
+                  <span className="text-sm pr-4 flex-1">{faq.question}</span>
                   <span className="flex-shrink-0 text-[#191970]">
-                    {isOpen ? <Minus size={20} /> : <Plus size={20} />}
+                    {isOpen ? <Minus size={18} /> : <Plus size={18} />}
                   </span>
                 </button>
 
                 {isOpen && (
                   <div
                     id={`faq-answer-${index}`}
-                    className="px-5 pb-5 pt-2 text-gray-700 text-sm leading-relaxed border-t border-indigo-100"
+                    className="px-4 pb-3 pt-1 text-gray-700 text-xs leading-relaxed border-t border-indigo-100"
                     role="region"
                   >
                     {faq.answer}

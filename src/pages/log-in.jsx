@@ -143,7 +143,7 @@ export default function BosagLoginPage() {
             <div className="text-center mt-6">
               <p className="text-gray-600">
                 Don't have an account?{' '}
-                <a href="#" className="text-[#191970] hover:text-indigo-700 font-semibold">
+                <a href="/signup" className="text-[#191970] hover:text-indigo-700 font-semibold">
                   Sign up
                 </a>
               </p>
