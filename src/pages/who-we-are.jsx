@@ -73,16 +73,17 @@ export default function WhoWeAre() {
   return (
     <>
     <Navbar/>
-    <section className="py-16 bg-gray-50">
+    <section className="">
       {/* Header */}
-      <header className="text-center mb-14">
-        <h2 className="text-3xl md:text-4xl font-bold text-[#1c1c57]">
-          Who We Are: Ghana's Gateway to Global{" "}
-          <span className="text-[#F86208] underline decoration-orange-500/40">
-             Services
-          </span>
-        </h2>
-      </header>
+      <div className="text-center py-10 bg-white">
+      <h2 className="text-2xl md:text-4xl font-bold text-[#131663]">
+        Who We Are: Ghana&apos;s Gateway to{" "}
+        <span className="text-[#FF7A00] relative inline-block">
+          Global Services
+          <span className="absolute left-0 right-0 -bottom-1 mx-auto w-10 h-[3px] bg-[#FF7A00] rounded-full"></span>
+        </span>
+      </h2>
+    </div>
 
       {/* Vision & Mission */}
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 mb-20 px-6">
@@ -136,13 +137,13 @@ export default function WhoWeAre() {
       </div>
 
       {/* CTA Section */}
-      <div className="text-center">
+      <div className="text-center ">
         <h4 className="text-xl font-semibold text-[#1c1c57] mb-2">
           Ready to drive the future of Ghana's GBS sector?
         </h4>
         <p className="text-gray-600 mb-6">Join the unified voice.</p>
 
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center mb-10 gap-4">
           <button className="bg-[#F86208] hover:bg-orange-600 text-white px-6 py-2 rounded-lg shadow-md transition">
             Join BOSAG
           </button>

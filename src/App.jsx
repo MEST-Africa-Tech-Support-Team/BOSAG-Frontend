@@ -26,6 +26,7 @@ import WhoWeAre from "./pages/who-we-are.jsx";
 import MembershipPackages from "./pages/membership-packages.jsx";
 import SectorReport from "./pages/sector-report.jsx";
 import NotFound from "./pages/not-found.jsx";
+import BosagMembership from "./pages/bosag-membership.jsx";
 
 
 import DashboardHome from "./pages/dashboard/index.jsx";
@@ -76,6 +77,7 @@ const router = createBrowserRouter(
       <Route path="/onboarding/form-f" element={<FormF />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="*" element={<NotFound />} />
+      <Route path="/bosagmembership" element={<BosagMembership />} />
       
     </Route>
   )
