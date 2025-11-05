@@ -27,17 +27,6 @@ import banner24 from "../assets/images/logos/NPONTU.png";
 import banner25 from "../assets/images/logos/REMOTOWN.png";
 import banner26 from "../assets/images/logos/Teleperformance.png";
 
-// import banner27 from "../assets/images/logos/GDCL.png";
-// import banner28 from "../assets/images/logos/IIPGH.png";
-// import banner29 from "../assets/images/logos/GIPC_2.png";
-// import banner30 from "../assets/images/logos/GENESIS.png";
-// import banner31 from "../assets/images/logos/GENERATION GHANA.png";
-// import banner32 from "../assets/images/logos/GFZA.png";
-// import banner33 from "../assets/images/logos/GDC.jpg";
-// import banner34 from "../assets/images/logos/MASTERCARD.png";
-// import banner35 from "../assets/images/logos/MOC.jpg";
-// import banner36 from "../assets/images/logos/INVEST FOR JOBS.png";
-// import banner37 from "../assets/images/logos/KfW_RGB.jpg";
 
 const Partners = () => {
   // 👇 Split into two groups
@@ -68,20 +57,6 @@ const Partners = () => {
     { id: 24, logo: banner23, name: "Mobex" },
   ];
 
-//   const strategicPartners = [
-//     { id: 1, logo: banner33, name: "GDC" },
-//     { id: 2, logo: banner28, name: "IIPGH" },
-//     { id: 3, logo: banner8, name: "24H Economy" },
-//     { id: 4, logo: banner34, name: "Mastercard Foundation" },
-//     { id: 5, logo: banner32, name: "GFZA" },
-//     { id: 6, logo: banner29, name: "GIPC" },
-//     { id: 7, logo: banner30, name: "Genesis" },
-//     { id: 8, logo: banner31, name: "Generation Ghana" },
-//     { id: 9, logo: banner36, name: "Invest for Jobs" },
-//     { id: 10, logo: banner37, name: "KfW" },
-//     { id: 11, logo: banner27, name: "GDCL" },
-//     { id: 12, logo: banner35, name: "MOC" },
-//   ];
 
   return (
     <section className="py-10 px-6 bg-white">
