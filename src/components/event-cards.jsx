@@ -1,5 +1,8 @@
 import React from "react";
 import { Link } from "react-router";
+import ComLeadership from "../assets/images/hero4.jpg";
+import YouthMentorship from "../assets/images/hero6.jpg";
+import SustainabilityConference from "../assets/images/hero2.jpg";
 
 const EventCards = () => {
   const events = [
@@ -8,8 +11,7 @@ const EventCards = () => {
       title: "Community Leadership Workshop",
       description:
         "Empowering local leaders with essential skills for community development.",
-      image:
-        "https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      image: ComLeadership,
       path: "/events/community-leadership-workshop",
     },
     {
@@ -17,8 +19,7 @@ const EventCards = () => {
       title: "Youth Mentorship Program",
       description:
         "Connecting experienced professionals with aspiring young leaders.",
-      image:
-        "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      image: YouthMentorship,
       path: "/events/youth-mentorship-program",
     },
     {
@@ -26,8 +27,7 @@ const EventCards = () => {
       title: "Sustainability Conference",
       description:
         "Exploring innovative solutions for environmental challenges.",
-      image:
-        "https://images.pexels.com/photos/1181358/pexels-photo-1181358.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      image: SustainabilityConference,
       path: "/events/sustainability-conference",
     },
   ];
