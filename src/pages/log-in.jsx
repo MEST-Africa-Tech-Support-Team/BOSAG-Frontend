@@ -29,7 +29,7 @@ export default function BosagLoginPage() {
         <div className="absolute top-20 right-20 w-32 h-32 bg-indigo-700 rounded-full opacity-30"></div>
         <div className="absolute bottom-40 left-20 w-24 h-24 bg-indigo-600 rounded-full opacity-20"></div>
         <img src={loginimage} alt="" className='absolute '/>
-        <div className='inset-0 bg-black absolute opacity-40'></div>
+        <div className='inset-0 bg-[#31318D]  absolute opacity-40'></div>
         
         <div className="text-center z-10 max-w-md">
           <h1 className="text-6xl font-bold mb-3">BOSAG</h1>
@@ -57,7 +57,7 @@ export default function BosagLoginPage() {
           <div className="space-y-6">
             {/* Email Field */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[gray-700] mb-2">
                 Email
               </label>
               <input
@@ -66,7 +66,7 @@ export default function BosagLoginPage() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="john@example.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 text-[#cdcfd3] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               />
             </div>
 
@@ -82,7 +82,7 @@ export default function BosagLoginPage() {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent pr-12"
+                  className="w-full px-4 text-[#d2d5d9] py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent pr-12"
                 />
                 <button
                   type="button"

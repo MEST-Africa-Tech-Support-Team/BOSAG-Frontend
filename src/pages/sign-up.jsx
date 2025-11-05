@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
-import loginimage from '../assets/images/loginimage.jpg';
+import signup from '../assets/images/signup.png';
 
 export default function BosagSignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,14 +26,15 @@ export default function BosagSignUpPage() {
   };
 
   return (
+  
     <div className="flex min-h-screen">
       {/* Left Side - Brand Section */}
       <div className="hidden lg:flex lg:w-[45%] bg-[#191970] text-white items-center justify-center p-12 relative overflow-hidden">
         {/* Decorative circles */}
         <div className="absolute top-20 right-20 w-32 h-32 bg-indigo-700 rounded-full opacity-30"></div>
         <div className="absolute bottom-40 left-20 w-24 h-24 bg-indigo-600 rounded-full opacity-20"></div>
-         <img src={loginimage} alt="" className='absolute '/>
-         <div className='inset-0 bg-black absolute opacity-40'></div>
+         <img src={signup} alt="" className='absolute '/>
+         <div className='inset-0 bg-[#31318D]  absolute opacity-40'></div>
         
         <div className="text-center z-10 max-w-md">
           <h1 className="text-6xl font-bold mb-3">BOSAG</h1>
@@ -71,7 +72,7 @@ export default function BosagSignUpPage() {
                   value={formData.firstName}
                   onChange={handleChange}
                   placeholder="John"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-4 py-3 text-[#cdcfd3]  border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -84,7 +85,7 @@ export default function BosagSignUpPage() {
                   value={formData.lastName}
                   onChange={handleChange}
                   placeholder="Doe"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-4 py-3 text-[#cdcfd3] border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -100,7 +101,7 @@ export default function BosagSignUpPage() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="john@example.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-4 text-[#cdcfd3] py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               />
             </div>
 
@@ -116,7 +117,7 @@ export default function BosagSignUpPage() {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent pr-12"
+                  className="w-full px-4 py-3 border text-[#cdcfd3] border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent pr-12"
                 />
                 <button
                   type="button"

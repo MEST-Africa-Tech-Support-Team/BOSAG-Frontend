@@ -5,7 +5,7 @@ import Footer from "../components/footer";
 import memimage from "../assets/images/memimage.png";
 import MembershipCategories from "../components/membership-categories";
 import Partners from "../components/partners";
-
+import { Link } from "react-router";
 
 const BosagMembership = () => {
   return (
@@ -22,7 +22,7 @@ const BosagMembership = () => {
         />
 
         {/* Dark overlay */}
-        <div className="absolute inset-0 bg-[#31318D] opacity-42" aria-hidden="true" />
+        <div className="absolute inset-0 bg-[#31318D] opacity-42 " aria-hidden="true" />
 
         {/* Content */}
         <div className="relative pt-10">
@@ -193,12 +193,16 @@ const BosagMembership = () => {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">
+            <Link to="/signup">
             <button className="bg-[#FF7A00] text-white px-8 py-3 rounded-md font-medium hover:bg-[#e56e00] transition">
               Apply for Membership
             </button>
+            </Link>
+            <Link to="/contact">
             <button className="border border-[#131663] text-[#131663] px-8 py-3 rounded-md font-medium hover:bg-[#131663] hover:text-white transition">
               Contact Us
             </button>
+            </Link>
           </div>
         </div>
       </section>
