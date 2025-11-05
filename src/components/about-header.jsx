@@ -32,14 +32,14 @@ const AboutHeader = () => {
 
         <div className="flex flex-wrap gap-4">
           <Link
-            to="/about/governance-structure"
+            to="/about/governance"
             className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-5 py-2 rounded-md transition-colors text-sm sm:text-base"
           >
             Governance
           </Link>
 
           <Link
-            to="/about/board-management"
+            to="/about/board"
             className="border border-white text-white hover:bg-white hover:text-[#0a0a3a] font-medium px-10 py-2 rounded-md transition-colors text-sm sm:text-base"
           >
             Board

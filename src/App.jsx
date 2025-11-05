@@ -6,8 +6,11 @@ import {
   createRoutesFromElements,
 } from "react-router"; 
 
+import RootLayout from "../layouts/rootlayout.jsx";
+
 
 import Home from "./pages/home.jsx";
+
 import About from "./pages/about.jsx";
 import Blog from "./pages/blog.jsx";
 import BoardMembers from "./pages/board-members.jsx";
@@ -20,13 +23,13 @@ import Login from "./pages/log-in.jsx";
 import Signup from "./pages/sign-up.jsx";
 import Reset from "./pages/reset-password.jsx";
 import WhoWeAre from "./pages/who-we-are.jsx";
-import MembershipPackages from "./pages/membership-packages.jsx";
+import MembershipPackages from "./pages/bosag-membership.jsx";
 import SectorReport from "./pages/sector-report.jsx";
 import NotFound from "./pages/not-found.jsx";
 import BosagMembership from "./pages/bosag-membership.jsx";
 
 
-
+import DashboardHome from "./pages/dashboard/index.jsx";
 import FormA from "./pages/onboarding-forms/form-a.jsx";
 import FormB from "./pages/onboarding-forms/form-b.jsx";
 import FormC from "./pages/onboarding-forms/form-c.jsx";
@@ -36,9 +39,13 @@ import FormF from "./pages/onboarding-forms/form-f.jsx";
 import Terms from "./pages/terms.jsx";
 
 
+
+
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <>
+    <Route element={<RootLayout />}>
+
+   
        
       <Route path="/" element={<Home />} />
 
@@ -60,6 +67,8 @@ const router = createBrowserRouter(
       <Route path="/membership" element={<MembershipPackages />} />
       <Route path="/governance" element={<Governance/>} />
       <Route path="/sector-reports" element={<SectorReport />} />
+
+      <Route path="/dashboard" element={<DashboardHome />} />
       <Route path="/onboarding/form-a" element={<FormA />} />
       <Route path="/onboarding/form-b" element={<FormB />} />
       <Route path="/onboarding/form-c" element={<FormC />} />
@@ -70,7 +79,7 @@ const router = createBrowserRouter(
       <Route path="*" element={<NotFound />} />
       <Route path="/bosagmembership" element={<BosagMembership />} />
       
-    </>
+    </Route>
   )
 );
 
