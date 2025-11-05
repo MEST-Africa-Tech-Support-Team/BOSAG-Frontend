@@ -23,7 +23,7 @@ import Login from "./pages/log-in.jsx";
 import Signup from "./pages/sign-up.jsx";
 import Reset from "./pages/reset-password.jsx";
 import WhoWeAre from "./pages/who-we-are.jsx";
-import MembershipPackages from "./pages/membership-packages.jsx";
+import MembershipPackages from "./pages/bosag-membership.jsx";
 import SectorReport from "./pages/sector-report.jsx";
 import NotFound from "./pages/not-found.jsx";
 import BosagMembership from "./pages/bosag-membership.jsx";
