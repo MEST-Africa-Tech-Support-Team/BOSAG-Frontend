@@ -1,4 +1,4 @@
- import React from "react";
+import React from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { Link } from "react-router";
 import image from "../assets/images/image.png";

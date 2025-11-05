@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router";
 import { ChevronDown, Menu, X } from "lucide-react";
 import Logo from "../assets/images/logo.png";
@@ -7,6 +7,7 @@ const Navbar = () => {
   const [showAboutDropdown, setShowAboutDropdown] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const dropdownRef = useRef(null);
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -16,8 +17,8 @@ const Navbar = () => {
       dropdown: [
         { name: "Industry Overview", path: "/about/industry-overview" },
         { name: "Who We Are", path: "/about/who-we-are" },
-        { name: "Governance Structure", path: "/about/governance-structure" },
-        { name: "Board & Management", path: "/about/board-management" },
+        { name: "Governance Structure", path: "/about/governance" },
+        { name: "Board & Management", path: "/about/board" },
       ],
     },
     { name: "Sector Reports", path: "/sector-reports" },
@@ -32,11 +33,23 @@ const Navbar = () => {
 
   const isActive = (path) => location.pathname === path;
 
+  // 👇 Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowAboutDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 sm:px-10">
         <div className="flex items-center justify-between h-16">
-
           <Link to="/" className="flex items-center">
             <img src={Logo} alt="BOSAG" className="h-20 sm:h-30" />
           </Link>
@@ -46,8 +59,8 @@ const Navbar = () => {
               <li
                 key={link.name}
                 className="relative"
+                ref={link.name === "About" ? dropdownRef : null}
                 onMouseEnter={() => link.dropdown && setShowAboutDropdown(true)}
-                onMouseLeave={() => link.dropdown && setShowAboutDropdown(false)}
               >
                 <Link
                   to={link.path}
@@ -62,7 +75,7 @@ const Navbar = () => {
                   {link.dropdown && <ChevronDown size={18} />}
                 </Link>
 
-                {/*  About Dropdown */}
+                {/* About Dropdown */}
                 {link.dropdown && showAboutDropdown && (
                   <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-[#f8f9ff] shadow-md text-center z-50">
                     <ul className="divide-y divide-[#191970]/30">
