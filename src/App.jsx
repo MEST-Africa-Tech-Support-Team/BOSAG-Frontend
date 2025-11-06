@@ -8,13 +8,13 @@ import {
 
 import RootLayout from "../layouts/rootlayout.jsx";
 
-// Main pages
 import Home from "./pages/home.jsx";
 import About from "./pages/about.jsx";
 import Blog from "./pages/blog.jsx";
 import BoardMembers from "./pages/board-members.jsx";
 import Contact from "./pages/contact.jsx";
 import Gallery from "./pages/gallery.jsx";
+import Video from "./pages/video.jsx";
 import Governance from "./pages/governance.jsx";
 import IndustryOverview from "./pages/industry-overview.jsx";
 import Leadership from "./pages/leadership.jsx";
@@ -28,8 +28,10 @@ import NotFound from "./pages/not-found.jsx";
 import BosagMembership from "./pages/bosag-membership.jsx";
 import Terms from "./pages/terms.jsx";
 
-// Dashboard & Onboarding
 import DashboardHome from "./pages/dashboard/index.jsx";
+import ApplicationProgress from "./pages/dashboard/application-progress.jsx";
+import Summary from "./pages/dashboard/summary.jsx";
+
 import FormA from "./pages/onboarding-forms/form-a.jsx";
 import FormB from "./pages/onboarding-forms/form-b.jsx";
 import FormC from "./pages/onboarding-forms/form-c.jsx";
@@ -37,17 +39,15 @@ import FormD from "./pages/onboarding-forms/form-d.jsx";
 import FormE from "./pages/onboarding-forms/form-e.jsx";
 import FormF from "./pages/onboarding-forms/form-f.jsx";
 
-// Admin & Member Dashboard
 import AdminDashboard from "./pages/dashboard/admin-dashboard.jsx";
 import MembershipApproval from "./pages/dashboard/member-dashboardpage.jsx";
-import EventManagement from "./pages/dashboard/event-management.jsx"; // ✅ keep this too
+import EventManagement from "./pages/dashboard/event-management.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<RootLayout />}>
       <Route path="/" element={<Home />} />
 
-      {/* About Section */}
       <Route path="/about" element={<About />} />
       <Route path="/about/who-we-are" element={<WhoWeAre />} />
       <Route path="/about/leadership" element={<Leadership />} />
@@ -55,10 +55,10 @@ const router = createBrowserRouter(
       <Route path="/about/industry-overview" element={<IndustryOverview />} />
       <Route path="/about/board" element={<BoardMembers />} />
 
-      {/* Other Pages */}
       <Route path="/blog" element={<Blog />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/gallery" element={<Gallery />} />
+      <Route path="/video" element={<Video />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/reset" element={<Reset />} />
@@ -66,13 +66,17 @@ const router = createBrowserRouter(
       <Route path="/sector-reports" element={<SectorReport />} />
       <Route path="/terms" element={<Terms />} />
 
-      {/* Dashboards */}
+
+      <Route path="/dashboard" element={<DashboardHome />} />
+      <Route path="/dashboard/application" element={<ApplicationProgress />} />
+      <Route path="/summary" element={<Summary />} />
+
+
       <Route path="/dashboard" element={<DashboardHome />} />
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/member-dashboardpage" element={<MembershipApproval />} />
       <Route path="/event-management" element={<EventManagement />} />
 
-      {/* Onboarding Forms */}
       <Route path="/onboarding/form-a" element={<FormA />} />
       <Route path="/onboarding/form-b" element={<FormB />} />
       <Route path="/onboarding/form-c" element={<FormC />} />
@@ -80,7 +84,6 @@ const router = createBrowserRouter(
       <Route path="/onboarding/form-e" element={<FormE />} />
       <Route path="/onboarding/form-f" element={<FormF />} />
 
-      {/* Misc */}
       <Route path="/bosagmembership" element={<BosagMembership />} />
       <Route path="*" element={<NotFound />} />
     </Route>

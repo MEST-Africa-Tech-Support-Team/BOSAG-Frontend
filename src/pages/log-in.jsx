@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import loginimage from '../assets/images/loginimage.jpg';
 
+
 export default function BosagLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -49,8 +50,8 @@ export default function BosagLoginPage() {
         <div className="w-full max-w-md">
           {/* Header */}
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Sign In</h2>
-            <p className="text-gray-600">Please sign in to your account</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Log In</h2>
+            <p className="text-gray-600">Please log in to your account</p>
           </div>
 
           {/* Login Form */}
@@ -110,7 +111,7 @@ export default function BosagLoginPage() {
               onClick={handleSubmit}
               className="w-full bg-indigo-900 text-white font-semibold py-3 px-6 rounded-lg hover:bg-indigo-800 transition duration-300"
             >
-              Sign In
+              Log In
             </button>
 
             {/* Divider */}
