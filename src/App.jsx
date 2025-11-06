@@ -39,7 +39,7 @@ import FormF from "./pages/onboarding-forms/form-f.jsx";
 import Terms from "./pages/terms.jsx";
 
 
-
+import EventManagement from "./pages/dashboard/event-management.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -78,6 +78,8 @@ const router = createBrowserRouter(
       <Route path="/terms" element={<Terms />} />
       <Route path="*" element={<NotFound />} />
       <Route path="/bosagmembership" element={<BosagMembership />} />
+
+      <Route path="/event-management" element={<EventManagement />} />
       
     </Route>
   )
