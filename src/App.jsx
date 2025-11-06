@@ -38,7 +38,8 @@ import FormE from "./pages/onboarding-forms/form-e.jsx";
 import FormF from "./pages/onboarding-forms/form-f.jsx";
 import Terms from "./pages/terms.jsx";
 
-
+import AdminDashboard from "./pages/dashboard/admin-dashboard.jsx";
+import MembershipApproval from "./pages/dashboard/member-dashboardpage.jsx";
 
 
 const router = createBrowserRouter(
@@ -67,6 +68,8 @@ const router = createBrowserRouter(
       <Route path="/membership" element={<MembershipPackages />} />
       <Route path="/governance" element={<Governance/>} />
       <Route path="/sector-reports" element={<SectorReport />} />
+      <Route path ="/admin-dashboard" element={<AdminDashboard />} />
+      <Route path="/member-dashboardpage" element={<MembershipApproval />} />
 
       <Route path="/dashboard" element={<DashboardHome />} />
       <Route path="/onboarding/form-a" element={<FormA />} />
