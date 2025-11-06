@@ -24,57 +24,57 @@ const HeroSection = () => {
       image: hero1,
       title: "Empowering Global <span class='text-orange-500'>Services with</span> Ghanaian Excellence",
       text: "Establishing national leadership in business process outsourcing, driving sector growth, and creating sustainable employment opportunities for Ghana's digital economy.",
-      primary: { text: "Become a Member", link: "/membership" },
-      secondary: { text: "Learn More", link: "/about" },
+      primary: { text: "Become a Member", link: "/signup" },
+      // secondary: { text: "Learn More", link: "/about" },
     },
     {
       image: hero2,
       title: " ⁠Positioning Ghana as <span class='text-orange-500'>Africa’s Premier </span> Services Hub",
       text: "Establishing national leadership in business process outsourcing, driving sector growth, and creating sustainable employment opportunities for Ghana's digital economy.",
       primary: { text: "Governance", link: "/about/governance" },
-      secondary: { text: "Our Vision", link: "/about/who-we-are" },
+      // secondary: { text: "Our Vision", link: "/about/who-we-are" },
     },
     {
       image: hero3,
       title: "⁠Connecting <span class='text-orange-500'>Talent, Technology</span> & Opportunity",
       text: "Establishing national leadership in business process outsourcing, driving sector growth, and creating sustainable employment opportunities for Ghana's digital economy.",
       primary: { text: "Membership", link: "/membership" },
-      secondary: { text: "Meet Our Partners", link: "/about/board" },
+      // secondary: { text: "Meet Our Partners", link: "/about/board" },
     },
     {
       image: hero4,
       title: "Driving Innovation in <span class='text-orange-500'>BPO, ITES</span> & GBS",
       text: "Establishing national leadership in business process outsourcing, driving sector growth, and creating sustainable employment opportunities for Ghana's digital economy.",
       primary: { text: "Join Now", link: "/signup" },
-      secondary: { text: "Contact Us", link: "/contact" },
+      // secondary: { text: "Contact Us", link: "/contact" },
     },
     {
       image: hero5,
       title: "Championing <span class='text-orange-500'>Ethical Governance</span> & Sector Growth",
       text: "Establishing national leadership in business process outsourcing, driving sector growth, and creating sustainable employment opportunities for Ghana's digital economy.",
       primary: { text: "See Reports", link: "/sector-reports" },
-      secondary: { text: "Governance", link: "/about/governance" },
+      // secondary: { text: "Governance", link: "/about/governance" },
     },
     {
       image: hero6,
       title: "Championing <span class='text-orange-500'>Women in Tech</span> and Outsourcing",
       text: "Promoting diversity and inclusion across Ghana’s outsourcing sector.",
       primary: { text: "Our Impact", link: "/about" },
-      secondary: { text: "Join the Movement", link: "/membership" },
+      // secondary: { text: "Join the Movement", link: "/membership" },
     },
     {
       image: hero7,
       title: "Creating <span class='text-orange-500'>Global Opportunities</span> for Local Talent",
       text: "Expanding access to international clients and career opportunities.",
       primary: { text: "Learn More", link: "/about" },
-      secondary: { text: "Get Started", link: "/membership" },
+      // secondary: { text: "Get Started", link: "/membership" },
     },
     {
       image: hero8,
       title: "Collaborating for Industry Excellence",
       text: "Driving public-private partnerships for national growth and global recognition.",
       primary: { text: "See Our Work", link: "/gallery" },
-      secondary: { text: "Contact Us", link: "/contact" },
+      // secondary: { text: "Contact Us", link: "/contact" },
     },
   ];
 
@@ -119,12 +119,12 @@ const HeroSection = () => {
                   >
                     {slide.primary.text}
                   </Link>
-                  <Link
+                  {/* <Link
                     to={slide.secondary.link}
                     className="px-6 py-3 border border-white text-white hover:bg-white hover:text-[#020F33] text-sm font-semibold rounded-md transition-all"
                   >
                     {slide.secondary.text}
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             </div>

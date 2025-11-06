@@ -58,23 +58,54 @@ export default function FormStep1() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // ✅ Check if all required fields are filled
+    const {
+      organisationName,
+      yearOfEstablishment,
+      companyRegNumber,
+      sectorFocus,
+      employeesGhana,
+      employeesGlobal,
+      organisationTypes,
+      membershipTier,
+    } = formData;
+
+    const allFilled =
+      organisationName.trim() &&
+      yearOfEstablishment.trim() &&
+      companyRegNumber.trim() &&
+      sectorFocus.trim() &&
+      employeesGhana.trim() &&
+      employeesGlobal.trim() &&
+      organisationTypes.length > 0 &&
+      membershipTier.trim();
+
+    // ✅ Only mark completed if all fields are filled
+    const completed = JSON.parse(localStorage.getItem("completedSteps")) || [];
+    if (allFilled && !completed.includes(1)) {
+      completed.push(1);
+      localStorage.setItem("completedSteps", JSON.stringify(completed));
+    }
+
     navigate("/onboarding/form-b");
   };
 
   return (
     <div className="flex bg-gray-50 min-h-screen">
-      {/* Fixed Sidebar */}
+      {/* Sidebar */}
       <aside className="fixed top-0 left-0 h-full w-64 bg-white shadow-md z-20">
         <Sidebar />
       </aside>
 
       {/* Main Content */}
       <main className="flex-1 ml-64">
-        {/* Sticky Progress Bar */}
+        {/* Progress Bar */}
         <div className="sticky top-0 z-10 bg-white border-b shadow-sm">
-          <FormProgressBar currentStep={1} completedSteps={[]} />
+          <FormProgressBar currentStep={1} />
         </div>
 
+        {/* Form Section */}
         <section className="max-w-6xl mx-auto pt-2 pb-24 px-4 md:px-8">
           <form
             onSubmit={handleSubmit}
@@ -98,7 +129,7 @@ export default function FormStep1() {
               />
             </div>
 
-            {/* Two-column inputs */}
+            {/* Year and Registration */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -108,10 +139,10 @@ export default function FormStep1() {
                   type="text"
                   name="yearOfEstablishment"
                   placeholder="YYYY"
-                  value={formData.yearOfEstablishment}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md p-2 placeholder-gray-400"
-                />
+                value={formData.yearOfEstablishment}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-md p-2 placeholder-gray-400"
+              />
               </div>
 
               <div>
@@ -143,7 +174,7 @@ export default function FormStep1() {
               />
             </div>
 
-            {/* Employees count */}
+            {/* Employee Count */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -172,7 +203,7 @@ export default function FormStep1() {
               </div>
             </div>
 
-            {/* Organisation Types */}
+            {/* Organisation Type */}
             <div className="mb-8">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Type of Organisation
@@ -209,7 +240,7 @@ export default function FormStep1() {
               </div>
             </div>
 
-            {/* Membership Tiers */}
+            {/* Membership Tier */}
             <div className="mb-12">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Membership Tier
@@ -237,13 +268,13 @@ export default function FormStep1() {
               </div>
             </div>
 
-            {/* Next Button (always active) */}
+            {/* Navigation Buttons */}
             <div className="flex justify-end mt-10">
               <button
                 type="submit"
-                className="px-10 py-2 font-medium rounded-md bg-[#191970] text-white hover:bg-[#14145a] transition-colors"
+                className="px-10 py-2 font-medium rounded-md bg-[#F58220] text-white hover:bg-[#e16e10] transition-colors"
               >
-                Next
+                Next: Section B
               </button>
             </div>
           </form>

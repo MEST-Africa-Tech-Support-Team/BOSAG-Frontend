@@ -1,10 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const FormNavbar = ({ initialStep = 1 }) => {
-  // Manage current step in state (can be controlled externally if needed)
-  const [currentStep, setCurrentStep] = useState(initialStep);
-
-  // Define all steps for the form
+const FormProgressBar = ({ currentStep }) => {
   const steps = [
     { id: "A", label: "Organisation" },
     { id: "B", label: "Contact" },
@@ -14,72 +10,95 @@ const FormNavbar = ({ initialStep = 1 }) => {
     { id: "F", label: "Consent" },
   ];
 
-  return (
-    <div className="w-full bg-white border-b border-gray-200 px-4 py-3 md:px-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header text */}
-        <p className="text-sm text-gray-600 mb-3">
-          Complete all sections to submit your membership application
-        </p>
+  const [completedSteps, setCompletedSteps] = useState([]);
+  const [statusText, setStatusText] = useState("In Progress");
+  const [statusColor, setStatusColor] = useState({
+    bg: "#FFF1E6",
+    text: "#FF6600",
+  });
 
-        {/* Steps container */}
-        <div className="flex flex-wrap items-center justify-between gap-4">
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("completedSteps")) || [];
+    setCompletedSteps(saved);
+
+    if (saved.length === 0) {
+      setStatusText("Not Started");
+      setStatusColor({ bg: "#F3F4F6", text: "#6B7280" });
+    } else if (saved.length === steps.length) {
+      setStatusText("Completed");
+      setStatusColor({ bg: "#E6FFEA", text: "#16A34A" });
+    } else {
+      setStatusText("In Progress");
+      setStatusColor({ bg: "#FFF1E6", text: "#FF6600" });
+    }
+  }, [currentStep]);
+
+  return (
+    <div className="w-full bg-white border-b border-gray-200 px-4 py-6 md:px-10 rounded-t-xl">
+      <div className="max-w-6xl mx-auto flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-[15px] md:text-[16px] font-semibold text-[#0A0A3A]">
+              Membership Application Status
+            </h2>
+            <p className="text-sm text-gray-600 mt-1">
+              Complete all sections to submit your membership application
+            </p>
+          </div>
+
+          <div
+            className="text-xs font-medium px-4 py-1 rounded-full shadow-sm"
+            style={{
+              backgroundColor: statusColor.bg,
+              color: statusColor.text,
+            }}
+          >
+            {statusText}
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between mt-3 relative">
           {steps.map((step, index) => {
-            const isCompleted = index + 1 < currentStep;
-            const isCurrent = index + 1 === currentStep;
+            const stepNumber = index + 1;
+            const isCompleted = completedSteps.includes(stepNumber);
+            const isCurrent = stepNumber === currentStep;
 
             return (
               <div
                 key={step.id}
-                className="relative flex flex-col items-center text-center flex-1 min-w-[60px]"
+                className="relative flex flex-col items-center text-center flex-1"
               >
-                {/* Connector Line (except for first item) */}
                 {index > 0 && (
                   <div
                     className={`absolute top-4 left-[-50%] w-full h-[2px] ${
                       isCompleted
-                        ? "bg-[#191970]"
+                        ? "bg-[#0A0A3A]"
                         : isCurrent
-                        ? "bg-[#ff6600]"
-                        : "bg-gray-300"
+                        ? "bg-[#FF6600]"
+                        : "bg-[#D9D9D9]"
                     }`}
-                  ></div>
+                  />
                 )}
 
-                {/* Step Circle */}
                 <div
-                  className={`relative z-10 w-8 h-8 flex items-center justify-center rounded-full border-2 text-sm font-semibold transition-all duration-300 ${
+                  className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-semibold border transition-all duration-300 ${
                     isCompleted
-                      ? "bg-[#191970] border-[#191970] text-white"
+                      ? "bg-[#0A0A3A] border-[#0A0A3A] text-white"
                       : isCurrent
-                      ? "bg-[#ff6600] border-[#ff6600] text-white"
-                      : "border-[#bfc3d9] text-[#191970] bg-white"
+                      ? "bg-[#FF6600] border-[#FF6600] text-white"
+                      : "bg-white border-[#0A0A3A] text-[#0A0A3A]"
                   }`}
                 >
                   {step.id}
                 </div>
 
-                {/* Step Label */}
-                <div className="mt-1 text-[13px] font-medium text-gray-800">
-                  {step.label}
-                </div>
-
-                {/* Step Status */}
-                <div
-                  className={`text-xs ${
-                    isCompleted
-                      ? "text-green-600"
-                      : isCurrent
-                      ? "text-[#ff6600]"
-                      : "text-gray-500"
+                <p
+                  className={`mt-1 text-[12px] font-medium ${
+                    isCurrent ? "text-[#FF6600]" : "text-[#0A0A3A]"
                   }`}
                 >
-                  {isCompleted
-                    ? "Completed"
-                    : isCurrent
-                    ? "Current"
-                    : "Pending"}
-                </div>
+                  {step.label}
+                </p>
               </div>
             );
           })}
@@ -89,4 +108,4 @@ const FormNavbar = ({ initialStep = 1 }) => {
   );
 };
 
-export default FormNavbar;
+export default FormProgressBar;
