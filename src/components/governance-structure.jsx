@@ -3,7 +3,7 @@ import { Download } from 'lucide-react';
 
 export default function GovernanceStructure() {
   return (
-    <div className="bg-gray-50 py-16 px-6 h-[145vh] mb-16 md:hidden lg:block">
+    <div className="bg-gray-50 py-10 px-6 h-[200vh] mb-2 md:hidden lg:block">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">

@@ -3,7 +3,7 @@ import { FileText, CalendarDays, BarChart2 } from "lucide-react";
 
 export default function MembershipAccountability() {
   return (
-    <section className="bg-white py-16 px-6 md:px-12 lg:px-24">
+    <section className="bg-white py-8 px-6 md:px-12 lg:px-24">
       {/* Title */}
       <h2 className="text-3xl md:text-4xl font-bold text-center text-[#1A1A57] mb-14">
         Membership & Accountability
@@ -18,19 +18,19 @@ export default function MembershipAccountability() {
           </h3>
           <ul className="space-y-3 text-[#1A1A57]">
             <li className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-[#F38B00]"></span>
-              Platinum Full Members
+              <span className="w-3 h-3 rounded-full bg-gray-400"></span>
+              Platinum Members
             </li>
             <li className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-[#FFD600]"></span>
-              Gold Full Members
+              <span className="w-3 h-3 rounded-full bg-yellow-600"></span>
+              Gold Members
             </li>
             <li className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-[#9CA3AF]"></span>
+              <span className="w-3 h-3 rounded-full bg-green-500"></span>
               Vendors & Affiliate Members
             </li>
             <li className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-[#22C55E]"></span>
+              <span className="w-3 h-3 rounded-full bg-blue-600"></span>
               Start-ups & Associate Members
             </li>
           </ul>

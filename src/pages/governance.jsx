@@ -47,7 +47,7 @@ const governance = () => {
     <>
     <Navbar/>
    <div>
-    <section className="bg-[#191970] text-white py-13 px-6 md:px-12 lg:px-15">
+    <section className="bg-[#191970] text-white py-10 px-6 md:px-12 lg:px-15">
       {/* Title */}
       <h2 className="text-3xl md:text-4xl font-bold mb-6">
         Governance Structure
@@ -78,7 +78,7 @@ const governance = () => {
       </div>
     </section>
 
-    <section className='bg-gray-50 py-8 px-6'>
+    <section className='bg-gray-50 py-4 px-6'>
       <div className="max-w-7xl mx-auto">
         {/* Main Heading */}
         <h2 className="text-3xl font-bold text-[#191970] mb-4 py-8">
@@ -156,7 +156,7 @@ const governance = () => {
     </section>
 
     <section>
-       <div className="bg-gray-100 py-16 px-6">
+       <div className="bg-gray-100 py-10 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -195,8 +195,15 @@ const governance = () => {
       </div>
     </div>
     </section>
+
+    <div >
     <GovernanceStructure/>
+    </div>
+
+    <div>
      <MembershipAccountability />
+     </div>
+
    </div>
     <Footer/>
     </>

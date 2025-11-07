@@ -9,14 +9,14 @@ import "swiper/css/navigation";
 import { Link } from "react-router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import hero1 from "../assets/images/hero.jpg";
-import hero2 from "../assets/images/hero1.jpg";
-import hero3 from "../assets/images/hero2.jpg";
-import hero4 from "../assets/images/hero3.jpg";
-import hero5 from "../assets/images/hero4.jpg";
-import hero6 from "../assets/images/hero5.jpg";
-import hero7 from "../assets/images/hero6.jpg";
-import hero8 from "../assets/images/hero7.jpg";
+import hero1 from "../assets/images/hero5.jpg";
+import hero2 from "../assets/images/report2.jpg";
+import hero3 from "../assets/images/hero3.jpg";
+import hero4 from "../assets/images/hero1.jpg";
+import hero5 from "../assets/images/hero2.jpg";
+import hero6 from "../assets/images/memimage.png";
+import hero7 from "../assets/images/hero.jpg";
+import hero8 from "../assets/images/hero6.jpg";
 
 const HeroSection = () => {
   const slides = [
