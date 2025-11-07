@@ -2,8 +2,24 @@ import React from 'react';
 import { Download } from 'lucide-react';
 
 export default function GovernanceStructure() {
+  function ResponsiveButton() {
+  const [isSmall, setIsSmall] = useState(false);
+
+  useEffect(() => {
+    const checkSize = () => setIsSmall(window.innerWidth < 640);
+    checkSize();
+    window.addEventListener("resize", checkSize);
+    return () => window.removeEventListener("resize", checkSize);
+  }, []);
+
   return (
-    <div className="bg-gray-50 py-16 px-6 h-[145vh] mb-16 md:hidden lg:block">
+    <button className="bg-blue-600 text-white px-4 py-2 rounded">
+      {isSmall ? "Send" : "Submit Form"}
+    </button>
+  );
+}
+  return (
+    <div className="bg-gray-50 py-16 px-6 h-[145vh] mb-16 hidden lg:block">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">

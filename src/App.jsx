@@ -37,6 +37,7 @@ import FormD from "./pages/onboarding-forms/form-d.jsx";
 import FormE from "./pages/onboarding-forms/form-e.jsx";
 import FormF from "./pages/onboarding-forms/form-f.jsx";
 import Terms from "./pages/terms.jsx";
+import Event from "./pages/event.jsx";
 
 
 
@@ -78,6 +79,7 @@ const router = createBrowserRouter(
       <Route path="/terms" element={<Terms />} />
       <Route path="*" element={<NotFound />} />
       <Route path="/bosagmembership" element={<BosagMembership />} />
+      <Route path="/event" element={<Event />} />
       
     </Route>
   )
