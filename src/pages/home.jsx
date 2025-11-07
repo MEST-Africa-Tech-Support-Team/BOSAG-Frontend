@@ -5,7 +5,7 @@ import "aos/dist/aos.css";
 import Navbar from "../components/navbar.jsx";
 import HeroSection from "../components/hero.jsx";
 import AboutSection from "../components/about-sec.jsx";
-import StrategicPillars from "../components/strategic-pillars.jsx";
+import StrategicPillars from "../components/about-strategy.jsx";
 import UpcomingEvents from "../components/event-cards.jsx";
 import MembershipSection from "../components/membership-categories.jsx";
 import BrandPartners from "../components/brand-partners.jsx";
@@ -34,9 +34,11 @@ export default function Home() {
         <AboutSection />
       </section>
 
-      <section data-aos="fade-up" data-aos-delay="200">
-        <StrategicPillars />
-      </section>
+      <div className="bg-gray-50">
+        <section data-aos="fade-up" data-aos-delay="200">
+          <StrategicPillars />
+        </section>
+      </div>
 
       <section data-aos="fade-up" data-aos-delay="300">
         <UpcomingEvents />

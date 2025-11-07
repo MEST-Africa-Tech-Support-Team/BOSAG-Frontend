@@ -56,7 +56,7 @@ const StrategicPlan = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
 
   return (
-    <section className="bg-white py-10 px-6 sm:px-10 lg:px-24 text-center">
+    <section className=" py-10 px-6 sm:px-10 lg:px-24 text-center">
       <div className="max-w-6xl mx-auto">
 
         <h2 className="text-[#1c1c57] text-2xl sm:text-3xl lg:text-4xl font-bold mb-10">
