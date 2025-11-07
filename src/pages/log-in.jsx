@@ -32,11 +32,26 @@ export default function BosagLoginPage() {
 
   return (
     <div className="flex min-h-screen">
-      {/* Left Section */}
-      <div
-        className="hidden lg:block w-1/2 bg-cover bg-center"
-        style={{ backgroundImage: `url(${loginimage})` }}
-      ></div>
+      {/* Left Side - Brand Section */}
+      <div className="hidden lg:flex lg:w-[45%] bg-[#191970]  text-white items-center justify-center p-12 relative overflow-hidden">
+        {/* Decorative circles */}
+        <div className="absolute top-20 right-20 w-32 h-32 bg-indigo-700 rounded-full opacity-30"></div>
+        <div className="absolute bottom-40 left-20 w-24 h-24 bg-indigo-600 rounded-full opacity-20"></div>
+        <img src={loginimage} alt="" className='absolute '/>
+        <div className='inset-0 bg-[#31318D]  absolute opacity-40'></div>
+        
+        <div className="text-center z-10 max-w-md">
+          <h1 className="text-6xl font-bold mb-3">BOSAG</h1>
+          <div className="flex items-center justify-center gap-2 mb-8">
+            <div className="h-0.5 w-16 bg-orange-500"></div>
+            <p className="text-xl tracking-wider">MEMBERSHIP</p>
+            <div className="h-0.5 w-16 bg-orange-500"></div>
+          </div>
+          <p className="text-lg leading-relaxed text-gray-200">
+            Join our exclusive community and unlock premium benefits designed for forward-thinking professionals.
+          </p>
+        </div>
+      </div>
 
       {/* Right Section */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">

@@ -27,7 +27,6 @@ import MembershipPackages from "./pages/bosag-membership.jsx";
 import SectorReport from "./pages/sector-report.jsx";
 import NotFound from "./pages/not-found.jsx";
 import BosagMembership from "./pages/bosag-membership.jsx";
-import Terms from "./pages/terms.jsx";
 
 import DashboardHome from "./pages/dashboard/index.jsx";
 import ApplicationProgress from "./pages/dashboard/application-progress.jsx";
@@ -39,6 +38,8 @@ import FormC from "./pages/onboarding-forms/form-c.jsx";
 import FormD from "./pages/onboarding-forms/form-d.jsx";
 import FormE from "./pages/onboarding-forms/form-e.jsx";
 import FormF from "./pages/onboarding-forms/form-f.jsx";
+import Terms from "./pages/terms.jsx";
+import Event from "./pages/event.jsx";
 
 import AdminDashboard from "./pages/dashboard/admin-dashboard.jsx";
 import MembershipApproval from "./pages/dashboard/member-dashboardpage.jsx";
@@ -90,6 +91,8 @@ const router = createBrowserRouter(
       <Route path="/onboarding/form-f" element={<FormF />} />
 
       <Route path="/bosagmembership" element={<BosagMembership />} />
+      <Route path="/event" element={<Event />} />
+      
       <Route path="*" element={<NotFound />} />
     </Route>
   )
