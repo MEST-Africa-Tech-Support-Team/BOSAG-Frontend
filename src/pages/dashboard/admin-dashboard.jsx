@@ -3,7 +3,7 @@ import DashboardStatsCard from "../../components/dashboardstats-card";
 import MembershipApproval from "../../components/membership-approval";
 import EventsManagement from "../../components/event-mgt";
 import { Users, UserPlus, CheckCircle, XCircle } from "lucide-react";
-import Sidebar from "../../components/sidebar";
+import Sidebar from "../../components/admin-sidebar";
 import DashboardHeader from "../../components/dashboard-header";
 
 const AdminDashboard = () => {

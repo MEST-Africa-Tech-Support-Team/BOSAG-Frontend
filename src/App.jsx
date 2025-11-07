@@ -20,6 +20,7 @@ import IndustryOverview from "./pages/industry-overview.jsx";
 import Leadership from "./pages/leadership.jsx";
 import Login from "./pages/log-in.jsx";
 import Signup from "./pages/sign-up.jsx";
+import ForgotPasswordPage from "./pages/forgot-password.jsx";
 import Reset from "./pages/reset-password.jsx";
 import WhoWeAre from "./pages/who-we-are.jsx";
 import MembershipPackages from "./pages/bosag-membership.jsx";
@@ -42,6 +43,8 @@ import FormF from "./pages/onboarding-forms/form-f.jsx";
 import AdminDashboard from "./pages/dashboard/admin-dashboard.jsx";
 import MembershipApproval from "./pages/dashboard/member-dashboardpage.jsx";
 import EventManagement from "./pages/dashboard/event-management.jsx";
+import ProtectedRoute from "./routes/ProtectedRoute.jsx";
+import ResetPasswordPage from "./pages/reset-password.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -61,7 +64,8 @@ const router = createBrowserRouter(
       <Route path="/video" element={<Video />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/reset" element={<Reset />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
       <Route path="/membership" element={<MembershipPackages />} />
       <Route path="/sector-reports" element={<SectorReport />} />
       <Route path="/terms" element={<Terms />} />
@@ -76,6 +80,7 @@ const router = createBrowserRouter(
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/member-dashboardpage" element={<MembershipApproval />} />
       <Route path="/event-management" element={<EventManagement />} />
+
 
       <Route path="/onboarding/form-a" element={<FormA />} />
       <Route path="/onboarding/form-b" element={<FormB />} />
