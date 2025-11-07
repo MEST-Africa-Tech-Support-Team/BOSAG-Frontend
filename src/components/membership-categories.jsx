@@ -13,9 +13,9 @@ import {
 
 const categories = [
   {
-    title: "Platinum Full Members",
+    title: "Platinum Members",
     icon: <Crown className="w-6 h-6 text-white" />,
-    gradient: "from-yellow-400 to-yellow-500",
+    gradient: "from-gray-400 to-gray-500",
     description:
       "Established BPO, ITO, and shared service providers with demonstrated delivery scale and international certifications.",
     points: [
@@ -25,9 +25,9 @@ const categories = [
     ],
   },
   {
-    title: "Gold Full Members",
+    title: "Gold Members",
     icon: <Shield className="w-6 h-6 text-white" />,
-    gradient: "from-yellow-300 to-yellow-400",
+    gradient: "from-yellow-400 to-yellow-500",
     description:
       "Active BPO, ITO, and shared services operations with proven delivery capability.",
     points: [
@@ -75,7 +75,7 @@ const categories = [
   {
     title: "Honorary & Observer Members",
     icon: <Eye className="w-6 h-6 text-white" />,
-    gradient: "from-gray-400 to-gray-500",
+    gradient: "from-red-400 to-red-500",
     description:
       "Advisors, investors, researchers, and key stakeholders engaged through invitations or strategic interest.",
     points: [
@@ -109,7 +109,7 @@ const MembershipCategories = () => {
             {categories.map((cat, index) => (
               <article
                 key={index}
-                onClick={() => navigate("/membership")}
+                onClick={() => navigate("/signup")}
                 className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 cursor-pointer transition-all hover:-translate-y-2 hover:shadow-2xl hover:border-[#191970]/40"
               >
                 <div className="flex items-center gap-3 mb-4">

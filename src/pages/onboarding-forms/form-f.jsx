@@ -1,255 +1,178 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router";
-import SignaturePad from "react-signature-canvas";
-import { Pencil, Upload, Trash2, CheckCircle } from "lucide-react";
-import FormProgressBar from "../../components/form-header.jsx";
+import React, { useState } from "react";
+import Navbar from "../../components/navbar.jsx";
+import Footer from "../../components/footer.jsx";
+import { FileText } from "lucide-react";
+import { Link } from "react-router";
 
 export default function FormStep6() {
-  const navigate = useNavigate();
-  const sigPadRef = useRef();
+  const [acknowledged, setAcknowledged] = useState(false);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    signature: null,
-    uploadFile: null,
-    date: "",
-    agreed: false,
-  });
-
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [isFormValid, setIsFormValid] = useState(false);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
-
-  useEffect(() => {
-    const { name, signature, uploadFile, date, agreed } = formData;
-    setIsFormValid(name && (signature || uploadFile) && date && agreed);
-  }, [formData]);
-
-  const clearSignature = () => {
-    if (sigPadRef.current) sigPadRef.current.clear();
-    setFormData((prev) => ({ ...prev, signature: null, uploadFile: null }));
-    setUploadSuccess(false);
-  };
-
-  const saveSignature = () => {
-    if (!sigPadRef.current.isEmpty()) {
-      const data = sigPadRef.current.getTrimmedCanvas().toDataURL("image/png");
-      setFormData((prev) => ({ ...prev, signature: data, uploadFile: null }));
-      setIsDrawing(false);
-      setUploadSuccess(false);
-    }
-  };
-
-  const handleUploadSignature = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setFormData((prev) => ({
-        ...prev,
-        uploadFile: event.target.result,
-        signature: null,
-      }));
-      setUploadSuccess(true);
-      setIsDrawing(false);
-      setTimeout(() => setUploadSuccess(false), 2500);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!isFormValid) {
-      alert("Please complete all required fields before submitting.");
-      return;
-    }
-    const finalSignature = formData.signature || formData.uploadFile;
-    alert("Form submitted successfully!");
-    console.log("✅ Submitted Data:", { ...formData, signature: finalSignature });
+  const handleCheckboxChange = () => {
+    setAcknowledged(!acknowledged);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <FormProgressBar currentStep={6} completedSteps={[1, 2, 3, 4, 5]} />
+    <div className="flex flex-col min-h-screen bg-[#F7F7F8]">
+      <Navbar />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white p-6 sm:p-8 shadow-md rounded-md border border-gray-200"
-        >
-          <h2 className="text-xl font-semibold text-[#191970] mb-6 text-center sm:text-left">
-            Section F: Signature
-          </h2>
-
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Authorized Representative Name
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, name: e.target.value }))
-              }
-              placeholder="Enter your full name"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-700 placeholder-gray-400 transition"
-            />
-          </div>
-
-          <div className="mb-8">
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              Signature
-            </label>
-
-            <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 bg-gray-50 relative text-center hover:border-blue-400 transition-all duration-200">
-
-              {!formData.signature && !formData.uploadFile && !isDrawing && (
-                <div className="flex flex-col items-center justify-center text-gray-400 text-sm">
-                  <Upload className="w-8 h-8 mb-2 opacity-70" />
-                  <p>Drag & drop or click “Upload Image” to add a signature</p>
-                </div>
-              )}
-
-              {/* Drawing Canvas */}
-              {isDrawing && (
-                <div className="flex justify-center">
-                  <SignaturePad
-                    ref={sigPadRef}
-                    penColor="black"
-                    canvasProps={{
-                      width:
-                        window.innerWidth < 640
-                          ? 300
-                          : window.innerWidth < 1024
-                          ? 400
-                          : 500,
-                      height: 180,
-                      className:
-                        "border rounded-lg bg-white shadow-inner cursor-crosshair",
-                    }}
-                  />
-                </div>
-              )}
-
-              {/* Signature Preview (Drawn or Uploaded) */}
-              {(formData.signature || formData.uploadFile) && !isDrawing && (
-                <div className="flex justify-center mb-3 animate-fade-in">
-                  <img
-                    src={formData.signature || formData.uploadFile}
-                    alt="Signature Preview"
-                    className="max-h-24 object-contain border border-gray-200 rounded-lg shadow-sm bg-white p-1 transition-transform hover:scale-[1.02]"
-                  />
-                </div>
-              )}
-
-              {/* Upload success toast */}
-              {uploadSuccess && (
-                <div className="absolute top-3 right-4 flex items-center bg-white border border-green-200 text-green-700 text-xs sm:text-sm px-2 py-1 rounded-md shadow-sm animate-fade-in">
-                  <CheckCircle className="w-4 h-4 mr-1" />
-                  Image uploaded successfully!
-                </div>
-              )}
-
-
-              <div className="flex flex-wrap justify-center gap-3 mt-5">
-                {!isDrawing ? (
-                  <button
-                    type="button"
-                    onClick={() => setIsDrawing(true)}
-                    className="flex items-center bg-blue-700 hover:bg-blue-800 text-white text-sm font-medium px-4 py-2 rounded-md transition"
-                  >
-                    <Pencil className="w-4 h-4 mr-2" /> Draw Signature
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={saveSignature}
-                    className="flex items-center bg-green-700 hover:bg-green-800 text-white text-sm font-medium px-4 py-2 rounded-md transition"
-                  >
-                    <CheckCircle className="w-4 h-4 mr-2" /> Save Signature
-                  </button>
-                )}
-
-                <label className="flex items-center bg-gray-700 hover:bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-md cursor-pointer transition">
-                  <Upload className="w-4 h-4 mr-2" />
-                  Upload Image
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleUploadSignature}
-                    className="hidden"
-                  />
-                </label>
-
-                <button
-                  type="button"
-                  onClick={clearSignature}
-                  className="flex items-center bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-md transition"
-                >
-                  <Trash2 className="w-4 h-4 mr-2" /> Clear
-                </button>
-              </div>
+      <main className="flex-grow py-4 px-4 md:px-8">
+        <div className="max-w-5xl mx-auto bg-white shadow-sm rounded-none p-8 md:p-10 border border-gray-200">
+          <div className="text-center mb-10">
+            <div className="w-12 h-12 mx-auto rounded-full bg-[#E6ECFF] flex items-center justify-center">
+              <FileText className="w-6 h-6 text-[#1B2B65]" />
             </div>
+            <h1 className="text-2xl font-semibold text-[#1B2B65] mt-4">
+              BOSAG Membership
+            </h1>
+            <p className="text-gray-600 text-sm font-medium mt-1">
+              Consent and Disclaimer
+            </p>
+            <p className="text-gray-500 text-sm mt-3 max-w-2xl mx-auto">
+              Please read the following terms and conditions carefully before proceeding
+              with your membership application.
+            </p>
           </div>
 
+          <section className="mb-8">
+            <h2 className="text-lg font-semibold text-[#1B2B65] mb-3 flex items-center">
+              <span className="text-[#1B2B65] font-bold mr-2">1.</span>Consent
+            </h2>
+            <ol className="space-y-2 text-black text-sm leading-relaxed pl-6">
+              <li>
+                <span className="text-[#3C6FE0] font-semibold mr-1">1.1</span>
+                The Member confirms that all information provided in this application is true,
+                accurate, and complete to the best of its knowledge.
+              </li>
+              <li>
+                <span className="text-[#3C6FE0] font-semibold mr-1">1.2</span>
+                The Member agrees to be bound by the Constitution of the Business Outsourcing
+                Services Association of Ghana (BOSAG), including any amendments made to it,
+                and to comply with the BOSAG Code of Conduct and Ethics.
+              </li>
+              <li>
+                <span className="text-[#3C6FE0] font-semibold mr-1">1.3</span>
+                The Member consents to active participation in BOSAG programs, initiatives,
+                and sector-wide engagements, and commits to uphold the values and mission
+                of the Association.
+              </li>
+              <li>
+                <span className="text-[#3C6FE0] font-semibold mr-1">1.4</span>
+                The Member authorizes BOSAG to publicly display its name, logo, and sector
+                affiliation in member directories, promotional materials, and official
+                communications, unless otherwise declined in writing.
+              </li>
+              <li>
+                <span className="text-[#3C6FE0] font-semibold mr-1">1.5</span>
+                The Member acknowledges that membership data may be used for legal, regulatory,
+                or enforcement purposes by BOSAG and that participation is voluntary and subject
+                to BOSAG’s governance framework.
+              </li>
+            </ol>
+          </section>
 
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Date
-            </label>
-            <input
-              type="date"
-              value={formData.date}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, date: e.target.value }))
-              }
-              className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-700 transition"
-            />
-          </div>
+          <section className="mb-8">
+            <h2 className="text-lg font-semibold text-[#1B2B65] mb-3 flex items-center">
+              <span className="text-[#1B2B65] font-bold mr-2">2.</span>Data Protection
+            </h2>
+            <ol className="space-y-2 text-black text-sm leading-relaxed pl-6">
+              <li>
+                <span className="text-[#F58220] font-semibold mr-1">2.1</span>
+                BOSAG shall collect, process, and store Member data in accordance with applicable
+                data protection laws and regulations, including the Data Protection Act, 2012 (Act 843).
+              </li>
+              <li>
+                <span className="text-[#F58220] font-semibold mr-1">2.2</span>
+                The information obtained shall be used solely for purposes related to membership
+                administration, strategic coordination, sector development, and compliance with
+                applicable laws.
+              </li>
+              <li>
+                <span className="text-[#F58220] font-semibold mr-1">2.3</span>
+                BOSAG shall not disclose Member data to third parties without prior written consent,
+                except where required by law or regulatory obligation.
+              </li>
+              <li>
+                <span className="text-[#F58220] font-semibold mr-1">2.4</span>
+                BOSAG shall implement appropriate technical and organizational measures to safeguard
+                Member data against unauthorized access, loss, misuse, or alteration.
+              </li>
+            </ol>
+          </section>
 
+          <section className="mb-8">
+            <h2 className="text-lg font-semibold text-[#1B2B65] mb-3 flex items-center">
+              <span className="text-[#1B2B65] font-bold mr-2">3.</span>Disclaimer of Liability
+            </h2>
+            <ol className="space-y-2 text-black text-sm leading-relaxed pl-6">
+              <li>
+                <span className="text-[#D93025] font-semibold mr-1">3.1</span>
+                BOSAG and its affiliates shall not be liable for any direct, indirect, incidental,
+                or consequential damage arising from the Member’s participation in BOSAG activities
+                or use of BOSAG platforms or interactions with other members.
+              </li>
+              <li>
+                <span className="text-[#D93025] font-semibold mr-1">3.2</span>
+                The Member acknowledges that any commercial, business, financial, or sectoral
+                benefits are of a mutual nature, and disclaims any responsibility for any engagements
+                initiated through BOSAG’s network.
+              </li>
+              <li>
+                <span className="text-[#D93025] font-semibold mr-1">3.3</span>
+                The Member agrees to indemnify and hold harmless BOSAG, its officers, employees,
+                and affiliates from any claims, liabilities, or damages resulting from the Member’s
+                conduct, representation, or breach of BOSAG’s policies.
+              </li>
+              <li>
+                <span className="text-[#D93025] font-semibold mr-1">3.4</span>
+                BOSAG reserves the right to amend its membership terms, governance policies, and
+                operational guidelines. Members shall be notified of any material changes and
+                retain the right to review their membership if they do not agree to revised terms.
+              </li>
+            </ol>
+          </section>
 
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-6">
-            <button
-              type="button"
-              onClick={() => navigate("/Terms")}
-              className="bg-blue-700 hover:bg-blue-800 text-white font-medium px-3 py-2 rounded-md shadow-sm transition w-full sm:w-auto"
-            >
-              View T & C
-            </button>
-
-            <div className="flex items-center space-x-2 text-sm text-gray-600">
+          <div className="border-t border-gray-200 pt-6 mt-8">
+            <label className="flex items-start text-sm text-gray-700 space-x-2">
               <input
                 type="checkbox"
-                checked={formData.agreed}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    agreed: e.target.checked,
-                  }))
-                }
-                className="w-4 h-4 accent-blue-700 cursor-pointer"
+                checked={acknowledged}
+                onChange={handleCheckboxChange}
+                className="w-4 h-4 accent-[#F58220] mt-0.5 cursor-pointer"
               />
-              <span>By submitting this form, you agree to our terms and conditions</span>
+              <span>
+                <span className="font-medium">I acknowledge and agree to the terms</span>
+                <span className="block text-gray-500 text-xs mt-1">
+                  By checking this box, I confirm that I have read, understood, and voluntarily
+                  agreed to the terms outlined in this Consent and Disclaimer Notice.
+                </span>
+              </span>
+            </label>
+
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-8">
+              <Link
+                to="/onboarding/form-e"
+                className="bg-gray-200 text-gray-700 px-8 py-2 rounded-md text-sm font-medium hover:bg-gray-300 transition"
+              >
+                Back
+              </Link>
+
+              <Link
+                to="/dashboard/application"
+                disabled={!acknowledged}
+                className={`px-8 py-2 text-sm font-medium rounded-md shadow-sm transition-all ${
+                  acknowledged
+                    ? "bg-[#F58220] text-white hover:bg-[#e36b0a]"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
+              >
+                Proceed to Application
+              </Link>
             </div>
           </div>
+        </div>
+      </main>
 
-
-          <div className="flex justify-center mt-8">
-            <button
-              type="submit"
-              disabled={!isFormValid}
-              className={`font-medium px-8 py-2 rounded-md shadow-sm w-full sm:w-auto transition-colors ${
-                isFormValid
-                  ? "bg-blue-700 hover:bg-blue-800 text-white"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
-            >
-              Submit Application
-            </button>
-          </div>
-        </form>
-      </div>
+      <Footer />
     </div>
   );
 }

@@ -1,7 +1,6 @@
 import React from "react";
 
 import banner1 from "../assets/images/logos/ACT.png";
-import banner2 from "../assets/images/logos/GIZ.png";
 import banner3 from "../assets/images/logos/AMALITECH.png";
 import banner4 from "../assets/images/logos/TURNTABL.png";
 import banner5 from "../assets/images/logos/RELIANCE.png";
@@ -36,8 +35,8 @@ import banner32 from "../assets/images/logos/GFZA.png";
 import banner33 from "../assets/images/logos/GDC.jpg";
 import banner34 from "../assets/images/logos/MASTERCARD.png";
 import banner35 from "../assets/images/logos/MOC.jpg";
-import banner36 from "../assets/images/logos/INVEST FOR JOBS.png";
-import banner37 from "../assets/images/logos/KfW_RGB.jpg";
+import banner36 from "../assets/images/logos/TONY.png";
+
 
 const BrandPartners = () => {
   // 👇 Split into two groups
@@ -57,11 +56,11 @@ const BrandPartners = () => {
     { id: 13, logo: banner10, name: "Adaire" },
     { id: 14, logo: banner5, name: "Reliance Personnel" },
     { id: 15, logo: banner12, name: "ASSL" },
-    { id: 16, logo: banner21, name: "Jobberman" },
+    { id: 16, logo: banner25, name: "Jobberman" },
     { id: 17, logo: banner1, name: "ACT ICT" },
     { id: 18, logo: banner11, name: "Aidec Digital" },
     { id: 19, logo: banner20, name: "Innovare" },
-    { id: 20, logo: banner25, name: "MEST" },
+    { id: 20, logo: banner21, name: "MEST" },
     { id: 21, logo: banner13, name: "Ayo Foundation" },
     { id: 22, logo: banner18, name: "DreamOval" },
     { id: 23, logo: banner15, name: "CodeTrain" },
@@ -69,18 +68,18 @@ const BrandPartners = () => {
   ];
 
   const strategicPartners = [
-    { id: 1, logo: banner33, name: "GDC" },
+    { id: 1, logo: banner27, name: "GDC" },
     { id: 2, logo: banner28, name: "IIPGH" },
     { id: 3, logo: banner8, name: "24H Economy" },
     { id: 4, logo: banner34, name: "Mastercard Foundation" },
     { id: 5, logo: banner32, name: "GFZA" },
-    { id: 6, logo: banner29, name: "GIPC" },
+    { id: 6, logo: banner35, name: "GIPC" },
     { id: 7, logo: banner30, name: "Genesis" },
-    { id: 8, logo: banner31, name: "Generation Ghana" },
+    { id: 8, logo: banner29, name: "Generation Ghana" },
     { id: 9, logo: banner36, name: "Invest for Jobs" },
-    { id: 10, logo: banner37, name: "KfW" },
-    { id: 11, logo: banner27, name: "GDCL" },
-    { id: 12, logo: banner35, name: "MOC" },
+    { id: 10, logo: banner31, name: "KfW" },
+    { id: 11, logo: banner33, name: "GDCL" },
+    // { id: 12, logo: banner31, name: "MOC" },
   ];
 
   return (
@@ -118,7 +117,7 @@ const BrandPartners = () => {
           </h2>
         </header>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-5 items-center justify-center">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-5 items-center justify-center">
           {strategicPartners.map((brand) => (
             <div
               key={brand.id}

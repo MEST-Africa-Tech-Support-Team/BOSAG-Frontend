@@ -16,15 +16,11 @@ const MembershipDashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#f9fafc] flex">
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Main Content */}
       <main className="flex-1 ml-64 p-8">
         <div className="max-w-5xl mx-auto">
-          {/* Main Card */}
           <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-            {/* Header inside card */}
             <header className="mb-6">
               <h1 className="text-2xl font-semibold text-gray-900">
                 Welcome, John! Your Membership Journey Starts Here.
@@ -39,7 +35,6 @@ const MembershipDashboard = () => {
               </div>
             </header>
 
-            {/* Application Progress */}
             <h2 className="text-lg font-semibold text-gray-900 mb-5">
               Application Progress
             </h2>
@@ -66,7 +61,6 @@ const MembershipDashboard = () => {
               ))}
             </ul>
 
-            {/* Next Step Section */}
             <div className="bg-[#eef4ff] p-5 rounded-md border border-[#d7e3ff]">
               <h3 className="font-semibold text-gray-800 mb-1">
                 Next Step: Educational Credentials
@@ -89,7 +83,6 @@ const MembershipDashboard = () => {
               </div>
             </div>
 
-            {/* Bottom Info Section */}
             <div className="mt-10 pt-6 border-t border-gray-100 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
               <article>
                 <div className="text-[#191970] font-semibold mb-1">🔒 Secure Process</div>
