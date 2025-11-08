@@ -29,8 +29,7 @@ import NotFound from "./pages/not-found.jsx";
 import BosagMembership from "./pages/bosag-membership.jsx";
 
 import DashboardHome from "./pages/dashboard/index.jsx";
-import ApplicationProgress from "./pages/dashboard/application-progress.jsx";
-import Summary from "./pages/dashboard/summary.jsx";
+import ApplicationProgress from "./pages/onboarding-forms/application-progress.jsx";
 
 import FormA from "./pages/onboarding-forms/form-a.jsx";
 import FormB from "./pages/onboarding-forms/form-b.jsx";
@@ -38,6 +37,10 @@ import FormC from "./pages/onboarding-forms/form-c.jsx";
 import FormD from "./pages/onboarding-forms/form-d.jsx";
 import FormE from "./pages/onboarding-forms/form-e.jsx";
 import FormF from "./pages/onboarding-forms/form-f.jsx";
+import Summary from "./pages/onboarding-forms/summary.jsx";
+import ResourceHub from "./pages/onboarding-forms/resource-hub.jsx";
+import ManageProfile from "./pages/onboarding-forms/manage-profile.jsx";
+
 import Terms from "./pages/terms.jsx";
 import Event from "./pages/event.jsx";
 
@@ -46,6 +49,7 @@ import MembershipApproval from "./pages/dashboard/member-dashboardpage.jsx";
 import EventManagement from "./pages/dashboard/event-management.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import ResetPasswordPage from "./pages/reset-password.jsx";
+import DashboardOverview from "./pages/dashboard/dashboard-overview.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -73,14 +77,13 @@ const router = createBrowserRouter(
 
 
       <Route path="/dashboard" element={<DashboardHome />} />
-      <Route path="/dashboard/application" element={<ApplicationProgress />} />
-      <Route path="/summary" element={<Summary />} />
-
+     
 
       <Route path="/dashboard" element={<DashboardHome />} />
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/member-dashboardpage" element={<MembershipApproval />} />
       <Route path="/event-management" element={<EventManagement />} />
+      <Route path="/dashboard-overview" element={<DashboardOverview />} />
 
 
       <Route path="/onboarding/form-a" element={<FormA />} />
@@ -89,6 +92,11 @@ const router = createBrowserRouter(
       <Route path="/onboarding/form-d" element={<FormD />} />
       <Route path="/onboarding/form-e" element={<FormE />} />
       <Route path="/onboarding/form-f" element={<FormF />} />
+      <Route path="/onboarding/summary" element={<Summary />} />
+      <Route path="/onboarding/application" element={<ApplicationProgress />} />
+      <Route path="/onboarding/resource-hub" element={<ResourceHub />} />
+      <Route path="/onboarding/manage-profile" element={<ManageProfile />} />
+
 
       <Route path="/bosagmembership" element={<BosagMembership />} />
       <Route path="/event" element={<Event />} />

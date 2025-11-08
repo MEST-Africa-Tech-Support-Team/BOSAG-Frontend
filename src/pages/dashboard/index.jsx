@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../../components/sidebar";
-import { ChevronRight, Lock, Clock } from "lucide-react";
+import { ChevronRight, Lock, Clock, FileText, FileBadge, Shield, Gavel } from "lucide-react";
 import { Link } from "react-router";
 
 const MembershipDashboard = () => {
@@ -12,6 +12,34 @@ const MembershipDashboard = () => {
     { id: "E", label: "References" },
     { id: "F", label: "Documentation Upload" },
     { id: "G", label: "Review & Submit" },
+  ];
+
+
+  const documents = [
+    {
+      icon: <FileText className="text-blue-600 w-5 h-5" />,
+      title: "BOSAG Constitution",
+      viewUrl: "https://docs.google.com/document/d/1VKyKRw3fVuc-WsvSdNKSA4kwXV_gDPQc/edit?usp=drive_link&ouid=110519001254426831619&rtpof=true&sd=true",
+      downloadUrl: "https://docs.google.com/document/d/1VKyKRw3fVuc-WsvSdNKSA4kwXV_gDPQc/edit?usp=drive_link&ouid=110519001254426831619&rtpof=true&sd=true",
+    },
+    {
+      icon: <FileBadge className="text-blue-600 w-5 h-5" />,
+      title: "Membership Terms & Conditions",
+      viewUrl: "#",
+      downloadUrl: "#",
+    },
+    {
+      icon: <Shield className="text-blue-600 w-5 h-5" />,
+      title: "Code of Conduct and Ethics",
+      viewUrl: "#",
+      downloadUrl: "#",
+    },
+    {
+      icon: <Gavel className="text-blue-600 w-5 h-5" />,
+      title: "Governing Council Mandate",
+      viewUrl: "#",
+      downloadUrl: "#",
+    },
   ];
 
   return (
@@ -34,6 +62,44 @@ const MembershipDashboard = () => {
                 </p>
               </div>
             </header>
+
+            <section className="bg-white p-6 rounded-lg border border-gray-100">
+              <h2 className="text-sm font-semibold text-gray-800 mb-4">
+                Read these Documents Before Application
+              </h2>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {documents.map((doc, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between border border-gray-100 rounded-md p-3"
+                  >
+                    <div className="flex items-center gap-2">
+                      {doc.icon}
+                      <span className="text-sm text-gray-700 font-medium">{doc.title}</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm font-medium">
+                      <a
+                        href={doc.viewUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-orange-500 hover:underline"
+                      >
+                        View
+                      </a>
+                      <a
+                        href={doc.downloadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-orange-500 hover:underline"
+                      >
+                        Download
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
 
             <h2 className="text-lg font-semibold text-gray-900 mb-5">
               Application Progress
