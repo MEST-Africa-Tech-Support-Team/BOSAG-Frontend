@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import FormProgressBar from "../../components/form-header.jsx";
 import Sidebar from "../../components/sidebar.jsx";
@@ -6,12 +6,25 @@ import Sidebar from "../../components/sidebar.jsx";
 export default function FormStep3() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    nominatedRep: "",
-    positionRole: "",
-    alternateRep: "",
-    authorizedSignatory: "",
+  // ✅ Load saved data from localStorage first
+  const [formData, setFormData] = useState(() => {
+    const saved = localStorage.getItem("formC");
+    return saved
+      ? JSON.parse(saved)
+      : {
+          nominatedRep: "",
+          positionRole: "",
+          alternateRep: "",
+          authorizedSignatory: "",
+          emailAddress: "",
+          phoneNumber: "",
+        };
   });
+
+  // ✅ Save to localStorage on every change
+  useEffect(() => {
+    localStorage.setItem("formC", JSON.stringify(formData));
+  }, [formData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,8 +34,14 @@ export default function FormStep3() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const { nominatedRep, positionRole, alternateRep, authorizedSignatory } =
-      formData;
+    localStorage.setItem("formC", JSON.stringify(formData));
+
+    const {
+      nominatedRep,
+      positionRole,
+      alternateRep,
+      authorizedSignatory,
+    } = formData;
 
     const allFilled =
       nominatedRep.trim() &&
@@ -30,7 +49,7 @@ export default function FormStep3() {
       alternateRep.trim() &&
       authorizedSignatory.trim();
 
-    // ✅ Mark step 3 as completed only when all fields are filled
+    // ✅ Mark step 3 complete if all main fields filled
     const completed = JSON.parse(localStorage.getItem("completedSteps")) || [];
     if (allFilled && !completed.includes(3)) {
       completed.push(3);
@@ -64,8 +83,8 @@ export default function FormStep3() {
               Section C: Governance and Representation
             </h2>
 
+            {/* Primary Representative */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Nominated Representative */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Nominated Representative to BOSAG
@@ -79,7 +98,6 @@ export default function FormStep3() {
                 />
               </div>
 
-              {/* Position/Role */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Position/Role
@@ -93,7 +111,37 @@ export default function FormStep3() {
                 />
               </div>
 
-              {/* Alternate Representative */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email Address{" "}
+                </label>
+                <input
+                  type="email"
+                  name="emailAddress"
+                  placeholder="example@company.com"
+                  value={formData.emailAddress}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-md p-2 placeholder-gray-400"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Phone Number{" "}
+                </label>
+                <input
+                  type="tel"
+                  name="phoneNumber"
+                  placeholder="(123) 456-7890"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-md p-2 placeholder-gray-400"
+                />
+              </div>
+            </div>
+
+            {/* Alternate Representative */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Alternate Representative{" "}
@@ -108,10 +156,9 @@ export default function FormStep3() {
                 />
               </div>
 
-              {/* Authorized Signatory */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Authorized Signatory (if different)
+                  Authorized Signatory
                 </label>
                 <input
                   type="text"
