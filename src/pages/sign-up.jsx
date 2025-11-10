@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router";
 import signup from "../assets/images/signup.png";
-import { registerUser, socialLogin } from "../services/authService"; // API helper
-import { jwtDecode } from "jwt-decode";
-import { GoogleLogin } from "@react-oauth/google";
+import { registerUser } from "../services/authService"; // API helper
+import GoogleButton from "../components/google-button.jsx"; // Google Button Component
+
+
 
 export default function BosagSignUpPage() {
   const navigate = useNavigate();
@@ -55,23 +56,7 @@ export default function BosagSignUpPage() {
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
-    try {
-      const decoded = jwtDecode(credentialResponse.credential);
-      const email = decoded.email;
-      const result = await socialLogin(email, "google");
-      alert(`Welcome ${result.user?.firstName || "user"}!`);
-      console.log("Logged in:", result);
-      navigate("/dashboard");
-    } catch (error) {
-      console.error("Google login failed:", error);
-      alert("Google sign-in failed!");
-    }
-  };
 
-  const handleGoogleError = () => {
-    alert("Google sign-in was cancelled or failed.");
-  };
 
   return (
     <div className="flex min-h-screen">
@@ -206,19 +191,8 @@ export default function BosagSignUpPage() {
           </div>
 
           {/* Social Auth */}
-          <div className="space-y-3">
-            <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
-
-            <button
-              onClick={() => alert("Facebook login coming soon!")}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-300"
-            >
-              <svg className="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-              </svg>
-              <span className="text-gray-700 font-medium">Sign up with Facebook</span>
-            </button>
-          </div>
+          <GoogleButton />
+          
 
           {/* Login Link */}
           <div className="text-center mt-6">

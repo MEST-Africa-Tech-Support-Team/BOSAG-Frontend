@@ -53,27 +53,18 @@ export const loginUser = async (credentials) => {
 
 
 // SOCIAL LOGIN
-export const socialLogin = async (email, provider) => {
-  try {
-    const response = await axios.post(
-      "https://bosag-backend.onrender.com/api/users/social-login",
-      { email, provider },
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+export const socialLogin = (provider) => {
+  const urls = {
+    google: "https://bosag-backend.onrender.com/api/users/auth/google",
+  };
 
-    // Save token if provided
-    if (response.data?.token) {
-      localStorage.setItem("bosagToken", response.data.token);
-    }
-
-    return response.data;
-  } catch (error) {
-    console.error("Social login failed:", error.response?.data || error.message);
-    throw error.response?.data || "Social login failed";
+  if (urls[provider]) {
+    window.location.href = urls[provider]; // redirects user to backend OAuth
+  } else {
+    console.error(`Unsupported provider: ${provider}`);
   }
 };
+
 
 
 

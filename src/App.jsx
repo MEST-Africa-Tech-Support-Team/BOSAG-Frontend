@@ -51,6 +51,10 @@ import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import ResetPasswordPage from "./pages/reset-password.jsx";
 import DashboardOverview from "./pages/dashboard/dashboard-overview.jsx";
 
+
+import AuthCallback from "./pages/auth-callback.jsx";
+
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<RootLayout />}>
@@ -76,7 +80,14 @@ const router = createBrowserRouter(
       <Route path="/terms" element={<Terms />} />
 
 
-      <Route path="/dashboard" element={<DashboardHome />} />
+       <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardHome />
+            </ProtectedRoute>
+          }
+        />
      
 
       <Route path="/dashboard" element={<DashboardHome />} />
@@ -100,6 +111,7 @@ const router = createBrowserRouter(
 
       <Route path="/bosagmembership" element={<BosagMembership />} />
       <Route path="/event" element={<Event />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
       
       <Route path="*" element={<NotFound />} />
     </Route>
