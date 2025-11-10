@@ -40,7 +40,9 @@ import FormF from "./pages/onboarding-forms/form-f.jsx";
 // Admin & Member Dashboard
 import AdminDashboard from "./pages/dashboard/admin-dashboard.jsx";
 import MembershipApproval from "./pages/dashboard/member-dashboardpage.jsx";
-import EventManagement from "./pages/dashboard/event-management.jsx"; // ✅ keep this too
+import EventManagement from "./pages/dashboard/event-management.jsx";
+import AdminMembersDashboard from "./pages/dashboard/admin-members-dashboard.jsx"
+import AddEvent from "./pages/dashboard/add-event.jsx"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -71,6 +73,8 @@ const router = createBrowserRouter(
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/member-dashboardpage" element={<MembershipApproval />} />
       <Route path="/event-management" element={<EventManagement />} />
+      <Route path="/admin-members-dashboard" element={<AdminMembersDashboard />} />
+      <Route path="/add-event" element={<AddEvent />} />
 
       {/* Onboarding Forms */}
       <Route path="/onboarding/form-a" element={<FormA />} />
