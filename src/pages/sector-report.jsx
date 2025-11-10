@@ -15,92 +15,92 @@ import report8 from "../assets/images/hero4.jpg";
 const reports = [
     {
         id: 1,
-        title: "State of the GB&BPPO Sector in Ghana 2025",
+        title: "Ghana GBS/BPO Sector Report 2025",
         category: "Annual Reports",
         date: "Q4 2025",
         type: "Annual Report",
         description:
-            "Comprehensive analysis of the BPO and shared services sector in Ghana, highlighting key trends, growth areas, and policy recommendations.",
+            "The 2025 Ghana GBS/BPO Spotlight Report provides a comprehensive analysis of the country’s position in the global outsourcing landscape.",
         image: report1,
-        file: "/reports/state-of-sector.pdf",
+        file: "https://drive.google.com/file/d/1gY5iBGsc161laLD9DvmiluH24tuzFw5t/view?usp=drive_link",
     },
-    {
-        id: 2,
-        title: "Ghana’s Competitive Cost Benchmarks",
-        category: "Market Benchmarks",
-        date: "Q3 2025",
-        type: "Market Benchmark",
-        description:
-            "A cost benchmarking study comparing Ghana’s competitiveness across major outsourcing destinations.",
-        image: report2,
-        file: "/reports/ghana-cost-benchmarks.pdf",
-    },
-    {
-        id: 3,
-        title: "Policy Brief: SEZ Tax Incentives for BPO",
-        category: "Policy Briefs",
-        date: "Q3 2025",
-        type: "Policy Brief",
-        description:
-            "An overview of policy incentives and fiscal frameworks designed to attract BPO and ICT investments in Ghana.",
-        image: report3,
-        file: "/reports/sez-tax-incentives.pdf",
-    },
-    {
-        id: 4,
-        title: "Case Study: GCC Attraction Successes",
-        category: "Case Studies",
-        date: "Q3 2025",
-        type: "Case Study",
-        description:
-            "A compilation of successful case studies detailing Ghana’s global competitiveness in customer service delivery.",
-        image: report4,
-        file: "/reports/gcc-attraction.pdf",
-    },
-    {
-        id: 5,
-        title: "Talent Development & Skills Assessment",
-        category: "Policy Briefs",
-        date: "Q2 2025",
-        type: "Research Study",
-        description:
-            "Analysis of the skills landscape and readiness for the outsourcing and digital service sectors in Ghana.",
-        image: report5,
-        file: "/reports/talent-development.pdf",
-    },
-    {
-        id: 6,
-        title: "Digital Infrastructure Readiness Report",
-        category: "Tech & Innovation",
-        date: "Q2 2025",
-        type: "Tech & Innovation",
-        description:
-            "Evaluation of Ghana’s ICT infrastructure readiness to support scalable outsourcing operations.",
-        image: report6,
-        file: "/reports/digital-infrastructure.pdf",
-    },
-    {
-        id: 7,
-        title: "Market Penetration Strategies 2026",
-        category: "Case Studies",
-        date: "Q1 2025",
-        type: "Strategy Report",
-        description:
-            "Strategic insights for expanding Ghana’s global outsourcing market presence and partnerships.",
-        image: report7,
-        file: "/reports/market-strategies.pdf",
-    },
-    {
-        id: 8,
-        title: "Innovation & Technology Strategies",
-        category: "Tech & Innovation",
-        date: "Q1 2025",
-        type: "Tech & Innovation",
-        description:
-            "Highlights on innovation-driven initiatives transforming the outsourcing ecosystem in Ghana.",
-        image: report8,
-        file: "/reports/innovation-strategies.pdf",
-    },
+    // {
+    //     id: 2,
+    //     title: "Ghana’s Competitive Cost Benchmarks",
+    //     category: "Market Benchmarks",
+    //     date: "Q3 2025",
+    //     type: "Market Benchmark",
+    //     description:
+    //         "A cost benchmarking study comparing Ghana’s competitiveness across major outsourcing destinations.",
+    //     image: report2,
+    //     file: "/reports/ghana-cost-benchmarks.pdf",
+    // },
+    // {
+    //     id: 3,
+    //     title: "Policy Brief: SEZ Tax Incentives for BPO",
+    //     category: "Policy Briefs",
+    //     date: "Q3 2025",
+    //     type: "Policy Brief",
+    //     description:
+    //         "An overview of policy incentives and fiscal frameworks designed to attract BPO and ICT investments in Ghana.",
+    //     image: report3,
+    //     file: "/reports/sez-tax-incentives.pdf",
+    // },
+    // {
+    //     id: 4,
+    //     title: "Case Study: GCC Attraction Successes",
+    //     category: "Case Studies",
+    //     date: "Q3 2025",
+    //     type: "Case Study",
+    //     description:
+    //         "A compilation of successful case studies detailing Ghana’s global competitiveness in customer service delivery.",
+    //     image: report4,
+    //     file: "/reports/gcc-attraction.pdf",
+    // },
+    // {
+    //     id: 5,
+    //     title: "Talent Development & Skills Assessment",
+    //     category: "Policy Briefs",
+    //     date: "Q2 2025",
+    //     type: "Research Study",
+    //     description:
+    //         "Analysis of the skills landscape and readiness for the outsourcing and digital service sectors in Ghana.",
+    //     image: report5,
+    //     file: "/reports/talent-development.pdf",
+    // },
+    // {
+    //     id: 6,
+    //     title: "Digital Infrastructure Readiness Report",
+    //     category: "Tech & Innovation",
+    //     date: "Q2 2025",
+    //     type: "Tech & Innovation",
+    //     description:
+    //         "Evaluation of Ghana’s ICT infrastructure readiness to support scalable outsourcing operations.",
+    //     image: report6,
+    //     file: "/reports/digital-infrastructure.pdf",
+    // },
+    // {
+    //     id: 7,
+    //     title: "Market Penetration Strategies 2026",
+    //     category: "Case Studies",
+    //     date: "Q1 2025",
+    //     type: "Strategy Report",
+    //     description:
+    //         "Strategic insights for expanding Ghana’s global outsourcing market presence and partnerships.",
+    //     image: report7,
+    //     file: "/reports/market-strategies.pdf",
+    // },
+    // {
+    //     id: 8,
+    //     title: "Innovation & Technology Strategies",
+    //     category: "Tech & Innovation",
+    //     date: "Q1 2025",
+    //     type: "Tech & Innovation",
+    //     description:
+    //         "Highlights on innovation-driven initiatives transforming the outsourcing ecosystem in Ghana.",
+    //     image: report8,
+    //     file: "/reports/innovation-strategies.pdf",
+    // },
 ];
 
 const categories = [
@@ -203,6 +203,8 @@ const SectorReports = () => {
 
                                 <a
                                     href={report.file}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     download
                                     className="flex items-center justify-center gap-2 bg-[#ff6600] hover:bg-[#e95c00] text-white py-2 rounded-md font-medium transition-colors"
                                 >

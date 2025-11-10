@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import FormProgressBar from "../../components/form-header.jsx";
 import Sidebar from "../../components/sidebar.jsx";
@@ -6,12 +6,23 @@ import Sidebar from "../../components/sidebar.jsx";
 export default function FormStep2() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    contactName: "",
-    jobTitle: "",
-    email: "",
-    phone: "",
+  // ✅ Load any saved data first
+  const [formData, setFormData] = useState(() => {
+    const saved = localStorage.getItem("formB");
+    return saved
+      ? JSON.parse(saved)
+      : {
+          contactName: "",
+          jobTitle: "",
+          email: "",
+          phone: "",
+        };
   });
+
+  // ✅ Save to localStorage whenever data changes
+  useEffect(() => {
+    localStorage.setItem("formB", JSON.stringify(formData));
+  }, [formData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,7 +32,10 @@ export default function FormStep2() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // only mark as completed if all fields filled
+    // Save before navigating
+    localStorage.setItem("formB", JSON.stringify(formData));
+
+    // Only mark complete if all fields filled
     const isComplete = Object.values(formData).every((v) => v.trim() !== "");
     const completed = JSON.parse(localStorage.getItem("completedSteps")) || [];
 
@@ -94,7 +108,6 @@ export default function FormStep2() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    // placeholder="example@company.com"
                     className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-[#191970] focus:outline-none"
                   />
                 </div>
@@ -108,7 +121,6 @@ export default function FormStep2() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    // placeholder="Enter phone number"
                     className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-[#191970] focus:outline-none"
                   />
                 </div>

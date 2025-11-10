@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import FormProgressBar from "../../components/form-header.jsx";
 import Sidebar from "../../components/sidebar.jsx";
@@ -17,17 +17,28 @@ export default function FormStep1() {
     "Other (Please specify)",
   ];
 
-  const [formData, setFormData] = useState({
-    organisationName: "",
-    yearOfEstablishment: "",
-    companyRegNumber: "",
-    sectorFocus: "",
-    employeesGhana: "",
-    employeesGlobal: "",
-    organisationTypes: [],
-    otherOrganisationText: "",
-    membershipTier: "",
+  // ✅ Load saved data from localStorage if available
+  const [formData, setFormData] = useState(() => {
+    const saved = localStorage.getItem("formA");
+    return saved
+      ? JSON.parse(saved)
+      : {
+          organisationName: "",
+          yearOfEstablishment: "",
+          companyRegNumber: "",
+          sectorFocus: "",
+          employeesGhana: "",
+          employeesGlobal: "",
+          organisationTypes: [],
+          otherOrganisationText: "",
+          membershipTier: "",
+        };
   });
+
+  // ✅ Save form data to localStorage on every change
+  useEffect(() => {
+    localStorage.setItem("formA", JSON.stringify(formData));
+  }, [formData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,6 +70,9 @@ export default function FormStep1() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // ✅ Save final version before moving forward
+    localStorage.setItem("formA", JSON.stringify(formData));
+
     // ✅ Check if all required fields are filled
     const {
       organisationName,
@@ -81,7 +95,7 @@ export default function FormStep1() {
       organisationTypes.length > 0 &&
       membershipTier.trim();
 
-    // ✅ Only mark completed if all fields are filled
+    // ✅ Update completed steps
     const completed = JSON.parse(localStorage.getItem("completedSteps")) || [];
     if (allFilled && !completed.includes(1)) {
       completed.push(1);
@@ -139,10 +153,10 @@ export default function FormStep1() {
                   type="text"
                   name="yearOfEstablishment"
                   placeholder="YYYY"
-                value={formData.yearOfEstablishment}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md p-2 placeholder-gray-400"
-              />
+                  value={formData.yearOfEstablishment}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-md p-2 placeholder-gray-400"
+                />
               </div>
 
               <div>
