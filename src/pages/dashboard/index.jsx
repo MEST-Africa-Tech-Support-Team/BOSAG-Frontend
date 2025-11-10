@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../../components/sidebar";
-import { ChevronRight, Lock, Clock } from "lucide-react";
+import { ChevronRight, Lock, Clock, FileText, FileBadge, Shield, Gavel } from "lucide-react";
 import { Link } from "react-router";
 
 const MembershipDashboard = () => {
@@ -14,17 +14,41 @@ const MembershipDashboard = () => {
     { id: "G", label: "Review & Submit" },
   ];
 
+
+  const documents = [
+    {
+      icon: <FileText className="text-blue-600 w-5 h-5" />,
+      title: "BOSAG Constitution",
+      viewUrl: "https://docs.google.com/document/d/1VKyKRw3fVuc-WsvSdNKSA4kwXV_gDPQc/edit?usp=drive_link&ouid=110519001254426831619&rtpof=true&sd=true",
+      downloadUrl: "https://docs.google.com/document/d/1VKyKRw3fVuc-WsvSdNKSA4kwXV_gDPQc/edit?usp=drive_link&ouid=110519001254426831619&rtpof=true&sd=true",
+    },
+    {
+      icon: <FileBadge className="text-blue-600 w-5 h-5" />,
+      title: "Membership Terms & Conditions",
+      viewUrl: "#",
+      downloadUrl: "#",
+    },
+    {
+      icon: <Shield className="text-blue-600 w-5 h-5" />,
+      title: "Code of Conduct and Ethics",
+      viewUrl: "#",
+      downloadUrl: "#",
+    },
+    {
+      icon: <Gavel className="text-blue-600 w-5 h-5" />,
+      title: "Governing Council Mandate",
+      viewUrl: "#",
+      downloadUrl: "#",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-[#f9fafc] flex">
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Main Content */}
       <main className="flex-1 ml-64 p-8">
         <div className="max-w-5xl mx-auto">
-          {/* Main Card */}
           <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-            {/* Header inside card */}
             <header className="mb-6">
               <h1 className="text-2xl font-semibold text-gray-900">
                 Welcome, John! Your Membership Journey Starts Here.
@@ -39,7 +63,44 @@ const MembershipDashboard = () => {
               </div>
             </header>
 
-            {/* Application Progress */}
+            <section className="bg-white p-6 rounded-lg border border-gray-100">
+              <h2 className="text-sm font-semibold text-gray-800 mb-4">
+                Read these Documents Before Application
+              </h2>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {documents.map((doc, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between border border-gray-100 rounded-md p-3"
+                  >
+                    <div className="flex items-center gap-2">
+                      {doc.icon}
+                      <span className="text-sm text-gray-700 font-medium">{doc.title}</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm font-medium">
+                      <a
+                        href={doc.viewUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-orange-500 hover:underline"
+                      >
+                        View
+                      </a>
+                      <a
+                        href={doc.downloadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-orange-500 hover:underline"
+                      >
+                        Download
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
             <h2 className="text-lg font-semibold text-gray-900 mb-5">
               Application Progress
             </h2>
@@ -66,7 +127,6 @@ const MembershipDashboard = () => {
               ))}
             </ul>
 
-            {/* Next Step Section */}
             <div className="bg-[#eef4ff] p-5 rounded-md border border-[#d7e3ff]">
               <h3 className="font-semibold text-gray-800 mb-1">
                 Next Step: Educational Credentials
@@ -89,7 +149,6 @@ const MembershipDashboard = () => {
               </div>
             </div>
 
-            {/* Bottom Info Section */}
             <div className="mt-10 pt-6 border-t border-gray-100 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
               <article>
                 <div className="text-[#191970] font-semibold mb-1">🔒 Secure Process</div>

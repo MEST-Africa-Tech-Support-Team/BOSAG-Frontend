@@ -5,7 +5,7 @@ import Footer from "../components/footer";
 import memimage from "../assets/images/memimage.png";
 import MembershipCategories from "../components/membership-categories";
 import Partners from "../components/partners";
-
+import { Link } from "react-router";
 
 const BosagMembership = () => {
   return (
@@ -22,12 +22,12 @@ const BosagMembership = () => {
         />
 
         {/* Dark overlay */}
-        <div className="absolute inset-0 bg-[#31318D] opacity-42" aria-hidden="true" />
+        <div className="absolute inset-0 bg-[#31318D] opacity-42 " aria-hidden="true" />
 
         {/* Content */}
         <div className="relative pt-10">
           <div className="max-w-6xl mx-auto px-6 pt-10 pb-10 ml-20">
-            <h1 className="text-4xl font-semibold mb-4 leading-tight">
+            <h1 className="text-xl md:text-5xl font-semibold mb-4 leading-tight">
               Join BOSAG Membership
             </h1>
             <p className="text-lg max-w-[480px] mb-8">
@@ -51,7 +51,7 @@ const BosagMembership = () => {
       {/* Why Join BOSAG */}
       <section className="py-20 bg-white text-center">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#131663] mb-4">
+          <h2 className="text-xl md:text-4xl font-bold text-[#131663] mb-4">
             Why Join BOSAG?
           </h2>
           <p className="text-gray-600 max-w-3xl mx-auto mb-12">
@@ -116,7 +116,7 @@ const BosagMembership = () => {
       {/* Core Membership Benefits Section */}
       <section className="bg-white py-20 text-center">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#131663] mb-3">
+          <h2 className="text-xl md:text-4xl font-bold text-[#131663] mb-3">
             Core Membership Benefits
           </h2>
           <p className="text-gray-600 mb-12 max-w-2xl mx-auto">
@@ -184,7 +184,7 @@ const BosagMembership = () => {
       {/* Ready to Join Section */}
       <section className="bg-gray-50 py-16 text-center">
         <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#131663] mb-4">
+          <h2 className="text-xl md:text-4xl font-bold text-[#131663] mb-4">
             Ready to Join BOSAG?
           </h2>
           <p className="text-gray-600 mb-8">
@@ -193,12 +193,16 @@ const BosagMembership = () => {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">
+            <Link to="/signup">
             <button className="bg-[#FF7A00] text-white px-8 py-3 rounded-md font-medium hover:bg-[#e56e00] transition">
               Apply for Membership
             </button>
+            </Link>
+            <Link to="/contact">
             <button className="border border-[#131663] text-[#131663] px-8 py-3 rounded-md font-medium hover:bg-[#131663] hover:text-white transition">
               Contact Us
             </button>
+            </Link>
           </div>
         </div>
       </section>

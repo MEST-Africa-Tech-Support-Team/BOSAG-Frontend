@@ -33,12 +33,12 @@ const EventCards = () => {
   ];
 
   return (
-    <section className="bg-white py-16 px-6 md:px-10">
+    <section className="bg-white py-10 px-6 md:px-10">
       <div className="max-w-7xl mx-auto">
 
         <div className="flex items-center justify-between mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-[#191970]">
-            Upcoming Events
+             Events
           </h2>
 
           <Link
