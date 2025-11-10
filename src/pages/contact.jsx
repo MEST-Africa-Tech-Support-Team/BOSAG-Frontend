@@ -185,7 +185,7 @@ export default function BosagContactPage() {
                 </div>
                 <div>
                   <h3 className="text-indigo-900 font-bold text-base mb-1">LinkedIn</h3>
-                  <a href="#" className="text-gray-600 text-sm underline hover:text-indigo-900">
+                  <a href="https://www.linkedin.com/in/david-gowu-9158027/" className="text-gray-600 text-sm underline hover:text-indigo-900">
                     Visit our LinkedIn Profile
                   </a>
                 </div>

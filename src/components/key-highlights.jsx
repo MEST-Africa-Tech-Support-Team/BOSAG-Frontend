@@ -33,9 +33,9 @@ const KeyHighlights = () => {
     <section className="py-20 bg-white">
       <div className="max-w-6xl mx-auto px-6 text-center">
         {/* Title */}
-        <h2 className="text-3xl md:text-3xl font-bold text-[#0A0A0A] mb-2">
+        <h1 className="text-xl md:text-4xl font-bold text-[#0A0A0A] mb-6">
           Key Industry Highlights
-        </h2>
+        </h1>
         <p className="text-gray-600 mb-12">
           Ghana's competitive advantages in the global services sector
         </p>

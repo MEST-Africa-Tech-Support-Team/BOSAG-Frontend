@@ -3,7 +3,7 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import about from "../assets/images/about.png";
 import KeyHighlights from "../components/key-highlights";
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Download } from 'lucide-react';
 import SectorCapabilities from "../components/sector-capabilities";
 import SectorLeadership from "../components/sector-leadership";
 import VisionForFuture from "../components/vision-for-future";
@@ -15,18 +15,18 @@ const IndustryOverview = () => {
     <Navbar />
     <section className="relative w-full text-white overflow-hidden">
   {/* Background Image */}
-  <div className="absolute inset-0">
+  <div className="absolute  h-[55vh] inset-0">
     <img
       src={about}
       alt="Industry background"
-      className="w-full h-full object-cover object-center"
+      className="w-full object-cover object-center"
     />
     {/* Overlay for readability */}
-    <div className="absolute inset-0 bg-[#0B1B46]/70"></div>
+    <div className="absolute inset-0 bg-[#0B1B46]/50  h-[57vh] "></div>
   </div>
 
   {/* Content */}
-  <div className="relative max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-28">
+  <div className="relative max-w-6xl mx-auto px-6 md:px-10 py-15 md:py-18">
     <h2 className="text-3xl md:text-5xl font-extrabold mb-6 leading-snug">
       Industry Overview Of BOSAG
     </h2>
@@ -44,8 +44,8 @@ const IndustryOverview = () => {
 
     {/* Buttons */}
     <div className="flex flex-wrap gap-4">
-      <button className="bg-[#F86208] hover:bg-[#ea680c] transition text-white font-medium px-8 py-3 rounded-md">
-        Downlond Document
+      <button className="bg-[#F86208] flex gap-3 hover:bg-[#ea680c] transition text-white font-medium px-8 py-3 rounded-md">
+       <Download />Downlond Document
       </button>
       {/* <button className="border border-white text-white hover:bg-white hover:text-[#0B2B8A] transition font-medium px-8 py-3 rounded-md">
         Board
@@ -58,7 +58,7 @@ const IndustryOverview = () => {
     <section className="bg-[#f8fbff] py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Main Heading */}
-        <h1 className="text-xl sm:text-5xl font-bold text-gray-900 text-center mb-12">
+        <h1 className="text-xl sm:text-4xl font-bold text-gray-900 text-center mb-12">
           Ghana's Rise as a GBS Hub
         </h1>
 
@@ -97,7 +97,7 @@ const IndustryOverview = () => {
      <section className="bg-[#242470] py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto text-center">
         {/* Main Heading */}
-        <h1 className="text-3xl sm:text-4xl lg:text-3xl font-bold text-white mb-6 leading-tight">
+        <h1 className="text-xl sm:text-4xl lg:text-3xl font-bold text-white mb-6 leading-tight">
           Join BOSAG in Building Ghana's Digital Future
         </h1>
 

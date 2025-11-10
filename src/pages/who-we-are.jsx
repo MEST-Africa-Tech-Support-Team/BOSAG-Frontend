@@ -75,9 +75,9 @@ export default function WhoWeAre() {
     <Navbar/>
     <section className="">
       {/* Header */}
-      <div className="text-center py-10 bg-white">
+      <div className="text-center py-10  bg-white">
       <h2 className="text-2xl md:text-4xl font-bold text-[#131663]">
-        Who We Are: Ghana&apos;s Gateway to{" "}
+        Who We Are: Ghana&apos;s Gateway to{" "} 
         <span className="text-[#FF7A00] relative inline-block">
           Global Services
           <span className="absolute left-0 right-0 -bottom-1 mx-auto w-10 h-[3px] bg-[#FF7A00] rounded-full"></span>
@@ -86,8 +86,9 @@ export default function WhoWeAre() {
     </div>
 
       {/* Vision & Mission */}
+      <div className="w-full bg-[#f7f8fc] flex flex-col lg:flex-row lg:h-[45vh] p-15  ">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 mb-20 px-6">
-        <div className="bg-[#191970] text-white p-8 rounded-2xl shadow-lg">
+        <div className="bg-[#191970] border-t-3 border-[#F86208] text-white p-8 rounded-2xl shadow-lg">
           <Eye className="w-7 h-7 text-[#F86208] mb-4" />
           <h3 className="text-xl font-semibold mb-3">Our Vision</h3>
           <p className="text-sm leading-relaxed text-white/90">
@@ -112,10 +113,11 @@ export default function WhoWeAre() {
           </p>
         </div>
       </div>
+      </div>
 
       {/* Objectives */}
       <div className="max-w-6xl mx-auto px-6 mb-16">
-        <h3 className="text-center text-2xl font-bold text-[#191970] mb-10">
+        <h3 className="text-center mt-10 text-xl md:text-4xl font-bold text-[#191970] mb-10">
           Our 10 Objectives: BOSAG's Core Mandate
         </h3>
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
@@ -137,8 +139,8 @@ export default function WhoWeAre() {
       </div>
 
       {/* CTA Section */}
-      <div className="text-center ">
-        <h4 className="text-xl font-semibold text-[#1c1c57] mb-2">
+      <div className="text-center mt-15 h-[30vh]">
+        <h4 className="text-xl md:text-4xl font-semibold text-[#1c1c57] mb-2">
           Ready to drive the future of Ghana's GBS sector?
         </h4>
         <p className="text-gray-600 mb-6">Join the unified voice.</p>

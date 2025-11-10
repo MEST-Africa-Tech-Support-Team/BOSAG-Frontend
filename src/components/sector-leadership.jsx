@@ -7,7 +7,7 @@ export default function SectorLeadership() {
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-16">
-          <h1 className="text-3xl sm:text-5xl font-bold mb-4">
+          <h1 className="text-xl sm:text-4xl font-bold mb-4">
             Sector Leadership: BOSAG
           </h1>
           <p className="text-l text-gray-200">

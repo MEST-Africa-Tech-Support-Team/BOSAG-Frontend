@@ -5,14 +5,15 @@ export default function GovernanceStructure() {
   const [isSmall, setIsSmall] = useState(false);
 
   useEffect(() => {
-    const checkSize = () => setIsSmall(window.innerWidth < 640);
+    const checkSize = () => setIsSmall(window.innerWidth < 768);
     checkSize();
     window.addEventListener("resize", checkSize);
     return () => window.removeEventListener("resize", checkSize);
   }, []);
 
+  
   return (
-    <div className="bg-gray-50 py-10 px-6 h-[200vh] mb-2 md:hidden lg:block">
+    <div className="bg-gray-50 py-10 px-6 lg:h-[140vh] mb-2 ">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -27,7 +28,7 @@ export default function GovernanceStructure() {
         </div>
 
         {/* Organizational Chart */}
-        <div className="flex flex-col items-center mb-12 relative">
+        <div className="flex-col hidden lg:block items-center mb-12 relative">
           {/* General Assembly */}
           <div className="bg-[#191970] text-white rounded-xl shadow-lg p-7 w-60 text-center absolute top-0 left-47 mb-8">
             <h3 className="text-l font-bold mb-2">GENERAL ASSEMBLY</h3>
@@ -94,7 +95,7 @@ export default function GovernanceStructure() {
             {/* Left Column */}
             <div className="flex flex-col items-center">
               <div className="grid grid-cols-2 gap-4 w-full mb-4">
-                <div className="bg-[#EFF6FF] border-2 border-[#191970] absolute top-114 left-19 rounded-xl p-4 text-center">
+                <div className="bg-[#EFF6FF] border-2 border-[#191970] absolute top-114 left-30 rounded-xl p-4 text-center">
                   <h4 className="font-bold text-[#191970] text-sm mb-1">
                     POLICY ADVOCACY
                   </h4>
@@ -102,7 +103,7 @@ export default function GovernanceStructure() {
                     Specialised Committee
                   </p>
                 </div>
-                <div className="bg-[#EFF6FF] border-2 border-[#191970] absolute top-114 left-66 rounded-xl p-4 text-center">
+                <div className="bg-[#EFF6FF] border-2 border-[#191970] absolute top-114 left-80 rounded-xl p-4 text-center">
                   <h4 className="font-bold text-[#191970] text-sm mb-1">
                     SKILLS DEVELOPMENT
                   </h4>
@@ -113,11 +114,11 @@ export default function GovernanceStructure() {
               </div>
 
               {/* SME lines */}
-              <div className="absolute top-133 left-88 w-1 h-9 bg-[#191970]"></div>
-              <div className="absolute top-133 left-39 w-1 h-9 bg-[#191970]"></div>
+              <div className="absolute top-133 left-104 w-1 h-9 bg-[#191970]"></div>
+              <div className="absolute top-133 left-52 w-1 h-9 bg-[#191970]"></div>
 
               <div className="grid grid-cols-2 gap-4 relative w-full">
-                <div className="bg-[#EFF6FF] border-2 border-[#191970] absolute top-140 left-6 rounded-xl p-4 text-center">
+                <div className="bg-[#EFF6FF] border-2 border-[#191970] absolute top-140 left-20 rounded-xl p-4 text-center">
                   <h4 className="font-bold text-[#191970] text-sm mb-1">
                     MARKETING & PROMOTION
                   </h4>
@@ -125,7 +126,7 @@ export default function GovernanceStructure() {
                     Specialised Committee
                   </p>
                 </div>
-                <div className="bg-[#EFF6FF] border-2 border-[#191970] w-63 absolute top-140 left-67 rounded-xl p-4 text-center">
+                <div className="bg-[#EFF6FF] border-2 border-[#191970] w-63 absolute top-140 left-80 rounded-xl p-4 text-center">
                   <h4 className="font-bold text-[#191970] text-sm mb-1">
                     SME & CAPACITY BUILDING
                   </h4>
@@ -138,15 +139,15 @@ export default function GovernanceStructure() {
               {/* Connector lines */}
               <div className="grid grid-cols-2 gap-4 w-full mb-0">
                 <div className="flex justify-center">
-                  <div className="w-1 h-8 absolute top-163 left-37 bg-[#191970]"></div>
+                  <div className="w-1 h-8 absolute top-163 left-50 bg-[#191970]"></div>
                 </div>
                 <div className="flex justify-center">
-                  <div className="w-1 h-8 absolute top-163 left-89 bg-[#191970]"></div>
+                  <div className="w-1 h-8 absolute top-163 left-105 bg-[#191970]"></div>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 w-full">
-                <div className="bg-[#EFF6FF] border-2 border-indigo-900 absolute top-172 left-6 rounded-xl p-4 text-center">
+                <div className="bg-[#EFF6FF] border-2 border-indigo-900 absolute top-172 left-24 rounded-xl p-4 text-center">
                   <h4 className="font-bold text-indigo-900 text-sm mb-1">
                     RESEARCH & KNOWLEDGE
                   </h4>
@@ -154,7 +155,7 @@ export default function GovernanceStructure() {
                     Specialised Committee
                   </p>
                 </div>
-                <div className="bg-[#EFF6FF] border-2 border-indigo-900 w-53 absolute top-172 left-67 rounded-xl p-4 text-center">
+                <div className="bg-[#EFF6FF] border-2 border-indigo-900 w-53 absolute top-172 left-83 rounded-xl p-4 text-center">
                   <h4 className="font-bold text-indigo-900 text-sm mb-1">
                     MEMBERSHIP ETHICS
                   </h4>
@@ -168,13 +169,13 @@ export default function GovernanceStructure() {
             {/* Right Column */}
             <div className="flex flex-col relative items-center">
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-[#EFF6FF] w-45 h-20 border-2 border-indigo-900 absolute top-117 -left-23 rounded-xl p-4 text-center">
+                <div className="bg-[#EFF6FF] w-40 h-20 border-2 border-indigo-900 absolute top-117 -left-5 rounded-xl p-4 text-center">
                   <h4 className="font-bold text-indigo-900 text-sm mb-1">
                     CORPORATES
                   </h4>
                   <p className="text-xs text-gray-600">Sector Consultants</p>
                 </div>
-                <div className="bg-[#EFF6FF] w-45 h-20 border-2 border-indigo-900 absolute top-117 left-31 rounded-xl p-4 text-center">
+                <div className="bg-[#EFF6FF] w-40 h-20 border-2 border-indigo-900 absolute top-117 left-47 rounded-xl p-4 text-center">
                   <h4 className="font-bold text-indigo-900 text-sm mb-1">
                     INDIVIDUALS
                   </h4>
@@ -191,9 +192,9 @@ export default function GovernanceStructure() {
             href="/BOSAG-Governance-Structure.pdf"
             download="Bosag_Governance_Structure.pdf"
           >
-            <button className="bg-orange-500 hover:bg-orange-600 text-white absolute top-200 left-120 font-bold py-4 px-12 rounded-lg transition duration-300 inline-flex items-center gap-3 shadow-lg">
+            <button className="bg-orange-500 hover:bg-orange-600 text-white lg:absolute lg:top-200 lg:left-120 font-bold py-4 px-12 rounded-lg transition duration-300 inline-flex items-center gap-3 shadow-lg">
               <Download className="w-5 h-5" />
-              Download Document
+              {isSmall ? "Download Governance Structure" : "Download Document"}
             </button>
           </a>
         </div>
