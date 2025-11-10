@@ -1,5 +1,5 @@
 import React from "react";
-import gowu from "../assets/images/gowu.png";
+import gowu from "../assets/images/Gowu.png";
 
 const BosagExecutive = () => {
   return (
