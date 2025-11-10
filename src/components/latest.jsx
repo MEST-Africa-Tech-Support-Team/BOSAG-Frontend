@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import Team from '../assets/images/team.jpg';
 import Win from '../assets/images/win.jpg';
-import Growth from '../assets/images/growth.jpg';
+import Growth from '../assets/images/pic.jpg';
 
 export default function ArticlesSection() {
   const [formData, setFormData] = useState({
