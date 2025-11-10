@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import Team from '../assets/images/team.jpg';
 import Win from '../assets/images/win.jpg';
-import growth from '../assets/images/growth.jpg';
+import Growth from '../assets/images/growth.jpg';
 
 export default function ArticlesSection() {
   const [formData, setFormData] = useState({
@@ -25,7 +25,7 @@ export default function ArticlesSection() {
 
   const articles = [
     {
-      image: growth,
+      image: Growth,
       title: 'The 100K Job Goal: Forecasting Ghana\'s GBS Growth',
       description: 'The current workforce includes 19,672 professionals, with 3,034 serving international clients. The Highest Target models achieving 100,095 international offshore jobs by 2030.',
       link: '/about'
