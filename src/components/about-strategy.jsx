@@ -7,7 +7,7 @@ import {
   Globe2,
   Download,
 } from "lucide-react";
-import StrategicPlanModal from "../components/strategic-modal";
+import StrategicPlanModal from "./strategic-modal";
 
 const strategies = [
   {

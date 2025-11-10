@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router";
 import signup from "../assets/images/signup.png";
-import { registerUser, socialLogin } from "../services/authService"; // 👈 import API helper
+import { registerUser, socialLogin } from "../services/authService"; // API helper
 import { jwtDecode } from "jwt-decode";
 import { GoogleLogin } from "@react-oauth/google";
 
 export default function BosagSignUpPage() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -27,19 +29,15 @@ export default function BosagSignUpPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.agreedToTerms) {
-      alert("Please agree to the Terms of Service first!");
+    const { firstName, lastName, email, password, agreedToTerms } = formData;
+    if (!firstName || !lastName || !email || !password || !agreedToTerms) {
+      alert("Please fill all fields and agree to the Terms of Service.");
       return;
     }
 
     setLoading(true);
     try {
-      await registerUser({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        password: formData.password,
-      });
+      await registerUser({ firstName, lastName, email, password });
       alert("✅ Signup successful!");
       setFormData({
         firstName: "",
@@ -48,6 +46,7 @@ export default function BosagSignUpPage() {
         password: "",
         agreedToTerms: false,
       });
+      navigate("/login");
     } catch (error) {
       console.error("Signup error:", error);
       alert("❌ Signup failed. Please check your details or try again later.");
@@ -56,18 +55,14 @@ export default function BosagSignUpPage() {
     }
   };
 
-
- const handleGoogleSuccess = async (credentialResponse) => {
+  const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      // Google sends us a "credential" JWT (like a magic ticket 🎟️)
-      const decoded = jwt_decode(credentialResponse.credential);
+      const decoded = jwtDecode(credentialResponse.credential);
       const email = decoded.email;
-
-      // Call your backend endpoint
       const result = await socialLogin(email, "google");
-
       alert(`Welcome ${result.user?.firstName || "user"}!`);
       console.log("Logged in:", result);
+      navigate("/dashboard");
     } catch (error) {
       console.error("Google login failed:", error);
       alert("Google sign-in failed!");
@@ -84,9 +79,8 @@ export default function BosagSignUpPage() {
       <div className="hidden lg:flex lg:w-[45%] bg-[#191970] text-white items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute top-20 right-20 w-32 h-32 bg-indigo-700 rounded-full opacity-30"></div>
         <div className="absolute bottom-40 left-20 w-24 h-24 bg-indigo-600 rounded-full opacity-20"></div>
-        <img src={signup} alt="" className="absolute" />
+        <img src={signup} alt="Signup" className="absolute object-cover w-full h-full" />
         <div className="inset-0 bg-black absolute opacity-40"></div>
-
         <div className="text-center z-10 max-w-md">
           <h1 className="text-6xl font-bold mb-3">BOSAG</h1>
           <div className="flex items-center justify-center gap-2 mb-8">
@@ -109,11 +103,10 @@ export default function BosagSignUpPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Name Fields */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  First Name
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
                 <input
                   type="text"
                   name="firstName"
@@ -125,9 +118,7 @@ export default function BosagSignUpPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Last Name
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
                 <input
                   type="text"
                   name="lastName"
@@ -140,10 +131,9 @@ export default function BosagSignUpPage() {
               </div>
             </div>
 
+            {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
               <input
                 type="email"
                 name="email"
@@ -155,10 +145,9 @@ export default function BosagSignUpPage() {
               />
             </div>
 
+            {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Password
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -167,22 +156,19 @@ export default function BosagSignUpPage() {
                   onChange={handleChange}
                   placeholder="••••••••"
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent pr-12"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg pr-12 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-5 h-5" />
-                  ) : (
-                    <Eye className="w-5 h-5" />
-                  )}
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
 
+            {/* Terms */}
             <div className="flex items-start">
               <input
                 type="checkbox"
@@ -203,40 +189,41 @@ export default function BosagSignUpPage() {
               </label>
             </div>
 
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className={`w-full ${loading ? "bg-gray-400" : "bg-indigo-900 hover:bg-indigo-800"
-                } text-white font-semibold py-3 px-6 rounded-lg transition duration-300`}
+              className={`w-full ${loading ? "bg-gray-400" : "bg-indigo-900 hover:bg-indigo-800"} text-white font-semibold py-3 px-6 rounded-lg transition duration-300`}
             >
               {loading ? "Signing up..." : "Sign Up"}
             </button>
           </form>
+
           {/* Divider */}
           <div className="relative flex items-center justify-center my-6">
             <div className="border-t border-gray-300 w-full"></div>
             <span className="bg-white px-4 text-sm text-gray-500 absolute">OR</span>
           </div>
 
-          {/* Social Sign Up Buttons */}
+          {/* Social Auth */}
           <div className="space-y-3">
-      <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
+            <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
 
-      <button
-        onClick={() => alert("Facebook login coming soon!")}
-        className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-300"
-      >
-        <svg className="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
-          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-        </svg>
-        <span className="text-gray-700 font-medium">Sign up with Facebook</span>
-      </button>
-    </div>
+            <button
+              onClick={() => alert("Facebook login coming soon!")}
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-300"
+            >
+              <svg className="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+              </svg>
+              <span className="text-gray-700 font-medium">Sign up with Facebook</span>
+            </button>
+          </div>
 
           {/* Login Link */}
           <div className="text-center mt-6">
             <p className="text-gray-600">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <a href="/login" className="text-[#191970] hover:text-indigo-700 font-semibold">
                 Login
               </a>
@@ -246,4 +233,5 @@ export default function BosagSignUpPage() {
       </div>
     </div>
   );
-}                          
+}
+                         

@@ -195,15 +195,12 @@ const governance = () => {
       </div>
     </div>
     </section>
-
     <div >
     <GovernanceStructure/>
     </div>
-
     <div>
      <MembershipAccountability />
      </div>
-
    </div>
     <Footer/>
     </>

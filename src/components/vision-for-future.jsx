@@ -34,7 +34,7 @@ const VisionForFuture = () => {
     <section className="py-20 bg-[#F9FAFB]">
       <div className="max-w-7xl mx-auto px-6 text-center">
         {/* Section Header */}
-        <h2 className="text-2xl md:text-4xl font-bold text-[#0A0A0A] mb-2">
+        <h2 className="text-xl md:text-4xl font-bold text-[#0A0A0A] mb-2">
           Vision for the Future
         </h2>
         <p className="text-gray-600 mb-12">

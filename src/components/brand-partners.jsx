@@ -84,7 +84,7 @@ const BrandPartners = () => {
       <div className="max-w-7xl mx-auto text-center">
         {/* Members & Collaborators */}
         <header className="mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#191970] mb-2">
+          <h2 className="text-xl md:text-4xl font-bold text-[#191970] mb-2">
             Members & Collaborators
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
