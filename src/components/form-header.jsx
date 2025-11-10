@@ -17,6 +17,26 @@ const FormProgressBar = ({ currentStep }) => {
     text: "#FF6600",
   });
 
+  // 👇 new: track scroll position to shrink/hide progress bar
+  const [isShrunk, setIsShrunk] = useState(false);
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setIsShrunk(true); // scrolling down → shrink
+      } else {
+        setIsShrunk(false); // scrolling up → restore
+      }
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("completedSteps")) || [];
     setCompletedSteps(saved);
@@ -34,7 +54,11 @@ const FormProgressBar = ({ currentStep }) => {
   }, [currentStep]);
 
   return (
-    <div className="w-full bg-white border-b border-gray-200 px-4 py-6 md:px-10 rounded-t-xl">
+    <div
+      className={`w-full bg-white border-b border-gray-200 px-4 py-6 md:px-10 rounded-t-xl transition-all duration-500 ${
+        isShrunk ? "py-2 opacity-80 scale-[0.98]" : "py-6 opacity-100 scale-100"
+      }`}
+    >
       <div className="max-w-6xl mx-auto flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <div>

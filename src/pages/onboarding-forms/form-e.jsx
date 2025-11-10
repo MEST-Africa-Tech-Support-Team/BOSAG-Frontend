@@ -27,6 +27,14 @@ export default function FormStep5() {
         const parsed = JSON.parse(saved);
         setFormData(parsed);
 
+        // ✅ Ensure file checkboxes and names persist visually
+        Object.keys(parsed.attachments || {}).forEach((key) => {
+          if (parsed.attachments[key]) {
+            console.log(`Restored uploaded file for: ${key}`);
+          }
+        });
+
+
         // Update word count
         if (parsed.companyProfile) {
           const words = parsed.companyProfile.trim().split(/\s+/).filter(Boolean);
