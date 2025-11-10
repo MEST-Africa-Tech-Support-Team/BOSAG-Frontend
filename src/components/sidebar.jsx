@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { LayoutDashboard, BookOpen, User, LogOut } from "lucide-react";
 import logo from "../assets/images/logo2.png";
+import { Link } from "react-router";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -23,7 +24,11 @@ const Sidebar = () => {
     <aside className="fixed top-0 left-0 h-screen w-64 bg-[#191970] text-white flex flex-col shadow-lg">
       {/* Logo Section */}
       <div className="flex flex-col items-center pt-6 pb-4 border-b border-[#2e2e86]">
-        <img src={logo} alt="BOSAG" className="w-28 mb-2" />
+
+        <Link to="/">
+       <img src={logo} alt="BOSAG" className="w-28 mb-2" />
+       </Link>
+
         <p className="text-[12px] text-gray-300 text-center px-4">
           Business Outsourcing Service Association, Ghana
         </p>

@@ -37,55 +37,51 @@ import banner34 from "../assets/images/logos/MASTERCARD.png";
 import banner35 from "../assets/images/logos/MOC.jpg";
 import banner36 from "../assets/images/logos/TONY.png";
 
-
 const BrandPartners = () => {
-  // 👇 Split into two groups
   const membersAndCollaborators = [
-    { id: 1, logo: banner19, name: "ESAL" },
-    { id: 2, logo: banner16, name: "Concentrix" },
-    { id: 3, logo: banner3, name: "Amalitech" },
-    { id: 4, logo: banner4, name: "Turntabl" },
-    { id: 5, logo: banner24, name: "Npontu" },
-    { id: 6, logo: banner7, name: "Fourth IR" },
-    { id: 7, logo: banner14, name: "CCI" },
-    { id: 8, logo: banner17, name: "DevOps Africa" },
-    { id: 9, logo: banner6, name: "Remotown" },
-    { id: 10, logo: banner22, name: "JS2" },
-    { id: 11, logo: banner26, name: "Teleperformance" },
-    { id: 12, logo: banner9, name: "Abelway" },
-    { id: 13, logo: banner10, name: "Adaire" },
-    { id: 14, logo: banner5, name: "Reliance Personnel" },
-    { id: 15, logo: banner12, name: "ASSL" },
-    { id: 16, logo: banner25, name: "Jobberman" },
-    { id: 17, logo: banner1, name: "ACT ICT" },
-    { id: 18, logo: banner11, name: "Aidec Digital" },
-    { id: 19, logo: banner20, name: "Innovare" },
-    { id: 20, logo: banner21, name: "MEST" },
-    { id: 21, logo: banner13, name: "Ayo Foundation" },
-    { id: 22, logo: banner18, name: "DreamOval" },
-    { id: 23, logo: banner15, name: "CodeTrain" },
-    { id: 24, logo: banner23, name: "Mobex" },
+    { id: 1, logo: banner19, name: "ESAL", url: "https://esalbpo.com/" },
+    { id: 2, logo: banner16, name: "Concentrix", url: "https://www.concentrix.com/" },
+    { id: 3, logo: banner3, name: "Amalitech", url: "https://amalitech.org" },
+    { id: 4, logo: banner4, name: "Turntabl", url: "https://turntabl.io" },
+    { id: 5, logo: banner24, name: "Npontu", url: "https://npontu.com" },
+    { id: 6, logo: banner7, name: "Fourth IR", url: "https://4th-ir.com" },
+    { id: 7, logo: banner14, name: "CCI", url: "https://cciglobal.com/" },
+    { id: 8, logo: banner17, name: "DevOps Africa", url: "https://www.devopsafricalimited.com/" },
+    { id: 9, logo: banner6, name: "Remotown", url: "https://meltwater.org/" },
+    { id: 10, logo: banner22, name: "JS2", url: "https://js2.co.uk" },
+    { id: 11, logo: banner26, name: "Teleperformance", url: "https://www.teleperformance.com" },
+    { id: 12, logo: banner9, name: "Abelway", url: "https://abelwaytech.com/" },
+    { id: 13, logo: banner10, name: "Adaire", url: "https://adaire.com" },
+    { id: 14, logo: banner5, name: "Reliance Personnel", url: "https://reliancepersonnel.com" },
+    { id: 15, logo: banner12, name: "ASSL", url: "https://www.africa2trust.com/B2BAfrica/ghana/tech-gaming/i-t-services/africa-software-solutions-ltd-assl/Profile/AboutUs/1/20/11333/3" },
+    { id: 16, logo: banner25, name: "Jobberman", url: "https://www.remotown.com/" },
+    { id: 17, logo: banner1, name: "ACT ICT", url: "https://act-ict.com/" },
+    { id: 18, logo: banner11, name: "Aidec Digital", url: "https://aidecdigital.com" },
+    { id: 19, logo: banner20, name: "Innovare", url: "https://www.innovarelearning.com/" },
+    { id: 20, logo: banner21, name: "MEST", url: "https://www.jobberman.com.gh/" },
+    { id: 21, logo: banner13, name: "Ayo Foundation", url: "https://ayotsl.com/" },
+    { id: 22, logo: banner18, name: "DreamOval", url: "https://www.dreamoval.org/" },
+    { id: 23, logo: banner15, name: "CodeTrain", url: "https://codetrainafrica.com/" },
+    { id: 24, logo: banner23, name: "Mobex", url: "https://mobexafrica.org/" },
   ];
 
   const strategicPartners = [
-    { id: 1, logo: banner27, name: "GDC" },
-    { id: 2, logo: banner28, name: "IIPGH" },
-    { id: 3, logo: banner8, name: "24H Economy" },
-    { id: 4, logo: banner34, name: "Mastercard Foundation" },
-    { id: 5, logo: banner32, name: "GFZA" },
-    { id: 6, logo: banner35, name: "GIPC" },
-    { id: 7, logo: banner30, name: "Genesis" },
-    { id: 8, logo: banner29, name: "Generation Ghana" },
-    { id: 9, logo: banner36, name: "Invest for Jobs" },
-    { id: 10, logo: banner31, name: "KfW" },
-    { id: 11, logo: banner33, name: "GDCL" },
-    // { id: 12, logo: banner31, name: "MOC" },
+    { id: 1, logo: banner27, name: "GDC", url: "https://www.gdcl.gov.gh/" },
+    { id: 2, logo: banner28, name: "IIPGH", url: "https://iipgh.org" },
+    { id: 3, logo: banner8, name: "24H Economy", url: "https://24hplus.gov.gh/" },
+    { id: 4, logo: banner34, name: "Mastercard Foundation", url: "https://mastercardfdn.org" },
+    { id: 5, logo: banner32, name: "GFZA", url: "https://gfza.gov.gh" },
+    { id: 6, logo: banner35, name: "GIPC", url: "https://moc.gov.gh/" },
+    { id: 7, logo: banner30, name: "Genesis", url: "https://www.genesis-analytics.com/" },
+    { id: 8, logo: banner29, name: "Generation Ghana", url: "https://gipc.gov.gh/" },
+    { id: 9, logo: banner36, name: "Invest for Jobs", url: "https://institute.global/" },
+    { id: 10, logo: banner31, name: "KfW", url: "https://ghana.generation.org/" },
+    { id: 11, logo: banner33, name: "GDCL", url: "https://www.giz.de/en" },
   ];
 
   return (
     <section className="py-10 px-6 bg-white">
       <div className="max-w-7xl mx-auto text-center">
-
         {/* Members & Collaborators */}
         <header className="mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-[#191970] mb-2">
@@ -98,8 +94,11 @@ const BrandPartners = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-5 items-center justify-center mb-16">
           {membersAndCollaborators.map((brand) => (
-            <div
+            <a
               key={brand.id}
+              href={brand.url}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center justify-center p-2 bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105"
             >
               <img
@@ -107,7 +106,7 @@ const BrandPartners = () => {
                 alt={brand.name}
                 className="w-full h-20 object-contain md:h-24 lg:h-28"
               />
-            </div>
+            </a>
           ))}
         </div>
 
@@ -119,8 +118,11 @@ const BrandPartners = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-5 items-center justify-center">
           {strategicPartners.map((brand) => (
-            <div
+            <a
               key={brand.id}
+              href={brand.url}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center justify-center p-2 bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105"
             >
               <img
@@ -128,11 +130,9 @@ const BrandPartners = () => {
                 alt={brand.name}
                 className="w-full h-20 object-contain md:h-24 lg:h-28"
               />
-            </div>
+            </a>
           ))}
         </div>
-
-
       </div>
     </section>
   );
