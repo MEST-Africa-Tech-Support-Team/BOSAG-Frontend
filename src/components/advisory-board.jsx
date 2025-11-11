@@ -21,7 +21,7 @@ const AdvisoryBoard = () => {
       logo: gdcl,
       subtitle: "",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "NOT AVAILABLE",
     },
     {
       name: "24-Hour Economy Secretariat",
@@ -51,7 +51,7 @@ const AdvisoryBoard = () => {
       logo: tbi,
       subtitle: "",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "NOT AVAILABLE",
     },
     {
       name: "Institute of ICT Professionals Ghana (IIPGH)",
@@ -65,7 +65,7 @@ const AdvisoryBoard = () => {
       logo: knust,
       subtitle: "",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "NOT AVAILABLE",
     },
     {
       name: "Africa Federation of GBS Associations",
@@ -100,21 +100,21 @@ const AdvisoryBoard = () => {
       logo: gepa,
       subtitle: "",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "NOT AVAILABLE",
     },
     {
       name: "Soronko Academy",
       logo: soronko,
       subtitle: "",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "NOT AVAILABLE",
     },
     {
       name: "Ghana Free Zones Authority",
       logo: gfza,
       subtitle: "",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "NOT AVAILABLE",
     },
   ];
 
