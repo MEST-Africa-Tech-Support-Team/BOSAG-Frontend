@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import FormProgressBar from "../../components/form-header.jsx";
 import Sidebar from "../../components/sidebar.jsx";
@@ -6,8 +6,14 @@ import Sidebar from "../../components/sidebar.jsx";
 export default function FormStep4() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    declarations: [false, false, false, false, false],
+  // ✅ Load saved data from localStorage first
+  const [formData, setFormData] = useState(() => {
+    const saved = localStorage.getItem("formD");
+    return saved
+      ? JSON.parse(saved)
+      : {
+          declarations: [false, false, false, false, false],
+        };
   });
 
   const declarationItems = [
@@ -17,6 +23,11 @@ export default function FormStep4() {
     "We ensure that all submitted information in this application is accurate and complete.",
     "We understand that membership is subject to approval by the BOSAG Board.",
   ];
+
+  // ✅ Save to localStorage every time declarations change
+  useEffect(() => {
+    localStorage.setItem("formD", JSON.stringify(formData));
+  }, [formData]);
 
   const handleCheckboxChange = (index) => {
     setFormData((prev) => {
@@ -28,6 +39,8 @@ export default function FormStep4() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    localStorage.setItem("formD", JSON.stringify(formData));
 
     const allChecked = formData.declarations.every(Boolean);
 

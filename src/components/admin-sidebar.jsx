@@ -29,7 +29,7 @@ export default function Sidebar() {
       <nav className="mt-6 flex-1 px-1 md:px-3">
         <ul className="space-y-1">
           <li>
-            <NavLink to="/admin-board" className={linkClass}>
+            <NavLink to="/admin-dash" className={linkClass}>
               <GoGraph className="w-5 h-5" />
               <span className="hidden md:inline-block ml-3">Dashboard</span>
             </NavLink>
@@ -54,7 +54,7 @@ export default function Sidebar() {
           </li>
 
           <li>
-            <NavLink to="/members" className={linkClass}>
+            <NavLink to="/admin-members-dashboard" className={linkClass}>
               <FaUsers className="w-5 h-5" />
               <span className="hidden md:inline-block ml-3">Members</span>
             </NavLink>

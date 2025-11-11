@@ -3,6 +3,7 @@ import AdminSidebar from "../../components/admin-sidebar";
 import EventmanagementCard from "../../components/event-management-card";
 import AdminEventFilter from "../../components/admin-event-filter";
 import { FaClock, FaUsers, FaCheck, FaCalendarDays } from "react-icons/fa6";
+import DashboardHeader from "../../components/dashboard-header";
 
 export default function EventManagement() {
   const [filter, setFilter] = useState("All");
@@ -71,6 +72,7 @@ export default function EventManagement() {
       <AdminSidebar />
 
       <div className="ml-16 md:ml-64 flex-1 bg-gray-50 w-full min-h-screen p-6 transition-all duration-300">
+        <DashboardHeader />
         {/* Top Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
           <StatCard

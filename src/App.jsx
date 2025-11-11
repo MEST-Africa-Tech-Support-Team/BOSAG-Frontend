@@ -29,8 +29,7 @@ import NotFound from "./pages/not-found.jsx";
 import BosagMembership from "./pages/bosag-membership.jsx";
 
 import DashboardHome from "./pages/dashboard/index.jsx";
-import ApplicationProgress from "./pages/dashboard/application-progress.jsx";
-import Summary from "./pages/dashboard/summary.jsx";
+import ApplicationProgress from "./pages/onboarding-forms/application-progress.jsx";
 
 import FormA from "./pages/onboarding-forms/form-a.jsx";
 import FormB from "./pages/onboarding-forms/form-b.jsx";
@@ -38,14 +37,22 @@ import FormC from "./pages/onboarding-forms/form-c.jsx";
 import FormD from "./pages/onboarding-forms/form-d.jsx";
 import FormE from "./pages/onboarding-forms/form-e.jsx";
 import FormF from "./pages/onboarding-forms/form-f.jsx";
+import Summary from "./pages/onboarding-forms/summary.jsx";
+import ResourceHub from "./pages/onboarding-forms/resource-hub.jsx";
+import ManageProfile from "./pages/onboarding-forms/manage-profile.jsx";
+
 import Terms from "./pages/terms.jsx";
 import Event from "./pages/event.jsx";
 
 import AdminDashboard from "./pages/dashboard/admin-dashboard.jsx";
 import MembershipApproval from "./pages/dashboard/member-dashboardpage.jsx";
 import EventManagement from "./pages/dashboard/event-management.jsx";
+import AdminMembersDashboard from "./pages/dashboard/admin-members-dashboard.jsx"
+import AddEvent from "./pages/dashboard/add-event.jsx"
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import ResetPasswordPage from "./pages/reset-password.jsx";
+import DashboardOverview from "./pages/dashboard/dashboard-overview.jsx";
+
 import DavidProfile from "./components/profiles/david-profile.jsx";
 import DeborahProfile from "./components/profiles/deborah-profile.jsx";
 import KojoProfile from "./components/profiles/kojo-profile.jsx";
@@ -53,6 +60,10 @@ import MatthewProfile from "./components/profiles/matthew-profile.jsx";
 import RolanaProfile from "./components/profiles/rolana-profile.jsx";
 import RyanProfile from "./components/profiles/ryan-profile.jsx";
 import MavisProfile from "./components/profiles/mavis-profile.jsx";
+
+
+import AuthCallback from "./pages/auth-callback.jsx";
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -79,16 +90,31 @@ const router = createBrowserRouter(
       <Route path="/terms" element={<Terms />} />
 
 
-      <Route path="/dashboard" element={<DashboardHome />} />
-      <Route path="/dashboard/application" element={<ApplicationProgress />} />
-      <Route path="/summary" element={<Summary />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardHome />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/onboarding/application"
+        element={
+                  <ProtectedRoute>
+                <ApplicationProgress />
+              </ProtectedRoute>
+        }
+                 />
 
 
       <Route path="/dashboard" element={<DashboardHome />} />
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/member-dashboardpage" element={<MembershipApproval />} />
       <Route path="/event-management" element={<EventManagement />} />
-
+      <Route path="/admin-members-dashboard" element={<AdminMembersDashboard />} />
+      <Route path="/add-event" element={<AddEvent />} />
+      <Route path="/dashboard-overview" element={<DashboardOverview />} />
 
       <Route path="/onboarding/form-a" element={<FormA />} />
       <Route path="/onboarding/form-b" element={<FormB />} />
@@ -96,18 +122,22 @@ const router = createBrowserRouter(
       <Route path="/onboarding/form-d" element={<FormD />} />
       <Route path="/onboarding/form-e" element={<FormE />} />
       <Route path="/onboarding/form-f" element={<FormF />} />
+      <Route path="/onboarding/summary" element={<Summary />} />
+      
+      <Route path="/onboarding/resource-hub" element={<ResourceHub />} />
+      <Route path="/onboarding/manage-profile" element={<ManageProfile />} />
 
       <Route path="/bosagmembership" element={<BosagMembership />} />
       <Route path="/event" element={<Event />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
 
-      {/* Profile Routes */}
-        <Route path="/kojo" element={<KojoProfile />} />
+      <Route path="/kojo" element={<KojoProfile />} />
         <Route path="/david" element={<DavidProfile />} />
         <Route path="/matthew" element={<MatthewProfile/>} />
          <Route path="/rolana" element={<RolanaProfile/>} />
         <Route path="/deborah" element={<DeborahProfile />} />
         <Route path="/ryan" element={<RyanProfile />} />
-        <Route path="/mavis" element={<MavisProfile />} /> 
+        <Route path="/mavis" element={<MavisProfile />} />
       
       <Route path="*" element={<NotFound />} />
     </Route>
