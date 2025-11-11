@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import signup from "../assets/images/signup.png";
-import { registerUser } from "../services/authService"; // API helper
-import GoogleButton from "../components/google-button.jsx"; // Google Button Component
-
-
+import { registerUser } from "../services/authService";
+import GoogleButton from "../components/google-button.jsx";
 
 export default function BosagSignUpPage() {
   const navigate = useNavigate();
@@ -32,14 +32,36 @@ export default function BosagSignUpPage() {
 
     const { firstName, lastName, email, password, agreedToTerms } = formData;
     if (!firstName || !lastName || !email || !password || !agreedToTerms) {
-      alert("Please fill all fields and agree to the Terms of Service.");
+      toast.error("Please fill all fields and agree to the Terms of Service.");
       return;
     }
 
     setLoading(true);
     try {
-      await registerUser({ firstName, lastName, email, password });
-      alert("✅ Signup successful!");
+      const response = await registerUser({ firstName, lastName, email, password });
+      
+      // Save user data to localStorage after successful signup
+      localStorage.setItem("user", JSON.stringify({
+        firstName,
+        lastName,
+        email
+      }));
+      
+      // If the API returns a token, save it too
+      if (response && response.token) {
+        localStorage.setItem("authToken", response.token);
+      }
+      
+      // Show success toast with email verification message
+      toast.success("Account created successfully! Please verify your email to continue.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      
       setFormData({
         firstName: "",
         lastName: "",
@@ -47,19 +69,27 @@ export default function BosagSignUpPage() {
         password: "",
         agreedToTerms: false,
       });
-      navigate("/login");
+      
+      // Navigate to login after a short delay
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (error) {
       console.error("Signup error:", error);
-      alert("❌ Signup failed. Please check your details or try again later.");
+      toast.error("Signup failed. Please check your details or try again later.", {
+        position: "top-right",
+        autoClose: 4000,
+      });
     } finally {
       setLoading(false);
     }
   };
 
-
-
   return (
     <div className="flex min-h-screen">
+      {/* Toast Container */}
+      <ToastContainer />
+      
       {/* Left Side - Brand Section */}
       <div className="hidden lg:flex lg:w-[45%] bg-[#191970] text-white items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute top-20 right-20 w-32 h-32 bg-indigo-700 rounded-full opacity-30"></div>
@@ -163,7 +193,7 @@ export default function BosagSignUpPage() {
                 className="w-4 h-4 mt-1 text-indigo-900 border-gray-300 rounded focus:ring-indigo-500"
               />
               <label className="ml-2 text-sm text-gray-700">
-                I’ve read and agree with{" "}
+                I've read and agree with{" "}
                 <a href="#" className="text-indigo-900 hover:text-indigo-700 font-medium underline">
                   Terms of Service
                 </a>{" "}
@@ -192,7 +222,6 @@ export default function BosagSignUpPage() {
 
           {/* Social Auth */}
           <GoogleButton />
-          
 
           {/* Login Link */}
           <div className="text-center mt-6">
@@ -208,4 +237,3 @@ export default function BosagSignUpPage() {
     </div>
   );
 }
-                         

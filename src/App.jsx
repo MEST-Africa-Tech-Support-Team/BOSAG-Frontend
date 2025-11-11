@@ -82,14 +82,23 @@ const router = createBrowserRouter(
       <Route path="/terms" element={<Terms />} />
 
 
-       <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardHome />
-            </ProtectedRoute>
-          }
-        />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardHome />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/onboarding/application"
+        element={
+                  <ProtectedRoute>
+                <ApplicationProgress />
+              </ProtectedRoute>
+        }
+                 />
+           
      
 
       <Route path="/dashboard" element={<DashboardHome />} />
@@ -108,7 +117,7 @@ const router = createBrowserRouter(
       <Route path="/onboarding/form-e" element={<FormE />} />
       <Route path="/onboarding/form-f" element={<FormF />} />
       <Route path="/onboarding/summary" element={<Summary />} />
-      <Route path="/onboarding/application" element={<ApplicationProgress />} />
+      
       <Route path="/onboarding/resource-hub" element={<ResourceHub />} />
       <Route path="/onboarding/manage-profile" element={<ManageProfile />} />
 

@@ -17,7 +17,7 @@ export default function FormStep1() {
     "Other (Please specify)",
   ];
 
-  // ✅ Load saved data from localStorage if available
+  // Load saved data from localStorage if available
   const [formData, setFormData] = useState(() => {
     const saved = localStorage.getItem("formA");
     return saved
@@ -35,7 +35,7 @@ export default function FormStep1() {
         };
   });
 
-  // ✅ Save form data to localStorage on every change
+  // Save form data to localStorage on every change
   useEffect(() => {
     localStorage.setItem("formA", JSON.stringify(formData));
   }, [formData]);
@@ -70,38 +70,17 @@ export default function FormStep1() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // ✅ Save final version before moving forward
+    // Save final Section A data
     localStorage.setItem("formA", JSON.stringify(formData));
 
-    // ✅ Check if all required fields are filled
-    const {
-      organisationName,
-      yearOfEstablishment,
-      companyRegNumber,
-      sectorFocus,
-      employeesGhana,
-      employeesGlobal,
-      organisationTypes,
-      membershipTier,
-    } = formData;
-
-    const allFilled =
-      organisationName.trim() &&
-      yearOfEstablishment.trim() &&
-      companyRegNumber.trim() &&
-      sectorFocus.trim() &&
-      employeesGhana.trim() &&
-      employeesGlobal.trim() &&
-      organisationTypes.length > 0 &&
-      membershipTier.trim();
-
-    // ✅ Update completed steps
+    // Mark step completed
     const completed = JSON.parse(localStorage.getItem("completedSteps")) || [];
-    if (allFilled && !completed.includes(1)) {
+    if (!completed.includes(1)) {
       completed.push(1);
       localStorage.setItem("completedSteps", JSON.stringify(completed));
     }
 
+    // Navigate to Section B
     navigate("/onboarding/form-b");
   };
 
@@ -237,17 +216,16 @@ export default function FormStep1() {
                         <span>{type}</span>
                       </label>
 
-                      {isOther &&
-                        formData.organisationTypes.includes(type) && (
-                          <input
-                            type="text"
-                            name="otherOrganisationText"
-                            value={formData.otherOrganisationText}
-                            onChange={handleChange}
-                            placeholder="Please specify"
-                            className="mt-1 border border-gray-300 rounded-md p-1 text-sm w-full placeholder-gray-400"
-                          />
-                        )}
+                      {isOther && formData.organisationTypes.includes(type) && (
+                        <input
+                          type="text"
+                          name="otherOrganisationText"
+                          value={formData.otherOrganisationText}
+                          onChange={handleChange}
+                          placeholder="Please specify"
+                          className="mt-1 border border-gray-300 rounded-md p-1 text-sm w-full placeholder-gray-400"
+                        />
+                      )}
                     </div>
                   );
                 })}
@@ -259,14 +237,12 @@ export default function FormStep1() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Membership Tier
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-1 gap-3">
                 {[
-                  "Platinum Full Member",
-                  "Gold Full Member",
-                  "Silver Full Member",
-                  "Bronze Full Member",
-                  "Associate Member",
-                  "Affiliate Member",
+                  "Platinum Member",
+                  "Gold Member",
+                  "Start-ups & Associate Member",
+                  "Vendors & Affiliate Member",
                 ].map((tier) => (
                   <label key={tier} className="flex items-center gap-3 text-sm">
                     <input

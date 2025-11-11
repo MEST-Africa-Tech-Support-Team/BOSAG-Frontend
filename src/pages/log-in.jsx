@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { useNavigate, Navigate } from 'react-router';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import signupimage from '../assets/images/signup.png';
 import GoogleButton from '../components/google-button';
-import { Navigate } from 'react-router';
+import { loginUser } from '../services/authService';
 
 export default function BosagLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
 
-  const navigate = useNavigate(); // for navigation
+  const navigate = useNavigate();
 
-   const token = localStorage.getItem("token");
+  const token = localStorage.getItem("bosagToken");
   if (token) return <Navigate to="/dashboard" replace />;
 
   const handleChange = (e) => {
@@ -24,23 +27,62 @@ export default function BosagLoginPage() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // check if all fields are filled
-    if (formData.email && formData.password) {
-      // save data to localStorage
-      localStorage.setItem('user', JSON.stringify(formData));
+    // Validate fields
+    if (!formData.email || !formData.password) {
+      toast.error('Please enter both email and password');
+      return;
+    }
 
-      // navigate to dashboard
-      navigate('/dashboard');
-    } else {
-      alert('Please enter both email and password');
+    setLoading(true);
+    try {
+      // Call login API
+      const response = await loginUser({ 
+        email: formData.email, 
+        password: formData.password 
+      });
+
+      // Save user data to localStorage based on your backend response
+      if (response && response.user) {
+        localStorage.setItem('user', JSON.stringify({
+          firstName: response.user.firstName || response.user.firstname,
+          lastName: response.user.lastName || response.user.lastname,
+          email: response.user.email
+        }));
+      }
+
+      // Token is already saved by loginUser function in authService
+
+      // Show success toast
+      toast.success('Login successful! Redirecting to dashboard...', {
+        position: 'top-right',
+        autoClose: 2000,
+      });
+
+      // Navigate to dashboard after short delay
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1500);
+
+    } catch (error) {
+      console.error('Login error:', error);
+      const errorMessage = error.message || 'Login failed. Please check your credentials and try again.';
+      toast.error(errorMessage, {
+        position: 'top-right',
+        autoClose: 4000,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="flex min-h-screen">
+      {/* Toast Container */}
+      <ToastContainer />
+
       {/* Left Side - Brand Section */}
       <div className="hidden lg:flex lg:w-[45%] bg-[#191970] text-white items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute top-20 right-20 w-32 h-32 bg-indigo-700 rounded-full opacity-30"></div>
@@ -69,7 +111,7 @@ export default function BosagLoginPage() {
             <p className="text-gray-600">Please Log in to your account</p>
           </div>
 
-          <div className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Email
@@ -80,6 +122,7 @@ export default function BosagLoginPage() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="john@example.com"
+                required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               />
             </div>
@@ -95,7 +138,8 @@ export default function BosagLoginPage() {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3  border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent pr-12"
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent pr-12"
                 />
                 <button
                   type="button"
@@ -114,10 +158,11 @@ export default function BosagLoginPage() {
             </div>
 
             <button
-              onClick={handleSubmit}
-              className="w-full bg-indigo-900 text-white font-semibold py-3 px-6 rounded-lg hover:bg-indigo-800 transition duration-300"
+              type="submit"
+              disabled={loading}
+              className={`w-full ${loading ? 'bg-gray-400' : 'bg-indigo-900 hover:bg-indigo-800'} text-white font-semibold py-3 px-6 rounded-lg transition duration-300`}
             >
-              Log In
+              {loading ? 'Logging in...' : 'Log In'}
             </button>
 
             <div className="relative flex items-center justify-center my-6">
@@ -136,7 +181,7 @@ export default function BosagLoginPage() {
                 </a>
               </p>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
