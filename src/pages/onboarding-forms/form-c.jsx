@@ -13,11 +13,13 @@ export default function FormStep3() {
       ? JSON.parse(saved)
       : {
           nominatedRep: "",
-          positionRole: "",
+          nomPositionRole: "",
+          nomEmailAddress: "",
+          nomPhoneNumber: "",
           alternateRep: "",
-          authorizedSignatory: "",
-          emailAddress: "",
-          phoneNumber: "",
+          altPositionRole: "",
+          altEmailAddress: "",
+          altPhoneNumber: "",
         };
   });
 
@@ -36,22 +38,16 @@ export default function FormStep3() {
 
     localStorage.setItem("formC", JSON.stringify(formData));
 
-    const {
-      nominatedRep,
-      positionRole,
-      alternateRep,
-      authorizedSignatory,
-    } = formData;
-
-    const allFilled =
-      nominatedRep.trim() &&
-      positionRole.trim() &&
-      alternateRep.trim() &&
-      authorizedSignatory.trim();
+    // Check if all required fields for nominated rep are filled
+    const isComplete =
+      formData.nominatedRep.trim() &&
+      formData.nomPositionRole.trim() &&
+      formData.nomEmailAddress.trim() &&
+      formData.nomPhoneNumber.trim();
 
     // ✅ Mark step 3 complete if all main fields filled
     const completed = JSON.parse(localStorage.getItem("completedSteps")) || [];
-    if (allFilled && !completed.includes(3)) {
+    if (isComplete && !completed.includes(3)) {
       completed.push(3);
       localStorage.setItem("completedSteps", JSON.stringify(completed));
     }
@@ -83,11 +79,12 @@ export default function FormStep3() {
               Section C: Governance and Representation
             </h2>
 
-            {/* Primary Representative */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Nominated Representative */}
+          
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nominated Representative to BOSAG
+                   Nominated Representative to BOSAG
                 </label>
                 <input
                   type="text"
@@ -104,8 +101,8 @@ export default function FormStep3() {
                 </label>
                 <input
                   type="text"
-                  name="positionRole"
-                  value={formData.positionRole}
+                  name="nomPositionRole"
+                  value={formData.nomPositionRole}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-md p-2"
                 />
@@ -113,13 +110,13 @@ export default function FormStep3() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email Address{" "}
+                  Email Address
                 </label>
                 <input
                   type="email"
-                  name="emailAddress"
+                  name="nomEmailAddress"
                   placeholder="example@company.com"
-                  value={formData.emailAddress}
+                  value={formData.nomEmailAddress}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-md p-2 placeholder-gray-400"
                 />
@@ -127,25 +124,24 @@ export default function FormStep3() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone Number{" "}
+                  Phone Number
                 </label>
                 <input
                   type="tel"
-                  name="phoneNumber"
-                  placeholder="(123) 456-7890"
-                  value={formData.phoneNumber}
+                  name="nomPhoneNumber"
+                  value={formData.nomPhoneNumber}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md p-2 placeholder-gray-400"
+                  className="w-full border border-gray-300 rounded-md p-2"
                 />
               </div>
             </div>
 
             {/* Alternate Representative */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Alternate Representative{" "}
-                  <span className="text-gray-400">(optional)</span>
+              <span className="text-gray-400 text-sm font-normal">(Optional)</span>
                 </label>
                 <input
                   type="text"
@@ -158,12 +154,39 @@ export default function FormStep3() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Authorized Signatory
+                  Position/Role
                 </label>
                 <input
                   type="text"
-                  name="authorizedSignatory"
-                  value={formData.authorizedSignatory}
+                  name="altPositionRole"
+                  value={formData.altPositionRole}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-md p-2"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  name="altEmailAddress"
+                  placeholder="example@company.com"
+                  value={formData.altEmailAddress}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-md p-2 placeholder-gray-400"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  name="altPhoneNumber"
+                  value={formData.altPhoneNumber}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-md p-2"
                 />

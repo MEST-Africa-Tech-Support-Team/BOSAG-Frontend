@@ -153,9 +153,11 @@ const Submitted = () => {
               <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="border border-gray-200 rounded-md p-6 flex flex-col justify-between">
                   <div>
-                    <h3 className="text-sm font-semibold text-[#0a0a3a] mb-2">
+                    
+                    <Link to="/onboarding/summary"><button className="text-sm font-semibold text-[#0a0a3a] mb-2">
                       View Application Summary
-                    </h3>
+                    </button></Link>
+
                     <p className="text-xs text-gray-500 mb-4">
                       Review the details you submitted
                     </p>

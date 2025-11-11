@@ -14,7 +14,6 @@ import {
   FaEdit,
 } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
-import { HiOutlineArrowNarrowLeft, HiOutlineArrowNarrowRight } from "react-icons/hi";
 
 const TIERS = [
   { key: "All", label: "All Tiers" },
@@ -150,17 +149,20 @@ export default function AdminMembersDashboard() {
       <AdminSidebar />
 
       <div className="ml-16 md:ml-64 flex-1 bg-gray-50 min-h-screen">
-        <DashboardHeader />
+        <DashboardHeader
+          title="Members Dashboard"
+          subtitle="Manage and approve member applications"
+        />
 
-        <main className="p-6">
+        <main className="p-4">
           {/* Tier stat cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
             {TIERS.slice(1).map((t) => (
               <div
                 key={t.key}
                 className="bg-white rounded-xl p-4 shadow-sm flex items-center justify-between gap-4"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between w-full">
                   <div>
                     <p className="text-xs text-gray-500">{t.label}</p>
                     <h3 className="text-lg font-semibold">
@@ -179,7 +181,7 @@ export default function AdminMembersDashboard() {
           {/* Filters row */}
           <div className="bg-white rounded-lg p-4 shadow-sm mb-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+              <div className="flex gap-3 items-start">
                 {/* Tier select */}
                 <select
                   value={tierFilter}
@@ -207,7 +209,7 @@ export default function AdminMembersDashboard() {
                 </select>
               </div>
 
-              <div className="flex-1 md:flex-none flex items-center gap-3 justify-end">
+              <div className="flex-none md:flex items-center gap-3 justify-end">
                 {/* Search */}
                 <div className="relative w-full md:w-64">
                   <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -219,7 +221,7 @@ export default function AdminMembersDashboard() {
                   />
                 </div>
 
-                <button className="bg-[#F8842B] text-white px-4 py-2 rounded-md text-sm font-medium">
+                <button className="bg-[#F8842B] text-white px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap mt-4 md:mt-0 flex md:flex-none justify-center">
                   Add Member
                 </button>
               </div>
@@ -229,16 +231,16 @@ export default function AdminMembersDashboard() {
           {/* Table (md+), Card list on small screens */}
           <div className="bg-white rounded-lg shadow-sm p-4">
             {/* responsive: table for md+, stacked cards for small screens */}
-            <div className="hidden md:block overflow-x-auto">
-              <table className="min-w-full text-left">
+            <div className="w-full overflow-x-auto">
+              <table className="min-w-full whitespace-nowrap text-left border-collapse">
                 <thead>
                   <tr className="text-xs text-gray-500 border-b">
-                    <th className="py-3 px-4">Member</th>
-                    <th className="py-3 px-4">Tier</th>
-                    <th className="py-3 px-4">Join Date</th>
-                    <th className="py-3 px-4">Expiry Date</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4">Actions</th>
+                    <th className="py-3 px-4 whitespace-nowrap">Tier</th>
+                    <th className="py-3 px-4 whitespace-nowrap">Member</th>
+                    <th className="py-3 px-4 whitespace-nowrap">Join Date</th>
+                    <th className="py-3 px-4 whitespace-nowrap">Expiry Date</th>
+                    <th className="py-3 px-4 whitespace-nowrap">Status</th>
+                    <th className="py-3 px-4 whitespace-nowrap">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -248,8 +250,8 @@ export default function AdminMembersDashboard() {
                       m.status === "Expired"
                         ? "text-red-600"
                         : m.status === "Expiring Soon"
-                        ? "text-orange-600"
-                        : "text-gray-600";
+                          ? "text-orange-600"
+                          : "text-gray-600";
 
                     return (
                       <tr key={m.id} className="border-b border-gray-300 last:border-b-0">
@@ -280,7 +282,7 @@ export default function AdminMembersDashboard() {
                         </td>
                         <td className="py-4 px-4 text-sm text-gray-600">{m.joinDate}</td>
                         <td className={`py-4 px-4 text-sm ${expiryClass}`}>{m.expiryDate}</td>
-                        <td className="py-4 px-4">
+                        <td className="py-3 px-4 whitespace-nowrap">
                           <span className={`inline-block px-3 py-1 rounded-full text-sm ${statusBadge(m.status)}`}>
                             {m.status}
                           </span>
@@ -309,7 +311,7 @@ export default function AdminMembersDashboard() {
             </div>
 
             {/* small screen card layout */}
-            <div className="md:hidden flex flex-col gap-3">
+            {/* <div className="md:hidden flex flex-col gap-3">
               {paginated.map((m) => {
                 const tier = tierMeta(m.tier);
                 return (
@@ -351,7 +353,7 @@ export default function AdminMembersDashboard() {
                   </div>
                 );
               })}
-            </div>
+            </div> */}
 
             {/* footer: showing X of Y and pagination */}
             <div className="mt-4 flex flex-col md:flex-row items-center justify-between gap-3">

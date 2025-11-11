@@ -1,9 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/sidebar";
 import { ChevronRight, Lock, Clock, FileText, FileBadge, Shield, Gavel } from "lucide-react";
-import { Link } from "react-router";
+import { Link, Navigate } from "react-router";
 
 const MembershipDashboard = () => {
+  const [firstName, setFirstName] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  // Check if user is authenticated
+  const token = localStorage.getItem("bosagToken");
+  
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setFirstName(parsedUser.firstName || parsedUser.firstname || "Member");
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+        setFirstName("Member");
+      }
+    } else {
+      setFirstName("Member");
+    }
+    setLoading(false);
+  }, []);
+
+  // Redirect to login if no token
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
   const steps = [
     { id: "A", label: "Personal Information" },
     { id: "B", label: "Professional Background" },
@@ -14,33 +41,25 @@ const MembershipDashboard = () => {
     { id: "G", label: "Review & Submit" },
   ];
 
-
   const documents = [
     {
       icon: <FileText className="text-blue-600 w-5 h-5" />,
       title: "BOSAG Constitution",
-      viewUrl: "https://docs.google.com/document/d/1VKyKRw3fVuc-WsvSdNKSA4kwXV_gDPQc/edit?usp=drive_link&ouid=110519001254426831619&rtpof=true&sd=true",
-      downloadUrl: "https://docs.google.com/document/d/1VKyKRw3fVuc-WsvSdNKSA4kwXV_gDPQc/edit?usp=drive_link&ouid=110519001254426831619&rtpof=true&sd=true",
+      viewUrl: "https://docs.google.com/document/d/1VKyKRw3fVuc-WsvSdNKSA4kwXV_gDPQc/edit",
+      downloadUrl: "https://docs.google.com/document/d/1VKyKRw3fVuc-WsvSdNKSA4kwXV_gDPQc/edit",
     },
-    {
-      icon: <FileBadge className="text-blue-600 w-5 h-5" />,
-      title: "Membership Terms & Conditions",
-      viewUrl: "#",
-      downloadUrl: "#",
-    },
-    {
-      icon: <Shield className="text-blue-600 w-5 h-5" />,
-      title: "Code of Conduct and Ethics",
-      viewUrl: "#",
-      downloadUrl: "#",
-    },
-    {
-      icon: <Gavel className="text-blue-600 w-5 h-5" />,
-      title: "Governing Council Mandate",
-      viewUrl: "#",
-      downloadUrl: "#",
-    },
+    { icon: <FileBadge className="text-blue-600 w-5 h-5" />, title: "Membership Terms & Conditions", viewUrl: "#", downloadUrl: "#" },
+    { icon: <Shield className="text-blue-600 w-5 h-5" />, title: "Code of Conduct and Ethics", viewUrl: "#", downloadUrl: "#" },
+    { icon: <Gavel className="text-blue-600 w-5 h-5" />, title: "Governing Council Mandate", viewUrl: "#", downloadUrl: "#" },
   ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#f9fafc] flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#f9fafc] flex">
@@ -51,7 +70,7 @@ const MembershipDashboard = () => {
           <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
             <header className="mb-6">
               <h1 className="text-2xl font-semibold text-gray-900">
-                Welcome, John! Your Membership Journey Starts Here.
+                Welcome, {firstName}! Your Membership Journey Starts Here.
               </h1>
 
               <div className="mt-3 flex items-start gap-3 bg-[#fff7f0] border border-[#ffd7b8] rounded-md p-3">
@@ -142,10 +161,13 @@ const MembershipDashboard = () => {
               </p>
 
               <div className="mt-5 flex justify-center">
-                <button className="flex items-center gap-2 bg-[#191970] text-white text-sm font-medium py-2.5 px-6 rounded-md hover:bg-[#14145e] transition-colors shadow-sm">
-                  <Link to="/onboarding/form-a">Start Application: Section A</Link>
+                <Link 
+                  to="/onboarding/form-a"
+                  className="flex items-center gap-2 bg-[#191970] text-white text-sm font-medium py-2.5 px-6 rounded-md hover:bg-[#14145e] transition-colors shadow-sm"
+                >
+                  Start Application: Section A
                   <ChevronRight size={16} />
-                </button>
+                </Link>
               </div>
             </div>
 
