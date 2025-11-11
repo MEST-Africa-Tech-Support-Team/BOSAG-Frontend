@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowLeft, Linkedin } from 'lucide-react';
 import ban from "../../assets/images/about.png";
-import kojo from "../../assets/images/kojo.png";
+import kojo from "../../assets/images/Kojo.png";
 import Navbar from '../navbar';
 import Footer from '../footer';
 import { Link } from 'react-router';
