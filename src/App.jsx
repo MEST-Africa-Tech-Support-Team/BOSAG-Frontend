@@ -46,6 +46,13 @@ import MembershipApproval from "./pages/dashboard/member-dashboardpage.jsx";
 import EventManagement from "./pages/dashboard/event-management.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import ResetPasswordPage from "./pages/reset-password.jsx";
+import DavidProfile from "./components/profiles/david-profile.jsx";
+import DeborahProfile from "./components/profiles/deborah-profile.jsx";
+import KojoProfile from "./components/profiles/kojo-profile.jsx";
+import MatthewProfile from "./components/profiles/matthew-profile.jsx";
+import RolanaProfile from "./components/profiles/rolana-profile.jsx";
+import RyanProfile from "./components/profiles/ryan-profile.jsx";
+import MavisProfile from "./components/profiles/mavis-profile.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -92,6 +99,15 @@ const router = createBrowserRouter(
 
       <Route path="/bosagmembership" element={<BosagMembership />} />
       <Route path="/event" element={<Event />} />
+
+      {/* Profile Routes */}
+        <Route path="/kojo" element={<KojoProfile />} />
+        <Route path="/david" element={<DavidProfile />} />
+        <Route path="/matthew" element={<MatthewProfile/>} />
+         <Route path="/rolana" element={<RolanaProfile/>} />
+        <Route path="/deborah" element={<DeborahProfile />} />
+        <Route path="/ryan" element={<RyanProfile />} />
+        <Route path="/mavis" element={<MavisProfile />} /> 
       
       <Route path="*" element={<NotFound />} />
     </Route>
