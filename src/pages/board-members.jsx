@@ -4,12 +4,18 @@ import Footer from "../components/footer";
 import banner from "../assets/images/about.png";
 import BosagExecutive from "../components/bosag-executive";
 import AdvisoryBoard from "../components/advisory-board";
-import hero from "../assets/images/hero.jpg";
-import matthew from "../assets/images/Matthew.jpg";
+import matthew from "../assets/images/mattew1.png";
 import kojo from "../assets/images/Kojo.png";
 import gowu from "../assets/images/Gowu.png";
 import rolana from "../assets/images/rolana.png";
 import ryan from "../assets/images/ryan.png";
+import deborah from "../assets/images/Deborah.jpg";
+import { Link, Route } from "react-router";
+
+
+
+
+
 const councilMembers = [
   {
     name: "Kojo Hayford",
@@ -17,48 +23,58 @@ const councilMembers = [
     title: "CEO, eSAL",
     image: kojo,
     featured: true,
+
   },
   {
     name: "David Gowu",
     role: "Member",
     title: "CEO, BOSAG",
-    image: gowu
+    image: gowu,
+    href : "david",
+  
   },
   {
     name: "Matthew Darkwa",
     role: "Member",
     title: "Operations Director, Amalitech",
     image: matthew,
+    href : "matthew"
   },
   {
     name: "Rolana Rashwan",
     role: "Member",
     title: "Consultant, Global Business Services",
     image: rolana,
+    href : "rolana",
   },
   {
     name: "Deborah Asmah",
     role: "Member",
     title: "Chief Marketing Officer, Npontu",
-    image: "https://randomuser.me/api/portraits/women/72.jpg",
+    image: deborah,
+    href : "deborah",
   },
   {
     name: "Mavis Ampah",
     role: "Member",
     title: "CEO, Cactus Creek Foundation",
-    image: "https://randomuser.me/api/portraits/women/68.jpg",
+    image: "",
+    href : "mavis"
   },
   {
     name: "Ryan Keilloh",
     role: "Member",
     title: "Country Manager, Concentrix Ghana",
     image: ryan,
+    href : "ryan"
   },
 ];
+
 
 const BoardMembers = () => {
   const featuredMember = councilMembers.find((m) => m.featured);
   const otherMembers = councilMembers.filter((m) => !m.featured);
+  
 
   return (
     <>
@@ -104,18 +120,20 @@ const BoardMembers = () => {
           <img
             src={featuredMember.image}
             alt={featuredMember.name}
-            className="w-36 h-36 rounded-full object-cover border-4 border-blue-600 mb-4"
+            className="w-40 h-50 rounded-full object-cover border-4 border-blue-600 mb-4"
           />
           <h3 className="text-xl font-semibold text-gray-900">
             {featuredMember.name}
           </h3>
-          <p className="text-blue-600 font-medium text-sm mb-1">
+          <p className="text-blue-600  font-medium text-sm mb-1">
             {featuredMember.role}
           </p>
           <p className="text-gray-500 text-sm mb-4">{featuredMember.title}</p>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2 rounded-md">
+          <Link to="/kojo">
+          <button className="bg-[#191970] hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2 rounded-md">
             Learn more
           </button>
+          </Link>
         </div>
       </div>
 
@@ -128,8 +146,8 @@ const BoardMembers = () => {
           >
             <img
               src={member.image}
-              alt={member.name}
-              className="w-28 h-28 rounded-full object-cover border-4 border-blue-600 mb-4"
+              alt=""
+              className="w-40 h-50 rounded-full object-cover border-4 border-blue-600 mb-4"
             />
             <h3 className="text-lg font-semibold text-gray-900">
               {member.name}
@@ -138,9 +156,11 @@ const BoardMembers = () => {
               {member.role}
             </p>
             <p className="text-gray-500 text-sm mb-4">{member.title}</p>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-md">
+            <Link to={`/${member.href}`}>
+            <button className="bg-[#191970] hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-md">
               Learn more
             </button>
+            </Link>
           </div>
         ))}
       </div>

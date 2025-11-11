@@ -26,7 +26,7 @@ import WhoWeAre from "./pages/who-we-are.jsx";
 import MembershipPackages from "./pages/bosag-membership.jsx";
 import SectorReport from "./pages/sector-report.jsx";
 import NotFound from "./pages/not-found.jsx";
-import BosagMembership from "./pages/bosag-membership.jsx";
+// import BosagMembership from "./pages/bosag-membership.jsx";
 
 import DashboardHome from "./pages/dashboard/index.jsx";
 import ApplicationProgress from "./pages/onboarding-forms/application-progress.jsx";
@@ -55,6 +55,14 @@ import DashboardOverview from "./pages/dashboard/dashboard-overview.jsx";
 import AdminSettings from "./pages/dashboard/admin-setting.jsx";
 import BosagAdminLogin from "./pages/dashboard/admin-login.jsx";
 import BosagAdminSignup from "./pages/dashboard/admin-signup.jsx";
+
+import DavidProfile from "./components/profiles/david-profile.jsx";
+import DeborahProfile from "./components/profiles/deborah-profile.jsx";
+import KojoProfile from "./components/profiles/kojo-profile.jsx";
+import MatthewProfile from "./components/profiles/matthew-profile.jsx";
+import RolanaProfile from "./components/profiles/rolana-profile.jsx";
+import RyanProfile from "./components/profiles/ryan-profile.jsx";
+import MavisProfile from "./components/profiles/mavis-profile.jsx";
 
 
 import AuthCallback from "./pages/auth-callback.jsx";
@@ -101,8 +109,6 @@ const router = createBrowserRouter(
               </ProtectedRoute>
         }
                  />
-           
-     
 
       <Route path="/dashboard" element={<DashboardHome />} />
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
@@ -112,7 +118,6 @@ const router = createBrowserRouter(
       <Route path="/add-event" element={<AddEvent />} />
       <Route path="/admin-settings" element={<AdminSettings />} />
       <Route path="/dashboard-overview" element={<DashboardOverview />} />
-
 
       <Route path="/onboarding/form-a" element={<FormA />} />
       <Route path="/onboarding/form-b" element={<FormB />} />
@@ -127,10 +132,17 @@ const router = createBrowserRouter(
       <Route path="/admin-login" element={<BosagAdminLogin />} />
       <Route path="/admin-signup" element={<BosagAdminSignup />} />
 
-
-      <Route path="/bosagmembership" element={<BosagMembership />} />
+{/* //       <Route path="/bosagmembership" element={<BosagMembership />} /> */}
       <Route path="/event" element={<Event />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
+
+      <Route path="/kojo" element={<KojoProfile />} />
+        <Route path="/david" element={<DavidProfile />} />
+        <Route path="/matthew" element={<MatthewProfile/>} />
+         <Route path="/rolana" element={<RolanaProfile/>} />
+        <Route path="/deborah" element={<DeborahProfile />} />
+        <Route path="/ryan" element={<RyanProfile />} />
+        <Route path="/mavis" element={<MavisProfile />} />
       
       <Route path="*" element={<NotFound />} />
     </Route>
