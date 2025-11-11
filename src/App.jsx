@@ -132,7 +132,7 @@ const router = createBrowserRouter(
       <Route path="/admin-login" element={<BosagAdminLogin />} />
       <Route path="/admin-signup" element={<BosagAdminSignup />} />
 
-//       <Route path="/bosagmembership" element={<BosagMembership />} />
+{/* //       <Route path="/bosagmembership" element={<BosagMembership />} /> */}
       <Route path="/event" element={<Event />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
 
