@@ -6,33 +6,48 @@ import { FileText } from "lucide-react";
 
 export default function FormStep6() {
   const navigate = useNavigate();
-  const [acknowledged, setAcknowledged] = useState(false);
 
-  // ✅ Load saved data
-  useEffect(() => {
+  // ✅ Load saved data from localStorage if available
+  const [formData, setFormData] = useState(() => {
     const saved = localStorage.getItem("formF");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setAcknowledged(!!parsed.acknowledged);
-    }
-  }, []);
+    return saved
+      ? JSON.parse(saved)
+      : {
+          acknowledged: false,
+        };
+  });
 
-  // ✅ Save to localStorage whenever checkbox changes
+  // ✅ Save to localStorage whenever data changes
   useEffect(() => {
-    localStorage.setItem("formF", JSON.stringify({ acknowledged }));
-  }, [acknowledged]);
+    localStorage.setItem("formF", JSON.stringify(formData));
+  }, [formData]);
 
   const handleCheckboxChange = () => {
-    setAcknowledged((prev) => !prev);
+    setFormData((prev) => ({
+      ...prev,
+      acknowledged: !prev.acknowledged,
+    }));
   };
 
-  const handleNext = () => {
-    if (!acknowledged) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!formData.acknowledged) {
       alert("Please acknowledge and agree to the terms before continuing.");
       return;
     }
-    // ✅ Save acknowledgment again before navigation
-    localStorage.setItem("formF", JSON.stringify({ acknowledged: true }));
+
+    // Save final data
+    localStorage.setItem("formF", JSON.stringify(formData));
+
+    // Mark step completed
+    const completed = JSON.parse(localStorage.getItem("completedSteps")) || [];
+    if (!completed.includes(6)) {
+      completed.push(6);
+      localStorage.setItem("completedSteps", JSON.stringify(completed));
+    }
+
+    // Navigate to summary
     navigate("/onboarding/summary");
   };
 
@@ -52,7 +67,10 @@ export default function FormStep6() {
 
         {/* Content */}
         <section className="max-w-6xl mx-auto pt-2 pb-24 px-4 md:px-8">
-          <div className="bg-white shadow-md border border-gray-200 rounded-lg p-8 md:p-10 w-full">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white shadow-md border border-gray-200 rounded-lg p-8 md:p-10 w-full"
+          >
             <div className="text-center mb-10">
               <div className="w-12 h-12 mx-auto rounded-full bg-[#E6ECFF] flex items-center justify-center">
                 <FileText className="w-6 h-6 text-[#1B2B65]" />
@@ -105,7 +123,7 @@ export default function FormStep6() {
                   <span className="text-[#3C6FE0] font-semibold mr-1">1.5</span>
                   The Member acknowledges that membership data may be used for
                   legal, regulatory, or enforcement purposes by BOSAG and that
-                  participation is voluntary and subject to BOSAG’s governance
+                  participation is voluntary and subject to BOSAG's governance
                   framework.
                 </li>
               </ol>
@@ -156,7 +174,7 @@ export default function FormStep6() {
                   <span className="text-[#D93025] font-semibold mr-1">3.1</span>
                   BOSAG and its affiliates shall not be liable for any direct,
                   indirect, incidental, or consequential damage arising from the
-                  Member’s participation in BOSAG activities or use of BOSAG
+                  Member's participation in BOSAG activities or use of BOSAG
                   platforms or interactions with other members.
                 </li>
                 <li>
@@ -164,14 +182,14 @@ export default function FormStep6() {
                   The Member acknowledges that any commercial, business,
                   financial, or sectoral benefits are of a mutual nature, and
                   disclaims any responsibility for any engagements initiated
-                  through BOSAG’s network.
+                  through BOSAG's network.
                 </li>
                 <li>
                   <span className="text-[#D93025] font-semibold mr-1">3.3</span>
                   The Member agrees to indemnify and hold harmless BOSAG, its
                   officers, employees, and affiliates from any claims,
-                  liabilities, or damages resulting from the Member’s conduct,
-                  representation, or breach of BOSAG’s policies.
+                  liabilities, or damages resulting from the Member's conduct,
+                  representation, or breach of BOSAG's policies.
                 </li>
                 <li>
                   <span className="text-[#D93025] font-semibold mr-1">3.4</span>
@@ -188,7 +206,7 @@ export default function FormStep6() {
               <label className="flex items-start text-sm text-gray-700 space-x-2">
                 <input
                   type="checkbox"
-                  checked={acknowledged}
+                  checked={formData.acknowledged}
                   onChange={handleCheckboxChange}
                   className="w-4 h-4 accent-[#F58220] mt-0.5 cursor-pointer"
                 />
@@ -207,6 +225,7 @@ export default function FormStep6() {
               {/* Buttons */}
               <div className="flex justify-between mt-10">
                 <button
+                  type="button"
                   onClick={() => navigate("/onboarding/form-e")}
                   className="bg-[#191970] hover:bg-[#14145a] text-white font-medium px-8 py-2 rounded-md shadow-sm transition-colors"
                 >
@@ -214,18 +233,19 @@ export default function FormStep6() {
                 </button>
 
                 <button
-                  onClick={handleNext}
+                  type="submit"
                   className={`px-10 py-2 font-medium rounded-md shadow-sm transition-colors ${
-                    acknowledged
+                    formData.acknowledged
                       ? "bg-[#F58220] text-white hover:bg-[#e16e10]"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
+                  disabled={!formData.acknowledged}
                 >
                   Next: Summary
                 </button>
               </div>
             </div>
-          </div>
+          </form>
         </section>
       </main>
     </div>

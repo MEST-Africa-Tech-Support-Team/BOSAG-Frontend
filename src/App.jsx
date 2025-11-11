@@ -26,7 +26,7 @@ import WhoWeAre from "./pages/who-we-are.jsx";
 import MembershipPackages from "./pages/bosag-membership.jsx";
 import SectorReport from "./pages/sector-report.jsx";
 import NotFound from "./pages/not-found.jsx";
-import BosagMembership from "./pages/bosag-membership.jsx";
+// import BosagMembership from "./pages/bosag-membership.jsx";
 
 import DashboardHome from "./pages/dashboard/index.jsx";
 import ApplicationProgress from "./pages/onboarding-forms/application-progress.jsx";
@@ -52,6 +52,9 @@ import AddEvent from "./pages/dashboard/add-event.jsx"
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import ResetPasswordPage from "./pages/reset-password.jsx";
 import DashboardOverview from "./pages/dashboard/dashboard-overview.jsx";
+import AdminSettings from "./pages/dashboard/admin-setting.jsx";
+import BosagAdminLogin from "./pages/dashboard/admin-login.jsx";
+import BosagAdminSignup from "./pages/dashboard/admin-signup.jsx";
 
 import DavidProfile from "./components/profiles/david-profile.jsx";
 import DeborahProfile from "./components/profiles/deborah-profile.jsx";
@@ -107,13 +110,13 @@ const router = createBrowserRouter(
         }
                  />
 
-
       <Route path="/dashboard" element={<DashboardHome />} />
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/member-dashboardpage" element={<MembershipApproval />} />
       <Route path="/event-management" element={<EventManagement />} />
       <Route path="/admin-members-dashboard" element={<AdminMembersDashboard />} />
       <Route path="/add-event" element={<AddEvent />} />
+      <Route path="/admin-settings" element={<AdminSettings />} />
       <Route path="/dashboard-overview" element={<DashboardOverview />} />
 
       <Route path="/onboarding/form-a" element={<FormA />} />
@@ -126,8 +129,10 @@ const router = createBrowserRouter(
       
       <Route path="/onboarding/resource-hub" element={<ResourceHub />} />
       <Route path="/onboarding/manage-profile" element={<ManageProfile />} />
+      <Route path="/admin-login" element={<BosagAdminLogin />} />
+      <Route path="/admin-signup" element={<BosagAdminSignup />} />
 
-      <Route path="/bosagmembership" element={<BosagMembership />} />
+//       <Route path="/bosagmembership" element={<BosagMembership />} />
       <Route path="/event" element={<Event />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
 

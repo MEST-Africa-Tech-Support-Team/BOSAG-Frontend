@@ -1,88 +1,144 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { Upload } from "lucide-react";
+import { Upload, X } from "lucide-react";
 import FormProgressBar from "../../components/form-header.jsx";
 import Sidebar from "../../components/sidebar.jsx";
+import { Link } from "react-router";
 
 export default function FormStep5() {
   const navigate = useNavigate();
 
-  // ✅ Initialize form data
-  const [formData, setFormData] = useState({
-    companyProfile: "",
-    attachments: {
-      registrationCertificate: null,
-      logo: null,
-      marketingMaterial: null,
-    },
-  });
-
-  const [wordCount, setWordCount] = useState(0);
-
-  // ✅ Load saved data from localStorage (consistent key: "formE")
-  useEffect(() => {
+  // ✅ Initialize form data with Base64 files from localStorage
+  const [formData, setFormData] = useState(() => {
     const saved = localStorage.getItem("formE");
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        setFormData(parsed);
-
-        // ✅ Ensure file checkboxes and names persist visually
-        Object.keys(parsed.attachments || {}).forEach((key) => {
-          if (parsed.attachments[key]) {
-            console.log(`Restored uploaded file for: ${key}`);
-          }
-        });
-
-
-        // Update word count
-        if (parsed.companyProfile) {
-          const words = parsed.companyProfile.trim().split(/\s+/).filter(Boolean);
-          setWordCount(words.length);
-        }
+        return {
+          companyProfile: parsed.companyProfile || "",
+          files: parsed.files || {
+            registrationCertificate: null,
+            logo: null,
+            marketingMaterial: null,
+          },
+        };
       } catch (err) {
         console.error("Error loading formE data:", err);
       }
     }
+    return {
+      companyProfile: "",
+      files: {
+        registrationCertificate: null,
+        logo: null,
+        marketingMaterial: null,
+      },
+    };
+  });
+
+  const [wordCount, setWordCount] = useState(0);
+
+  // Calculate initial word count
+  useEffect(() => {
+    if (formData.companyProfile) {
+      const words = formData.companyProfile.trim().split(/\s+/).filter(Boolean);
+      setWordCount(words.length);
+    }
   }, []);
 
-  // ✅ Auto-save whenever formData changes
+  // ✅ Save everything to localStorage (including Base64 files)
   useEffect(() => {
     localStorage.setItem("formE", JSON.stringify(formData));
   }, [formData]);
 
-  // ✅ Convert file to Base64 (for saving persistently)
+  // ✅ Convert file to Base64
   const fileToBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve({ name: file.name, data: reader.result });
+      reader.onload = () =>
+        resolve({
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          data: reader.result,
+        });
       reader.onerror = (error) => reject(error);
     });
 
-  // ✅ Handle file upload
+  // ✅ Handle file upload - convert to Base64 and store
   const handleFileChange = async (key, file) => {
     if (!file) return;
-    const base64File = await fileToBase64(file);
+
+    try {
+      const base64File = await fileToBase64(file);
+      setFormData((prev) => ({
+        ...prev,
+        files: {
+          ...prev.files,
+          [key]: base64File,
+        },
+      }));
+    } catch (error) {
+      console.error("Error converting file to Base64:", error);
+      alert("Failed to upload file. Please try again.");
+    }
+  };
+
+  // ✅ Handle file removal
+  const handleFileRemove = (key) => {
     setFormData((prev) => ({
       ...prev,
-      attachments: { ...prev.attachments, [key]: base64File },
+      files: {
+        ...prev.files,
+        [key]: null,
+      },
     }));
   };
 
-  // ✅ Handle text area
+  // ✅ Handle text area with word count
   const handleTextChange = (e) => {
     const value = e.target.value;
-    setFormData((prev) => ({ ...prev, companyProfile: value }));
     const words = value.trim().split(/\s+/).filter(Boolean);
-    setWordCount(words.length);
+
+    // Limit to 500 words
+    if (words.length <= 500) {
+      setFormData((prev) => ({ ...prev, companyProfile: value }));
+      setWordCount(words.length);
+    }
   };
 
-  // ✅ Submit (go to next page)
+  // ✅ Validate required fields
+  const validateForm = () => {
+    const errors = [];
+
+    if (!formData.companyProfile.trim()) {
+      errors.push("Company profile is required");
+    }
+
+    if (!formData.files.registrationCertificate) {
+      errors.push("Company registration certificate is required");
+    }
+
+    if (!formData.files.logo) {
+      errors.push("Company logo is required");
+    }
+
+    return errors;
+  };
+
+  // ✅ Submit
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Save data to localStorage (redundant safety)
+    // Validate required fields
+    const errors = validateForm();
+    if (errors.length > 0) {
+      alert("Please complete all required fields:\n" + errors.join("\n"));
+      return;
+    }
+
+    // Save data to localStorage (already saved via useEffect, but ensuring it's there)
     localStorage.setItem("formE", JSON.stringify(formData));
 
     // Track completed step
@@ -92,12 +148,12 @@ export default function FormStep5() {
       localStorage.setItem("completedSteps", JSON.stringify(completed));
     }
 
-    navigate("/onboarding/form-f"); // Go to summary
+    navigate("/onboarding/summary");
   };
 
   // ✅ Reusable file upload component
   const UploadField = ({ label, name, required, optional, accept }) => {
-    const file = formData.attachments[name];
+    const file = formData.files[name];
     const inputId = `file-input-${name}`;
 
     return (
@@ -127,40 +183,33 @@ export default function FormStep5() {
 
           {/* File Name Display */}
           <div className="flex-1">
-            <div className="border border-gray-200 rounded-md px-4 py-2 bg-gray-50 text-sm">
+            <div className="border border-gray-200 rounded-md px-4 py-2 bg-gray-50 text-sm flex items-center justify-between">
               <span className={`truncate ${file ? "text-gray-700" : "text-gray-400"}`}>
                 {file ? file.name : "No file selected"}
               </span>
+
+              {/* Remove button */}
+              {file && (
+                <button
+                  type="button"
+                  onClick={() => handleFileRemove(name)}
+                  className="ml-2 text-red-500 hover:text-red-700"
+                  title="Remove file"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
             </div>
           </div>
 
-          {/* ✅ File Preview / Link */}
-          {file?.data && (
-            file.name.match(/\.(png|jpg|jpeg|svg)$/i) ? (
-              <img
-                src={file.data}
-                alt="Preview"
-                className="w-10 h-10 object-cover border rounded-md"
-              />
-            ) : (
-              <a
-                href={file.data}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline text-sm"
-              >
-                View File
-              </a>
-            )
+          {/* File preview for images */}
+          {file?.data && file.type?.startsWith("image/") && (
+            <img
+              src={file.data}
+              alt="Preview"
+              className="w-10 h-10 object-cover border rounded-md"
+            />
           )}
-
-          {/* Checkbox */}
-          <input
-            type="checkbox"
-            readOnly
-            checked={!!file}
-            className="w-4 h-4 accent-[#F58220] cursor-default"
-          />
         </div>
       </div>
     );
@@ -176,7 +225,7 @@ export default function FormStep5() {
       {/* Main */}
       <main className="flex-1 ml-64">
         <div className="sticky top-0 z-10 bg-white border-b shadow-sm">
-          <FormProgressBar currentStep={5} completedSteps={[1, 2, 3, 4]} />
+          <FormProgressBar currentStep={5} />
         </div>
 
         <section className="max-w-6xl mx-auto pt-2 pb-24 px-4 md:px-8">
@@ -201,18 +250,19 @@ export default function FormStep5() {
                 Company profile or capability statement
                 <span className="text-red-500 ml-1">*</span>
               </label>
+              <h3 className="text-sm text-gray-600 mb-4">Provide a brief overview of your organization</h3>
 
               <textarea
                 id="companyProfile"
                 rows="5"
-                maxLength={500}
                 value={formData.companyProfile}
                 onChange={handleTextChange}
-                className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-[#191970] focus:border-[#191970] resize-none bg-gray-50"
+                placeholder="Describe your company (max 500 words)..."
+                className="w-full border border-gray-300 rounded-md p-3 text-sm focus:ring-[#191970] focus:border-[#191970] resize-none bg-gray-50 placeholder-gray-400"
               />
 
               <div className="text-right text-xs text-gray-500 mt-1">
-                Word Count: {wordCount}/500
+                {wordCount}/500 words
               </div>
             </div>
 
@@ -222,6 +272,7 @@ export default function FormStep5() {
                 label="Company registration certificate"
                 name="registrationCertificate"
                 required
+                accept=".pdf,.jpg,.jpeg,.png"
               />
               <UploadField
                 label="Logo (high-res PNG or vector)"
@@ -229,12 +280,16 @@ export default function FormStep5() {
                 required
                 accept=".png,.svg,.jpg,.jpeg"
               />
-              <UploadField
+              <UploadField 
                 label="Any relevant brochures or marketing material"
                 name="marketingMaterial"
                 optional
+                accept=".pdf,.jpg,.jpeg,.png"
               />
             </div>
+
+            <Link to="/onboarding/form-f">
+              <button className="bg-[#191970] hover:bg-[#14145a] text-white font-medium px-8 py-2 rounded-md shadow-sm transition-colors mt-6">View Consent and Disclaimer</button></Link>
 
             {/* Navigation Buttons */}
             <div className="flex justify-between mt-10">
@@ -250,10 +305,11 @@ export default function FormStep5() {
                 type="submit"
                 className="px-10 py-2 font-medium rounded-md bg-[#F58220] text-white hover:bg-[#e16e10] transition-colors"
               >
-                Next: Section F
+                Submit Application
               </button>
             </div>
           </form>
+
         </section>
       </main>
     </div>

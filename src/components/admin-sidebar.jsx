@@ -29,14 +29,14 @@ export default function Sidebar() {
       <nav className="mt-6 flex-1 px-1 md:px-3">
         <ul className="space-y-1">
           <li>
-            <NavLink to="/admin-dash" className={linkClass}>
+            <NavLink to="/admin-dashboard" className={linkClass}>
               <GoGraph className="w-5 h-5" />
               <span className="hidden md:inline-block ml-3">Dashboard</span>
             </NavLink>
           </li>
 
           <li>
-            <NavLink to="/approval" className={linkClass}>
+            <NavLink to="/member-dashboardpage" className={linkClass}>
               <FaUserCheck className="w-5 h-5" />
               <span className="hidden md:inline-block ml-3">
                 Membership Approval
@@ -61,7 +61,7 @@ export default function Sidebar() {
           </li>
 
           <li>
-            <NavLink to="/settings" className={linkClass}>
+            <NavLink to="/admin-settings" className={linkClass}>
               <IoMdSettings className="w-5 h-5" />
               <span className="hidden md:inline-block ml-3">Settings</span>
             </NavLink>

@@ -12,7 +12,11 @@ export default function FormStep2() {
     return saved
       ? JSON.parse(saved)
       : {
-          contactName: "",
+          contactEmail: "",
+          contactPhone: "",
+          companyWebsite: "",
+          companyAddress: "",
+          headOfOrganizationName: "",
           jobTitle: "",
           email: "",
           phone: "",
@@ -32,13 +36,21 @@ export default function FormStep2() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Save before navigating
     localStorage.setItem("formB", JSON.stringify(formData));
 
-    // Only mark complete if all fields filled
-    const isComplete = Object.values(formData).every((v) => v.trim() !== "");
-    const completed = JSON.parse(localStorage.getItem("completedSteps")) || [];
+    // Check if all required fields are filled
+    const isComplete =
+      formData.contactEmail.trim() &&
+      formData.contactPhone.trim() &&
+      formData.companyWebsite.trim() &&
+      formData.companyAddress.trim() &&
+      formData.headOfOrganizationName.trim() &&
+      formData.jobTitle.trim() &&
+      formData.email.trim() &&
+      formData.phone.trim();
 
+    // ✅ Mark step 2 complete if all fields filled
+    const completed = JSON.parse(localStorage.getItem("completedSteps")) || [];
     if (isComplete && !completed.includes(2)) {
       completed.push(2);
       localStorage.setItem("completedSteps", JSON.stringify(completed));
@@ -68,19 +80,32 @@ export default function FormStep2() {
               Section B: Contact Information
             </h2>
             <p className="text-sm text-gray-600 mb-8">
-              Please provide your organization’s contact details
+              Please provide your organization's contact details
             </p>
 
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Primary Contact Name
+                    Email Address
                   </label>
                   <input
-                    type="text"
-                    name="contactName"
-                    value={formData.contactName}
+                    type="email"
+                    name="contactEmail"
+                    placeholder="example@company.com"
+                    value={formData.contactEmail}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-[#191970] focus:outline-none placeholder-gray-400"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    name="contactPhone"
+                    value={formData.contactPhone}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-[#191970] focus:outline-none"
                   />
@@ -88,7 +113,54 @@ export default function FormStep2() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Position/Title
+                    Company Website
+                  </label>
+                  <input
+                    type="url"
+                    name="companyWebsite"
+                    value={formData.companyWebsite}
+                    placeholder="https://www.company.com"
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-[#191970] focus:outline-none placeholder-gray-400"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Company Address
+                  </label>
+                  <input
+                    type="text"
+                    name="companyAddress"
+                    value={formData.companyAddress}
+                    placeholder="Enter company's address"
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-[#191970] focus:outline-none placeholder-gray-400"
+                  />
+                </div>
+              </div>
+
+              <h2 className="text-xl font-semibold text-[#191970] py-8 mt-10">
+                Head of Organization 
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                   Head of Organization Name
+                  </label>
+                  <input
+                    type="text"
+                    name="headOfOrganizationName"
+                    value={formData.headOfOrganizationName}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-[#191970] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Job Title
                   </label>
                   <input
                     type="text"
@@ -107,8 +179,9 @@ export default function FormStep2() {
                     type="email"
                     name="email"
                     value={formData.email}
+                    placeholder="Enter email address"
                     onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-[#191970] focus:outline-none"
+                    className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-[#191970] focus:outline-none placeholder-gray-400"
                   />
                 </div>
 

@@ -42,7 +42,10 @@ export default function AddEvent() {
       <AdminSidebar />
 
       <div className="ml-12 md:ml-64 flex-1 bg-gray-50 min-h-screen">
-        <DashboardHeader />
+        <DashboardHeader
+          title="Event Management"
+          subtitle="Manage and organize your events"
+        />
 
         <main className="flex-1 p-6">
           <h1 className="text-2xl font-semibold text-gray-800">Add Event</h1>
