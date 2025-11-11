@@ -4,7 +4,7 @@ import Footer from "../components/footer";
 import banner from "../assets/images/about.png";
 import BosagExecutive from "../components/bosag-executive";
 import AdvisoryBoard from "../components/advisory-board";
-import matthew from "../assets/images/Mattew1.png";
+import matthew from "../assets/images/mattew1.png";
 import kojo from "../assets/images/Kojo.png";
 import gowu from "../assets/images/Gowu.png";
 import rolana from "../assets/images/rolana.png";
