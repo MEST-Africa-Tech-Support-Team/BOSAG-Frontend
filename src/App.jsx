@@ -52,6 +52,9 @@ import AddEvent from "./pages/dashboard/add-event.jsx"
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import ResetPasswordPage from "./pages/reset-password.jsx";
 import DashboardOverview from "./pages/dashboard/dashboard-overview.jsx";
+import AdminSettings from "./pages/dashboard/admin-setting.jsx";
+import BosagAdminLogin from "./pages/dashboard/admin-login.jsx";
+import BosagAdminSignup from "./pages/dashboard/admin-signup.jsx";
 
 
 import AuthCallback from "./pages/auth-callback.jsx";
@@ -98,6 +101,7 @@ const router = createBrowserRouter(
       <Route path="/event-management" element={<EventManagement />} />
       <Route path="/admin-members-dashboard" element={<AdminMembersDashboard />} />
       <Route path="/add-event" element={<AddEvent />} />
+      <Route path="/admin-settings" element={<AdminSettings />} />
       <Route path="/dashboard-overview" element={<DashboardOverview />} />
 
 
@@ -111,6 +115,8 @@ const router = createBrowserRouter(
       <Route path="/onboarding/application" element={<ApplicationProgress />} />
       <Route path="/onboarding/resource-hub" element={<ResourceHub />} />
       <Route path="/onboarding/manage-profile" element={<ManageProfile />} />
+      <Route path="/admin-login" element={<BosagAdminLogin />} />
+      <Route path="/admin-signup" element={<BosagAdminSignup />} />
 
 
       <Route path="/bosagmembership" element={<BosagMembership />} />
