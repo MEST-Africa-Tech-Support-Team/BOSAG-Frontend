@@ -23,14 +23,14 @@ export default function FormStep1() {
     return saved
       ? JSON.parse(saved)
       : {
-          organisationName: "",
-          yearOfEstablishment: "",
-          companyRegNumber: "",
+          organizationName: "",
+          yearEstablished: "",
+          registrationNumber: "",
           sectorFocus: "",
           employeesGhana: "",
           employeesGlobal: "",
-          organisationTypes: [],
-          otherOrganisationText: "",
+          organizationType: [],
+          otherOrganizationText: "",
           membershipTier: "",
         };
   });
@@ -49,16 +49,16 @@ export default function FormStep1() {
     const { value, checked } = e.target;
     setFormData((prev) => {
       const updated = checked
-        ? [...prev.organisationTypes, value]
-        : prev.organisationTypes.filter((item) => item !== value);
+        ? [...prev.organizationType, value]
+        : prev.organizationType.filter((item) => item !== value);
 
       return {
         ...prev,
-        organisationTypes: updated,
-        otherOrganisationText:
+        organizationType: updated,
+        otherOrganizationText:
           value === "Other (Please specify)" && !checked
             ? ""
-            : prev.otherOrganisationText,
+            : prev.otherOrganizationText,
       };
     });
   };
@@ -115,8 +115,8 @@ export default function FormStep1() {
               </label>
               <input
                 type="text"
-                name="organisationName"
-                value={formData.organisationName}
+                name="organizationName"
+                value={formData.organizationName}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md p-2"
               />
@@ -130,9 +130,9 @@ export default function FormStep1() {
                 </label>
                 <input
                   type="text"
-                  name="yearOfEstablishment"
+                  name="yearEstablished"
                   placeholder="YYYY"
-                  value={formData.yearOfEstablishment}
+                  value={formData.yearEstablished}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-md p-2 placeholder-gray-400"
                 />
@@ -144,8 +144,8 @@ export default function FormStep1() {
                 </label>
                 <input
                   type="text"
-                  name="companyRegNumber"
-                  value={formData.companyRegNumber}
+                  name="registrationNumber"
+                  value={formData.registrationNumber}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-md p-2"
                 />
@@ -210,7 +210,7 @@ export default function FormStep1() {
                         <input
                           type="checkbox"
                           value={type}
-                          checked={formData.organisationTypes.includes(type)}
+                          checked={formData.organizationType.includes(type)}
                           onChange={handleCheckboxChange}
                         />
                         <span>{type}</span>
@@ -219,8 +219,8 @@ export default function FormStep1() {
                       {isOther && formData.organisationTypes.includes(type) && (
                         <input
                           type="text"
-                          name="otherOrganisationText"
-                          value={formData.otherOrganisationText}
+                          name="otherOrganizationText"
+                          value={formData.otherOrganizationText}
                           onChange={handleChange}
                           placeholder="Please specify"
                           className="mt-1 border border-gray-300 rounded-md p-1 text-sm w-full placeholder-gray-400"
