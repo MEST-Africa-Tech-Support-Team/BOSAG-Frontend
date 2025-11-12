@@ -10,6 +10,14 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
+  const handleNavClick = (path) => {
+  navigate(path);
+  setOpenDropdown(null);
+  setMenuOpen(false); 
+  window.scrollTo(0, 0);
+};
+
+
   const navLinks = [
     { name: "Home", path: "/" },
     {
@@ -35,12 +43,6 @@ const Navbar = () => {
       ],
     },
   ];
-
-  const handleNavClick = (path) => {
-    navigate(path);
-    setOpenDropdown(null);
-    setMenuOpen(false);
-  };
 
   const toggleDropdown = (name) => {
     setOpenDropdown((prev) => (prev === name ? null : name));
