@@ -43,16 +43,14 @@ export default function SummaryPage() {
     }
 
     try {
-      const formA = JSON.parse(localStorage.getItem("formA")) || {};
-      const formB = JSON.parse(localStorage.getItem("formB")) || {};
-      const formC = JSON.parse(localStorage.getItem("formC")) || {};
-      const formD = JSON.parse(localStorage.getItem("formD")) || {};
+      // Load latest formE with potential File objects
       const formE = JSON.parse(localStorage.getItem("formE")) || {};
-      const formF = JSON.parse(localStorage.getItem("formF")) || {};
+      const filesForBackend = await convertFilesForBackend(formE.files || {});
 
       const formData = new FormData();
 
       // Section A
+      const formA = JSON.parse(localStorage.getItem("formA")) || {};
       formData.append("organizationName", formA.organizationName || "");
       formData.append("yearEstablished", formA.yearEstablished?.toString() || "");
       formData.append("registrationNumber", formA.registrationNumber || "");
@@ -69,26 +67,30 @@ export default function SummaryPage() {
       formData.append("employeesGhana", formA.employeesGhana?.toString() || "");
       formData.append("employeesGlobal", formA.employeesGlobal?.toString() || "");
 
-      // Section B
+      // Section B & C
+      const formB = JSON.parse(localStorage.getItem("formB")) || {};
+      const formC = JSON.parse(localStorage.getItem("formC")) || {};
       Object.entries(formB).forEach(([key, value]) => formData.append(key, value || ""));
-
-      // Section C
       Object.entries(formC).forEach(([key, value]) => formData.append(key, value || ""));
 
       // Section D
+      const formD = JSON.parse(localStorage.getItem("formD")) || {};
       Object.entries(formD).forEach(([key, value]) => formData.append(key, value ? "true" : "false"));
 
-      // Section E – files & company profile
-      const fileKeys = ["registrationCertificate", "logo", "brochure"];
-      for (const key of fileKeys) {
-        if (formE.files?.[key]) {
-          // Directly append the File object to formData
-          formData.append(key, formE.files[key]);
+      // Section E: Company profile + files
+      formData.append("companyProfile", formE.companyProfile || "");
+      for (const [key, fileOrUrl] of Object.entries(filesForBackend)) {
+        if (!fileOrUrl) continue;
+        // If File object, append directly; else append URL string
+        if (fileOrUrl instanceof File) {
+          formData.append(key, fileOrUrl);
+        } else {
+          formData.append(key, fileOrUrl);
         }
       }
-      formData.append("companyProfile", formE.companyProfile || "");
 
       // Section F
+      const formF = JSON.parse(localStorage.getItem("formF")) || {};
       formData.append("acknowledged", formF.acknowledged ? "true" : "false");
 
       // POST to backend
@@ -118,6 +120,24 @@ export default function SummaryPage() {
     }
   };
 
+  // ==================== FILES CONVERSION HELPER ====================
+  const convertFilesForBackend = async (files) => {
+    const result = {};
+    for (const [key, fileOrUrl] of Object.entries(files || {})) {
+      if (!fileOrUrl) continue;
+      if (fileOrUrl.startsWith("blob:")) {
+        // convert blob URL to File object
+        const blob = await fetch(fileOrUrl).then((res) => res.blob());
+        result[key] = new File([blob], key);
+      } else {
+        // Already a URL (previously uploaded)
+        result[key] = fileOrUrl;
+      }
+    }
+    return result;
+  };
+
+  // ==================== SUMMARY UI ====================
   return (
     <div className="flex bg-gray-50 min-h-screen">
       <Toaster position="top-right" />
@@ -174,7 +194,7 @@ export default function SummaryPage() {
   );
 }
 
-// ===================== SUMMARY SECTION (unchanged UI) =====================
+// ===================== SUMMARY SECTION COMPONENT =====================
 const SummarySection = ({ title, data, onEdit }) => {
   if (!data || Object.keys(data).length === 0) return null;
   const isSectionD = title.includes("Commitment and Declarations");
@@ -256,6 +276,7 @@ const SummarySection = ({ title, data, onEdit }) => {
   );
 };
 
+// ===================== HELPERS =====================
 function formatLabel(label) {
   return label.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase()).replaceAll("_", " ");
 }
