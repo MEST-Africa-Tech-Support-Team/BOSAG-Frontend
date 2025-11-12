@@ -4,10 +4,6 @@ import Sidebar from "../../components/sidebar.jsx";
 import toast, { Toaster } from "react-hot-toast";
 import bosagApi from "../../api/bosagApi.js";
 
-// ✅ Cloudinary frontend upload config
-const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
-
 export default function SummaryPage() {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
@@ -33,33 +29,6 @@ export default function SummaryPage() {
   }, []);
 
   const handleEdit = (path) => navigate(path);
-
-  // ✅ Upload file to Cloudinary
-  const uploadToCloudinary = async (file) => {
-    if (!CLOUD_NAME || !UPLOAD_PRESET) {
-      throw new Error("Cloudinary not configured");
-    }
-
-    // If file is already a URL string, return as-is (assume backend URL)
-    if (typeof file === "string" && file.startsWith("blob:") === false) return file;
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", UPLOAD_PRESET);
-    formData.append("folder", "membership_applications");
-
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!res.ok) {
-      const error = await res.json().catch(() => ({}));
-      throw new Error(error.error?.message || "Cloudinary upload failed");
-    }
-    const result = await res.json();
-    return result.secure_url;
-  };
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
@@ -87,17 +56,14 @@ export default function SummaryPage() {
       formData.append("organizationName", formA.organizationName || "");
       formData.append("yearEstablished", formA.yearEstablished?.toString() || "");
       formData.append("registrationNumber", formA.registrationNumber || "");
-
       if (Array.isArray(formA.organizationType)) {
         formA.organizationType.forEach((type) => formData.append("organizationType[]", type));
       } else if (formA.organizationType) {
         formData.append("organizationType[]", formA.organizationType);
       }
-
       if (formA.organizationType?.includes("Other")) {
         formData.append("otherOrganizationType", formA.otherOrganizationType || "");
       }
-
       formData.append("membershipTier", formA.membershipTier || "");
       formData.append("sectorFocus", formA.sectorFocus || "");
       formData.append("employeesGhana", formA.employeesGhana?.toString() || "");
@@ -116,8 +82,8 @@ export default function SummaryPage() {
       const fileKeys = ["registrationCertificate", "logo", "brochure"];
       for (const key of fileKeys) {
         if (formE.files?.[key]) {
-          const uploadedUrl = await uploadToCloudinary(formE.files[key]);
-          formData.append(key, uploadedUrl);
+          // Directly append the File object to formData
+          formData.append(key, formE.files[key]);
         }
       }
       formData.append("companyProfile", formE.companyProfile || "");
@@ -125,7 +91,7 @@ export default function SummaryPage() {
       // Section F
       formData.append("acknowledged", formF.acknowledged ? "true" : "false");
 
-      // ✅ POST to backend
+      // POST to backend
       await bosagApi.post("/onboarding/submit", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
