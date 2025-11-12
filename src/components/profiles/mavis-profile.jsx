@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowLeft, Linkedin } from 'lucide-react';
 import ban from "../../assets/images/about.png";
-import david from "../../assets/images/Gowu.png";
+import mavis from "../../assets/images/mavis.jpeg";
 import Navbar from '../navbar';
 import Footer from '../footer';
 import { Link } from 'react-router';
@@ -45,11 +45,11 @@ export default function MavisProfile() {
        <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg transition-all p-8 md:p-12 flex flex-col md:flex-row gap-10 items-center md:items-start">
                {/* Image */}
                <div className="w-full md:w-1/2 h-[80vh] flex justify-center md:justify-start">
-                 {/* <img
-                   src={}
+                 <img
+                   src={mavis}
                    alt=""
                    className="rounded-xl object-cover w-105 h-auto"
-                 /> */}
+                 />
                </div>
        
                {/* Text Section */}
@@ -71,7 +71,7 @@ export default function MavisProfile() {
                  {/* LinkedIn Button */}
                  <div className="mt-6">
                    <a
-                     href=""
+                     href="https://www.linkedin.com/in/mavis-ampah/"
                      target="_blank"
                      rel="noopener noreferrer"
                      className="inline-flex items-center bg-[#191970] hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md"

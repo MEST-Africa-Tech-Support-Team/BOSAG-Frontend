@@ -10,6 +10,7 @@ import gowu from "../assets/images/Gowu.png";
 import rolana from "../assets/images/rolana.png";
 import ryan from "../assets/images/ryan.png";
 import deborah from "../assets/images/Deborah.jpg";
+import mavis from "../assets/images/mavis.jpeg";
 import { Link, Route } from "react-router";
 
 
@@ -58,7 +59,7 @@ const councilMembers = [
     name: "Mavis Ampah",
     role: "Member",
     title: "CEO, Cactus Creek Foundation",
-    image: "",
+    image: mavis,
     href : "mavis"
   },
   {

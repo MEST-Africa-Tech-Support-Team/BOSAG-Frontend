@@ -187,7 +187,7 @@ export default function GovernanceStructure() {
         </div>
 
         {/* Download Button */}
-        <div className="flex justify-center relative mt-12">
+        <div className="flex justify-center relative mt-12 ">
           <a
             href="/BOSAG-Governance-Structure.pdf"
             download="Bosag_Governance_Structure.pdf"
