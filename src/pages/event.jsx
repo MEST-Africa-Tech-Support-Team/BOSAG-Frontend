@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-// Import your event images
 import ComLeadership from "../assets/images/report3.jpg";
 import YouthMentorship from "../assets/images/report1.jpg";
 import SustainabilityConference from "../assets/images/hero2.jpg";
@@ -12,7 +11,6 @@ const Event = () => {
 
   const tabs = ["All Events", "Upcoming Events", "Past Events", "Annual Events"];
 
-  // ✅ Your real event data (same as in EventCards)
   const events = [
     {
       date: "June 16, 2025",
@@ -22,6 +20,7 @@ const Event = () => {
       image: ComLeadership,
       path: "https://www.linkedin.com/feed/update/urn:li:activity:7341936512277561344",
       target: "_blank",
+      categories: ["Past Events", "Annual Events"], // ✅ Appears in TWO tabs!
     },
     {
       date: "4 months ago",
@@ -31,6 +30,7 @@ const Event = () => {
       image: YouthMentorship,
       path: "https://www.linkedin.com/feed/update/urn:li:activity:7335353813886758913",
       target: "_blank",
+      categories: ["Past Events"],
     },
     {
       date: "5 months ago",
@@ -40,15 +40,22 @@ const Event = () => {
       image: SustainabilityConference,
       path: "https://www.linkedin.com/feed/update/urn:li:activity:7334358921140170752",
       target: "_blank",
+      categories: ["Past Events"],
     },
   ];
+
+  // ✅ Filter: include event if activeTab is in its categories (or "All Events")
+  const filteredEvents = events.filter((event) => {
+    if (activeTab === "All Events") return true;
+    if (activeTab === "Upcoming Events") return false; // none are upcoming
+    return event.categories.includes(activeTab);
+  });
 
   return (
     <>
       <Navbar />
       <section className="py-10 bg-[#F8FAFC] text-center">
         <div className="max-w-4xl mx-auto px-6">
-          {/* Title */}
           <h2 className="text-3xl md:text-4xl font-bold text-[#18166A] mb-4">
             Events Hub
           </h2>
@@ -58,7 +65,6 @@ const Event = () => {
             drive sector growth.
           </p>
 
-          {/* Tabs */}
           <div className="flex flex-wrap justify-center gap-4">
             {tabs.map((tab) => (
               <button
@@ -77,41 +83,44 @@ const Event = () => {
         </div>
       </section>
 
-      {/* ✅ Your Real Event Cards — Integrated */}
       <section className="bg-white py-10 px-6 md:px-10">
         <div className="max-w-7xl mx-auto">
-
-          {/* Event Cards Grid */}
-          <div className="grid md:grid-cols-3 gap-6 overflow-x-auto md:overflow-visible scrollbar-hide">
-            {events.map((event, index) => (
-              <a
-                key={index}
-                href={event.path}
-                target={event.target}
-                rel="noopener noreferrer"
-                className="flex-shrink-0 w-full md:w-auto bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden transform hover:-translate-y-1 duration-300"
-              >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={event.image}
-                    alt={event.title}
-                    className="w-full h-60 object-cover transform transition-transform duration-500 hover:scale-105"
-                  />
-                </div>
-                <div className="p-5">
-                  <p className="text-orange-500 text-sm font-semibold mb-1">
-                    {event.date}
-                  </p>
-                  <h3 className="text-[#191970] font-bold text-lg leading-tight mb-1">
-                    {event.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {event.description}
-                  </p>
-                </div>
-              </a>
-            ))}
-          </div>
+          {filteredEvents.length > 0 ? (
+            <div className="grid md:grid-cols-3 gap-6 overflow-x-auto md:overflow-visible scrollbar-hide">
+              {filteredEvents.map((event, index) => (
+                <a
+                  key={index}
+                  href={event.path}
+                  target={event.target}
+                  rel="noopener noreferrer"
+                  className="flex-shrink-0 w-full md:w-auto bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden transform hover:-translate-y-1 duration-300"
+                >
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={event.image}
+                      alt={event.title}
+                      className="w-full h-60 object-cover transform transition-transform duration-500 hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-5">
+                    <p className="text-orange-500 text-sm font-semibold mb-1">
+                      {event.date}
+                    </p>
+                    <h3 className="text-[#191970] font-bold text-lg leading-tight mb-1">
+                      {event.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {event.description}
+                    </p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No events found for "{activeTab}".</p>
+            </div>
+          )}
         </div>
       </section>
 

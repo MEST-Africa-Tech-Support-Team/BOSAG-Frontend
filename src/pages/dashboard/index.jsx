@@ -41,16 +41,32 @@ const MembershipDashboard = () => {
     { id: "G", label: "Review & Submit" },
   ];
 
+  
   const documents = [
     {
       icon: <FileText className="text-blue-600 w-5 h-5" />,
       title: "BOSAG Constitution",
       viewUrl: "https://docs.google.com/document/d/1VKyKRw3fVuc-WsvSdNKSA4kwXV_gDPQc/edit",
-      downloadUrl: "https://docs.google.com/document/d/1VKyKRw3fVuc-WsvSdNKSA4kwXV_gDPQc/edit",
+      downloadUrl: "https://docs.google.com/document/d/1VKyKRw3fVuc-WsvSdNKSA4kwXV_gDPQc/export?format=pdf",
     },
-    { icon: <FileBadge className="text-blue-600 w-5 h-5" />, title: "Membership Terms & Conditions", viewUrl: "#", downloadUrl: "#" },
-    { icon: <Shield className="text-blue-600 w-5 h-5" />, title: "Code of Conduct and Ethics", viewUrl: "#", downloadUrl: "#" },
-    { icon: <Gavel className="text-blue-600 w-5 h-5" />, title: "Governing Council Mandate", viewUrl: "#", downloadUrl: "#" },
+    {
+      icon: <FileBadge className="text-blue-600 w-5 h-5" />,
+      title: "Membership Terms & Conditions",
+      viewUrl: "https://docs.google.com/document/d/13fuxoYOnm7T1IPnJo-v-nJYpSui9dwRm/edit",
+      downloadUrl: "https://docs.google.com/document/d/13fuxoYOnm7T1IPnJo-v-nJYpSui9dwRm/export?format=pdf",
+    },
+    {
+      icon: <Shield className="text-blue-600 w-5 h-5" />,
+      title: "Code of Conduct and Ethics",
+      viewUrl: "https://bosag.org/docs/code-of-conduct.pdf",
+      downloadUrl: "https://bosag.org/docs/code-of-conduct.pdf",
+    },
+    {
+      icon: <Gavel className="text-blue-600 w-5 h-5" />,
+      title: "Governing Council Mandate",
+      viewUrl: "https://drive.google.com/file/d/14j9OGGuZskM8snNAOJY2Yz4yHtzBjBwc/view",
+      downloadUrl: "https://drive.google.com/uc?export=download&id=14j9OGGuZskM8snNAOJY2Yz4yHtzBjBwc",
+    },
   ];
 
   if (loading) {
