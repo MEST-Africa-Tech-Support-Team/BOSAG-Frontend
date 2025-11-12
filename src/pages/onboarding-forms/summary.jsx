@@ -51,116 +51,70 @@ export default function SummaryPage() {
       const formE = JSON.parse(localStorage.getItem("formE")) || {};
       const formF = JSON.parse(localStorage.getItem("formF")) || {};
 
-      // Upload files to backend first and get URLs
-      const uploadedFiles = {};
+      const formData = new FormData();
 
-      if (formE.files?.registrationCertificate?.data) {
-        const blob = await fetch(formE.files.registrationCertificate.data).then(r => r.blob());
-        const form = new FormData();
-        form.append("file", blob, formE.files.registrationCertificate.name);
+      // ===================== Section A =====================
+      formData.append("organizationName", formA.organizationName || "");
+      formData.append("yearEstablished", formA.yearEstablished || "");
+      formData.append("registrationNumber", formA.registrationNumber || "");
+      formData.append("organizationType", formA.organizationType || "");
+      formData.append("membershipTier", formA.membershipTier || "");
+      formData.append("sectorFocus", formA.sectorFocus || "");
+      formData.append("employeesGhana", formA.employeesGhana || "");
+      formData.append("employeesGlobal", formA.employeesGlobal || "");
 
-        const resp = await axios.post(
-          "https://bosag-backend.onrender.com/api/upload",
-          form,
-          { headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" } }
-        );
-        uploadedFiles.registrationCertificate = resp.data.url;
-      }
+      // ===================== Section B =====================
+      formData.append("primaryContactName", formB.headOfOrganizationName || "");
+      formData.append("jobTitle", formB.jobTitle || "");
+      formData.append("email", formB.email || "");
+      formData.append("phone", formB.phone || "");
+      formData.append("website", formB.companyWebsite || "");
+      formData.append("PostalAddress", formB.companyAddress || "");
+      formData.append("CompanyEmail", formB.contactEmail || "");
+      formData.append("CompanyPhone", formB.contactPhone || "");
 
-      if (formE.files?.logo?.data) {
-        const blob = await fetch(formE.files.logo.data).then(r => r.blob());
-        const form = new FormData();
-        form.append("file", blob, formE.files.logo.name);
+      // ===================== Section C =====================
+      formData.append("nominatedRepresentative", formC.nominatedRepName || "");
+      formData.append("position", formC.nominatedRepPosition || "");
+      formData.append("NomPhone", formC.nominatedRepPhone || "");
+      formData.append("NomEmail", formC.nominatedRepEmail || "");
+      formData.append("alternateRepresentative", formC.alternateRepName || "");
+      formData.append("altPosition", formC.altPositionRole || "");
+      formData.append("AltPhone", formC.altPhoneNumber || "");
+      formData.append("AltEmail", formC.altEmailAddress || "");
 
-        const resp = await axios.post(
-          "https://bosag-backend.onrender.com/api/upload",
-          form,
-          { headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" } }
-        );
-        uploadedFiles.logo = resp.data.url;
-      }
+      // ===================== Section D =====================
+      formData.append("agreesConstitution", !!formD.agreesConstitution);
+      formData.append("accurateInformation", !!formD.accurateInformation);
+      formData.append("commitsParticipation", !!formD.commitsParticipation);
+      formData.append("agreesFeePayment", !!formD.agreesFeePayment);
+      formData.append("BosagApproval", !!formD.BosagApproval);
 
-      if (formE.files?.brochure?.data) {
-        const blob = await fetch(formE.files.brochure.data).then(r => r.blob());
-        const form = new FormData();
-        form.append("file", blob, formE.files.brochure.name);
+      // ===================== Section E =====================
+      if (formE.files?.registrationCertificate) formData.append("registrationCertificate", formE.files.registrationCertificate);
+      if (formE.files?.logo) formData.append("logo", formE.files.logo);
+      if (formE.files?.brochure) formData.append("brochure", formE.files.brochure);
+      formData.append("companyProfile", formE.companyProfile || "");
 
-        const resp = await axios.post(
-          "https://bosag-backend.onrender.com/api/upload",
-          form,
-          { headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" } }
-        );
-        uploadedFiles.brochure = resp.data.url;
-      }
+      // ===================== Section F =====================
+      formData.append("representativeName", formC.nominatedRepName || "");
+      formData.append("authorizedSignatory", formF.authorizedSignatory || "");
+      formData.append("dateSigned", new Date().toISOString().split("T")[0]);
 
-      const today = new Date().toISOString().split("T")[0];
-
-      const payload = {
-        // Section A
-        organizationName: formA.organizationName || "",
-        organizationType: formA.organizationType || [],
-        yearEstablished: formA.yearEstablished || null,
-        registrationNumber: formA.registrationNumber || "",
-        membershipTier: formA.membershipTier || "",
-        sectorFocus: formA.sectorFocus || "",
-        employeesGhana: formA.employeesGhana || 0,
-        employeesGlobal: formA.employeesGlobal || 0,
-
-        // Section B
-        email: formB.email || "",
-        contactEmail: formB.contactEmail || "",
-        headOfOrganizationName: formB.headOfOrganizationName || "",
-        jobTitle: formB.jobTitle || "",
-        phone: formB.phone || "",
-        companyWebsite: formB.companyWebsite || "",
-        companyAddress: formB.companyAddress || "",
-        contactPhone: formB.contactPhone || "",
-
-        // Section C
-        nominatedRep: formC.nominatedRepName || "",
-        nomPositionRole: formC.nominatedRepPosition || "",
-        nomPhoneNumber: formC.nominatedRepPhone || "",
-        nomEmailAddress: formC.nominatedRepEmail || "",
-        alternateRep: formC.alternateRepName || "",
-        altPositionRole: formC.altPositionRole || "",
-        altPhoneNumber: formC.altPhoneNumber || "",
-        altEmailAddress: formC.altEmailAddress || "",
-
-        // Section D
-        agreesConstitution: !!formD.agreesConstitution,
-        accurateInformation: !!formD.accurateInformation,
-        commitsParticipation: !!formD.commitsParticipation,
-        agreesFeePayment: !!formD.agreesFeePayment,
-        BosagApproval: !!formD.BosagApproval,
-
-        // Section E
-        companyProfile: formE.companyProfile || "",
-        registrationCertificate: uploadedFiles.registrationCertificate || "",
-        logo: uploadedFiles.logo || "",
-        brochure: uploadedFiles.brochure || "",
-
-        // Section F
-        acknowledged: !!formF.acknowledged,
-        authorizedSignatory: formC.nominatedRepName || "",
-        dateSigned: today,
-
-        // Admin
-        status: "Pending",
-        remarks: "",
-      };
-
-      const response = await axios.post(
-        "https://bosag-backend.onrender.com/api/onboarding/submit",
-        payload,
+      // ===================== Submit =====================
+      await axios.put(
+        "https://bosag-backend.onrender.com/onboarding/update",
+        formData,
         {
-          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 
-      if (response.status === 200 || response.status === 201) {
-        toast.success("✅ Application submitted successfully!");
-        navigate("/onboarding/application");
-      }
+      toast.success("✅ Application submitted successfully!");
+      navigate("/onboarding/application");
     } catch (err) {
       console.error(err);
       setError(err.message);
