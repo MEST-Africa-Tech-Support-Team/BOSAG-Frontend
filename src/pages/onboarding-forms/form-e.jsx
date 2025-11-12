@@ -9,7 +9,6 @@ export default function FormStep5() {
   const navigate = useNavigate();
   const [wordCount, setWordCount] = useState(0);
 
-  // Load formE from localStorage
   const [formData, setFormData] = useState(() => {
     const saved = localStorage.getItem("formE");
     if (saved) {
@@ -29,18 +28,26 @@ export default function FormStep5() {
     };
   });
 
-  // Update word count when companyProfile changes
+  // Word count update
   useEffect(() => {
     const words = formData.companyProfile.trim().split(/\s+/).filter(Boolean);
     setWordCount(words.length);
   }, [formData.companyProfile]);
 
-  // Save formE in localStorage on change
+  // Save to localStorage (safe version, no File objects)
   useEffect(() => {
-    localStorage.setItem("formE", JSON.stringify(formData));
+    const safeFiles = {};
+    Object.entries(formData.files).forEach(([key, file]) => {
+      // Save only blob URL or existing URL
+      safeFiles[key] = typeof file === "string" ? file : null;
+    });
+
+    localStorage.setItem(
+      "formE",
+      JSON.stringify({ ...formData, files: safeFiles })
+    );
   }, [formData]);
 
-  // Handle text area change
   const handleTextChange = (e) => {
     const value = e.target.value;
     const words = value.trim().split(/\s+/).filter(Boolean);
@@ -50,17 +57,15 @@ export default function FormStep5() {
     }
   };
 
-  // Handle file selection for preview
   const handleFileChange = (key, file) => {
     if (!file) return;
-    const tempUrl = URL.createObjectURL(file); // for UI preview
+    const tempUrl = URL.createObjectURL(file); // preview only
     setFormData((prev) => ({
       ...prev,
       files: { ...prev.files, [key]: tempUrl },
     }));
   };
 
-  // Remove selected file
   const handleFileRemove = (key) => {
     setFormData((prev) => ({
       ...prev,
@@ -68,36 +73,26 @@ export default function FormStep5() {
     }));
   };
 
-  // Form validation
   const validateForm = () => {
     const errors = [];
-    if (!formData.companyProfile.trim()) errors.push("Company profile is required");
-    if (!formData.files.registrationCertificate) errors.push("Registration certificate is required");
+    if (!formData.companyProfile.trim())
+      errors.push("Company profile is required");
+    if (!formData.files.registrationCertificate)
+      errors.push("Registration certificate is required");
     if (!formData.files.logo) errors.push("Company logo is required");
     return errors;
   };
 
-  // Submit handler for Next button
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const errors = validateForm();
     if (errors.length > 0) {
       alert("Please complete all required fields:\n" + errors.join("\n"));
       return;
     }
 
-    // Save form data safely (do not store File objects in localStorage)
-    const safeFormData = {
-      ...formData,
-      files: {
-        registrationCertificate: formData.files.registrationCertificate || null,
-        logo: formData.files.logo || null,
-        brochure: formData.files.brochure || null,
-      },
-    };
-    localStorage.setItem("formE", JSON.stringify(safeFormData));
-
-    // Mark step 5 as completed
+    // Mark step 5 completed
     const completed = JSON.parse(localStorage.getItem("completedSteps")) || [];
     if (!completed.includes(5)) {
       completed.push(5);
@@ -107,7 +102,6 @@ export default function FormStep5() {
     navigate("/onboarding/summary");
   };
 
-  // File upload UI component
   const UploadField = ({ label, name, required, optional, accept }) => {
     const fileUrl = formData.files[name];
     const inputId = `file-input-${name}`;
@@ -135,7 +129,6 @@ export default function FormStep5() {
             className="hidden"
             onChange={(e) => e.target.files[0] && handleFileChange(name, e.target.files[0])}
           />
-
           <div className="flex-1 min-w-0">
             <div className="border border-gray-200 rounded-md px-4 py-2 bg-gray-50 text-sm flex items-center justify-between">
               <span className={`truncate ${fileUrl ? "text-gray-700" : "text-gray-400"}`}>
@@ -178,16 +171,11 @@ export default function FormStep5() {
               Section E: Required Company Information
             </h2>
 
-            <p className="text-sm text-gray-600 mb-6">
-              Please upload or attach the following documents:
-            </p>
-
             <div className="border border-gray-200 rounded-md p-4 bg-white shadow-sm mb-6">
               <label htmlFor="companyProfile" className="block text-sm font-medium text-gray-700 mb-2">
                 Company profile or capability statement
                 <span className="text-red-500 ml-1">*</span>
               </label>
-              <h3 className="text-sm text-gray-600 mb-4">Provide a brief overview of your organization</h3>
               <textarea
                 id="companyProfile"
                 rows="5"
@@ -200,31 +188,13 @@ export default function FormStep5() {
             </div>
 
             <div className="space-y-6">
-              <UploadField
-                label="Company registration certificate"
-                name="registrationCertificate"
-                required
-                accept=".pdf,.jpg,.jpeg,.png"
-              />
-              <UploadField
-                label="Logo (high-res PNG or vector)"
-                name="logo"
-                required
-                accept=".png,.svg,.jpg,.jpeg"
-              />
-              <UploadField
-                label="Any relevant brochures or marketing material"
-                name="brochure"
-                optional
-                accept=".pdf,.jpg,.jpeg,.png"
-              />
+              <UploadField label="Company registration certificate" name="registrationCertificate" required accept=".pdf,.jpg,.jpeg,.png" />
+              <UploadField label="Logo (high-res PNG or vector)" name="logo" required accept=".png,.svg,.jpg,.jpeg" />
+              <UploadField label="Any relevant brochures or marketing material" name="brochure" optional accept=".pdf,.jpg,.jpeg,.png" />
             </div>
 
             <Link to="/onboarding/form-f">
-              <button
-                type="button"
-                className="bg-[#191970] hover:bg-[#14145a] text-white font-medium px-8 py-2 rounded-md shadow-sm transition-colors mt-6"
-              >
+              <button type="button" className="bg-[#191970] hover:bg-[#14145a] text-white font-medium px-8 py-2 rounded-md shadow-sm transition-colors mt-6">
                 View Consent and Disclaimer
               </button>
             </Link>

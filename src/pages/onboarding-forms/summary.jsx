@@ -43,57 +43,27 @@ export default function SummaryPage() {
     }
 
     try {
-      // Load latest formE with potential File objects
       const formE = JSON.parse(localStorage.getItem("formE")) || {};
       const filesForBackend = await convertFilesForBackend(formE.files || {});
 
       const formData = new FormData();
 
       // Section A
-      const formA = JSON.parse(localStorage.getItem("formA")) || {};
-      formData.append("organizationName", formA.organizationName || "");
-      formData.append("yearEstablished", formA.yearEstablished?.toString() || "");
-      formData.append("registrationNumber", formA.registrationNumber || "");
-      if (Array.isArray(formA.organizationType)) {
-        formA.organizationType.forEach((type) => formData.append("organizationType[]", type));
-      } else if (formA.organizationType) {
-        formData.append("organizationType[]", formA.organizationType);
-      }
-      if (formA.organizationType?.includes("Other")) {
-        formData.append("otherOrganizationType", formA.otherOrganizationType || "");
-      }
-      formData.append("membershipTier", formA.membershipTier || "");
-      formData.append("sectorFocus", formA.sectorFocus || "");
-      formData.append("employeesGhana", formA.employeesGhana?.toString() || "");
-      formData.append("employeesGlobal", formA.employeesGlobal?.toString() || "");
-
+      appendFormA(formData);
       // Section B & C
-      const formB = JSON.parse(localStorage.getItem("formB")) || {};
-      const formC = JSON.parse(localStorage.getItem("formC")) || {};
-      Object.entries(formB).forEach(([key, value]) => formData.append(key, value || ""));
-      Object.entries(formC).forEach(([key, value]) => formData.append(key, value || ""));
-
+      appendFormBC(formData);
       // Section D
-      const formD = JSON.parse(localStorage.getItem("formD")) || {};
-      Object.entries(formD).forEach(([key, value]) => formData.append(key, value ? "true" : "false"));
-
-      // Section E: Company profile + files
+      appendFormD(formData);
+      // Section E
       formData.append("companyProfile", formE.companyProfile || "");
-      for (const [key, fileOrUrl] of Object.entries(filesForBackend)) {
-        if (!fileOrUrl) continue;
-        // If File object, append directly; else append URL string
-        if (fileOrUrl instanceof File) {
-          formData.append(key, fileOrUrl);
-        } else {
-          formData.append(key, fileOrUrl);
-        }
-      }
-
+      Object.entries(filesForBackend).forEach(([key, fileOrUrl]) => {
+        if (!fileOrUrl) return;
+        formData.append(key, fileOrUrl instanceof File ? fileOrUrl : fileOrUrl);
+      });
       // Section F
       const formF = JSON.parse(localStorage.getItem("formF")) || {};
       formData.append("acknowledged", formF.acknowledged ? "true" : "false");
 
-      // POST to backend
       await bosagApi.post("/onboarding/submit", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -101,7 +71,7 @@ export default function SummaryPage() {
         },
       });
 
-      // Clear localStorage
+      // Clear storage
       ["formA", "formB", "formC", "formD", "formE", "formF"].forEach((key) =>
         localStorage.removeItem(key)
       );
@@ -120,21 +90,51 @@ export default function SummaryPage() {
     }
   };
 
-  // ==================== FILES CONVERSION HELPER ====================
+  // ==================== FILES CONVERSION ====================
   const convertFilesForBackend = async (files) => {
     const result = {};
     for (const [key, fileOrUrl] of Object.entries(files || {})) {
       if (!fileOrUrl) continue;
-      if (fileOrUrl.startsWith("blob:")) {
-        // convert blob URL to File object
+      if (typeof fileOrUrl === "string" && fileOrUrl.startsWith("blob:")) {
         const blob = await fetch(fileOrUrl).then((res) => res.blob());
         result[key] = new File([blob], key);
       } else {
-        // Already a URL (previously uploaded)
         result[key] = fileOrUrl;
       }
     }
     return result;
+  };
+
+  // ==================== SECTION APPEND HELPERS ====================
+  const appendFormA = (formData) => {
+    const formA = JSON.parse(localStorage.getItem("formA")) || {};
+    formData.append("organizationName", formA.organizationName || "");
+    formData.append("yearEstablished", formA.yearEstablished?.toString() || "");
+    formData.append("registrationNumber", formA.registrationNumber || "");
+    if (Array.isArray(formA.organizationType)) {
+      formA.organizationType.forEach((type) => formData.append("organizationType[]", type));
+    } else if (formA.organizationType) {
+      formData.append("organizationType[]", formA.organizationType);
+    }
+    if (formA.organizationType?.includes("Other")) {
+      formData.append("otherOrganizationType", formA.otherOrganizationType || "");
+    }
+    formData.append("membershipTier", formA.membershipTier || "");
+    formData.append("sectorFocus", formA.sectorFocus || "");
+    formData.append("employeesGhana", formA.employeesGhana?.toString() || "");
+    formData.append("employeesGlobal", formA.employeesGlobal?.toString() || "");
+  };
+
+  const appendFormBC = (formData) => {
+    const formB = JSON.parse(localStorage.getItem("formB")) || {};
+    const formC = JSON.parse(localStorage.getItem("formC")) || {};
+    Object.entries(formB).forEach(([key, value]) => formData.append(key, value || ""));
+    Object.entries(formC).forEach(([key, value]) => formData.append(key, value || ""));
+  };
+
+  const appendFormD = (formData) => {
+    const formD = JSON.parse(localStorage.getItem("formD")) || {};
+    Object.entries(formD).forEach(([key, value]) => formData.append(key, value ? "true" : "false"));
   };
 
   // ==================== SUMMARY UI ====================
@@ -146,24 +146,7 @@ export default function SummaryPage() {
       </aside>
 
       <main className="flex-1 ml-64 px-10 py-10">
-        <div className="mb-6">
-          <h1 className="text-[#191970] font-bold text-2xl">
-            Application Review: Final Submission
-          </h1>
-          <p className="text-gray-600 mt-1">
-            Please verify all information below is accurate before submitting.
-          </p>
-        </div>
-
-        {error && (
-          <div className="bg-red-50 border border-red-300 text-red-800 px-5 py-3 rounded-md mb-8 text-sm">
-            ❌ <span className="font-semibold">Error:</span> {error}
-          </div>
-        )}
-
-        <div className="bg-green-50 border border-green-300 text-green-800 px-5 py-3 rounded-md mb-8 text-sm font-medium">
-          ✅ <span className="font-semibold">Status:</span> All Sections Completed & Ready for Submission
-        </div>
+        <Header error={error} />
 
         <SummarySection title="Section A: Organisational Details" data={forms.formA} onEdit={() => handleEdit("/onboarding/form-a")} />
         <SummarySection title="Section B: Organization Contact Information" data={forms.formB} onEdit={() => handleEdit("/onboarding/form-b")} />
@@ -194,9 +177,26 @@ export default function SummaryPage() {
   );
 }
 
-// ===================== SUMMARY SECTION COMPONENT =====================
+// ==================== HEADER ====================
+const Header = ({ error }) => (
+  <div className="mb-6">
+    <h1 className="text-[#191970] font-bold text-2xl">Application Review: Final Submission</h1>
+    <p className="text-gray-600 mt-1">Please verify all information below is accurate before submitting.</p>
+    {error && (
+      <div className="bg-red-50 border border-red-300 text-red-800 px-5 py-3 rounded-md mt-3 text-sm">
+        ❌ <span className="font-semibold">Error:</span> {error}
+      </div>
+    )}
+    <div className="bg-green-50 border border-green-300 text-green-800 px-5 py-3 rounded-md mt-3 text-sm font-medium">
+      ✅ <span className="font-semibold">Status:</span> All Sections Completed & Ready for Submission
+    </div>
+  </div>
+);
+
+// ==================== SUMMARY SECTION ====================
 const SummarySection = ({ title, data, onEdit }) => {
   if (!data || Object.keys(data).length === 0) return null;
+
   const isSectionD = title.includes("Commitment and Declarations");
   const isSectionE = title.startsWith("Section E");
   const isSectionF = title.includes("Consent and Disclaimer");
@@ -209,76 +209,84 @@ const SummarySection = ({ title, data, onEdit }) => {
           onClick={onEdit}
           className="flex items-center gap-1.5 text-[#d97706] border border-[#d97706] px-3 py-1.5 rounded text-xs font-medium hover:bg-[#d97706] hover:text-white transition"
         >
-          <span>✎</span> Edit Section
+          ✎ Edit Section
         </button>
       </div>
 
-      {isSectionD ? (
-        <div className="space-y-4 text-sm">
-          {Object.entries(data)
-            .filter(([key]) => !["files", "attachments"].includes(key))
-            .map(([key, value]) => (
-              <div key={key} className="pb-2">
-                <p className="text-gray-700 mb-1">{formatDeclarationLabel(key)}</p>
-                <p className="text-teal-600 font-medium">{value ? "Confirmed" : "Not Confirmed"}</p>
-              </div>
-            ))}
-        </div>
-      ) : isSectionE ? (
-        <div className="space-y-6 text-sm">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <p className="text-gray-600 text-sm mb-1">Company Profile Overview Statement</p>
-              <p className="text-gray-900 font-medium">
-                {data.companyProfile ? `${data.companyProfile.trim().split(/\s+/).length}/500 words` : "Not provided"}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-600 text-sm mb-1">Registration Certificate</p>
-              <p className="font-medium text-teal-600">
-                {data.files?.registrationCertificate ? "File Selected" : "Missing"}
-              </p>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <p className="text-gray-600 text-sm mb-1">Logo</p>
-              <p className="font-medium text-teal-600">{data.files?.logo ? "File Selected" : "Missing"}</p>
-            </div>
-            <div>
-              <p className="text-gray-600 text-sm mb-1">Brochure</p>
-              <p className="font-medium">{data.files?.brochure ? "File Selected" : "Not provided (optional)"}</p>
-            </div>
-          </div>
-        </div>
-      ) : isSectionF ? (
-        <div className="text-sm">
-          <div className="pb-2">
-            <p className="text-gray-700 mb-1">Terms Acknowledgement</p>
-            <p className="font-medium">
-              {data.acknowledged ? <span className="text-teal-600">Confirmed</span> : <span className="text-gray-500">Not Confirmed</span>}
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm">
-          {Object.entries(data)
-            .filter(([key]) => !["files", "attachments"].includes(key))
-            .map(([key, value]) => (
-              <div key={key}>
-                <p className="text-gray-600 text-sm mb-1">{formatLabel(key)}</p>
-                <p className="text-gray-900 font-medium">{formatValue(value)}</p>
-              </div>
-            ))}
-        </div>
-      )}
+      {isSectionD ? <SectionD data={data} /> : isSectionE ? <SectionE data={data} /> : isSectionF ? <SectionF data={data} /> : <GenericSection data={data} />}
     </div>
   );
 };
 
-// ===================== HELPERS =====================
+// ==================== SECTION COMPONENTS ====================
+const SectionD = ({ data }) => (
+  <div className="space-y-4 text-sm">
+    {Object.entries(data)
+      .filter(([key]) => !["files", "attachments"].includes(key))
+      .map(([key, value]) => (
+        <div key={key} className="pb-2">
+          <p className="text-gray-700 mb-1">{formatDeclarationLabel(key)}</p>
+          <p className="text-teal-600 font-medium">{value ? "Confirmed" : "Not Confirmed"}</p>
+        </div>
+      ))}
+  </div>
+);
+
+const SectionE = ({ data }) => (
+  <div className="space-y-6 text-sm">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div>
+        <p className="text-gray-600 text-sm mb-1">Company Profile Overview</p>
+        <p className="text-gray-900 font-medium">
+          {data.companyProfile ? `${data.companyProfile.trim().split(/\s+/).length}/500 words` : "Not provided"}
+        </p>
+      </div>
+      <div>
+        <p className="text-gray-600 text-sm mb-1">Registration Certificate</p>
+        <p className="font-medium text-teal-600">{data.files?.registrationCertificate ? "File Selected" : "Missing"}</p>
+      </div>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div>
+        <p className="text-gray-600 text-sm mb-1">Logo</p>
+        <p className="font-medium text-teal-600">{data.files?.logo ? "File Selected" : "Missing"}</p>
+      </div>
+      <div>
+        <p className="text-gray-600 text-sm mb-1">Brochure</p>
+        <p className="font-medium">{data.files?.brochure ? "File Selected" : "Not provided (optional)"}</p>
+      </div>
+    </div>
+  </div>
+);
+
+const SectionF = ({ data }) => (
+  <div className="text-sm">
+    <div className="pb-2">
+      <p className="text-gray-700 mb-1">Terms Acknowledgement</p>
+      <p className="font-medium">{data.acknowledged ? <span className="text-teal-600">Confirmed</span> : <span className="text-gray-500">Not Confirmed</span>}</p>
+    </div>
+  </div>
+);
+
+const GenericSection = ({ data }) => (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm">
+    {Object.entries(data)
+      .filter(([key]) => !["files", "attachments"].includes(key))
+      .map(([key, value]) => (
+        <div key={key}>
+          <p className="text-gray-600 text-sm mb-1">{formatLabel(key)}</p>
+          <p className="text-gray-900 font-medium">{formatValue(value)}</p>
+        </div>
+      ))}
+  </div>
+);
+
+// ==================== HELPERS ====================
 function formatLabel(label) {
-  return label.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase()).replaceAll("_", " ");
+  return label
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (str) => str.toUpperCase())
+    .replaceAll("_", " ");
 }
 
 function formatDeclarationLabel(label) {
