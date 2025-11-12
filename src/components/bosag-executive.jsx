@@ -37,60 +37,39 @@ const BosagExecutive = () => {
 
           <div className="space-y-4 text-xs leading-relaxed">
             <p>
-              David Gowu is a visionary digital transformation leader with
-              expertise in ICT, Telecoms Engineering, IT outsourcing, strategic
-              talent management, and digital skills. He is the CEO and founding
-              board member of the Business Outsourcing Services Association
-              Ghana (BOSAG), Ghana’s premier trade association for Business
-              Process Outsourcing (BPO), IT Enabled Services (ITES), and Global
-              Business Services (GBS). BOSAG facilitates business and trade value
-              advocacy for government and public sector support, driving the
-              development of a thriving outsourcing industry in Ghana and Africa.
-            </p>
-            <p>
-              David was recently appointed as a Board Member of Ghana Digital
-              Centres Limited (GDCL) by the President of the Republic of Ghana,
-              recognizing his leadership and contributions to Ghana’s digital
-              transformation agenda.
-            </p>
-            <p>
-              Previously, David served as the Chief Talent Officer of 4th-iR
-              Ghana, where he led efforts to develop a virtual workforce of IT
-              talents specializing in AI, software development, and innovation to
-              support businesses globally. His leadership played a crucial role
-              in expanding AI-driven solutions and advancing digital
-              transformation.
-            </p>
-            <p>
-              David is also the co-founder and immediate past Executive Director
-              of the Institute of ICT Professionals Ghana (IIPGH), a professional
-              body dedicated to promoting excellence and professionalism in the
-              ICT industry. Under his leadership, IIPGH grew into a key player in
-              Ghana’s digital transformation, fostering collaboration between
-              industry and academia, enhancing digital literacy, and advocating
-              for the adoption of innovative technologies.
-            </p>
-            <p>
-              Currently, he serves as President of Technology Information
-              Confederation Africa (TICON Africa), an organization fostering
-              collaboration, knowledge sharing, and capacity building among
-              technology professionals and entrepreneurs across Africa. Through
-              conferences, research, education, and networking events, TICON
-              Africa empowers the African tech community and contributes
-              significantly to the Sustainable Development Goals (SDGs).
-            </p>
-            <p>
-              David holds a Bachelor’s degree in Electrical/Electronics
-              Engineering from the University of Mines and Technology (UMaT) and
-              a Master’s in Communication Engineering from the University of
-              Rwanda. He remains dedicated to advancing digital transformation in
-              Ghana, Africa, and beyond, driving innovation, talent development,
-              and technological excellence across the continent.
-            </p>
+                    David Gowu is a visionary ecosystem builder and digital transformation 
+                    leader with deep expertise in technology, talent development, and international
+                     business. As CEO and founding board member of the Business Outsourcing Services 
+                     Association Ghana (BOSAG), he leads efforts to position Ghana as a premier destination 
+                     for Business Process Outsourcing (BPO), IT Enabled Services (ITES), and Global Business 
+                     Services (GBS). His leadership bridges industry, government, and global markets to drive
+                      innovation, competitiveness, and sustainable growth.
+                   </p>
+                   <p>
+                     David was recently appointed by the President of Ghana as a Board Member of Ghana Digital 
+                     Centres Limited (GDCL), in recognition of his contributions to Ghana’s digital transformation agenda.
+                   </p>
+                   <p>
+                     Previously, he served as Chief Talent Officer at 4th-IR Ghana, where he built a virtual 
+                     workforce of IT professionals specializing in AI and software development to support global enterprises.
+                      He also co-founded and served as Executive Director of the Institute of ICT Professionals Ghana (IIPGH), 
+                      transforming it into a key player in Ghana’s digital ecosystem through industry-academia collaboration and 
+                      advocacy for emerging technologies.
+                   </p>
+                   <p>
+                     Currently, David serves as President of Technology Information Confederation Africa (TICON Africa),
+                      an organization fostering knowledge sharing, capacity building, and innovation among tech professionals
+                       across Africa.
+                   </p>
+                   <p>
+                    He holds a Bachelor’s in Electrical/Electronics Engineering from UMaT and a Master’s in 
+                    Communication Management from the University of Rwanda. David remains committed to advancing 
+                    digital transformation across Africa, driving innovation, talent development, and global competitiveness.
+                   </p>
           </div>
 
           {/* LinkedIn Button */}
-          <div className="mt-6">
+          <div className="mt-22">
             <a
               href="https://www.linkedin.com/in/david-gowu-9158027/"
               target="_blank"

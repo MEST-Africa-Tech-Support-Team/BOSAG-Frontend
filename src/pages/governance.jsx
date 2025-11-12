@@ -147,10 +147,15 @@ const governance = () => {
 
         {/* Download Button */}
         <div className="flex justify-center">
+          <a
+            href="/BOSAG-Governance-Structure.pdf"
+            download="Bosag_Governance_Structure.pdf"
+          >
           <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-12 rounded-lg transition duration-300 inline-flex items-center gap-3 shadow-lg">
             <Download className="w-5 h-5" />
             Download Document
           </button>
+          </a>
         </div>
       </div>
     </section>
