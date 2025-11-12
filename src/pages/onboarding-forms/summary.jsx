@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Sidebar from "../../components/sidebar.jsx";
-import bosagApi from "../../api/bosagApi.js";
 import axios from "axios";
-
+import toast, { Toaster } from "react-hot-toast";
 
 export default function SummaryPage() {
   const navigate = useNavigate();
@@ -20,7 +19,6 @@ export default function SummaryPage() {
   });
 
   useEffect(() => {
-    // Load all form data from localStorage
     setForms({
       formA: JSON.parse(localStorage.getItem("formA")) || {},
       formB: JSON.parse(localStorage.getItem("formB")) || {},
@@ -33,210 +31,148 @@ export default function SummaryPage() {
 
   const handleEdit = (path) => navigate(path);
 
-  const handleSubmit = async () => {
+  const handlePostSubmit = async (e) => {
+    e.preventDefault();
     setSubmitting(true);
     setError(null);
 
+    const token = localStorage.getItem("bosagToken");
+    if (!token) {
+      toast.error("No authentication token found. Please log in again.");
+      setSubmitting(false);
+      return;
+    }
+
     try {
-      const token = localStorage.getItem("bosagToken");
-      if (!token) throw new Error("No authentication token found. Please log in.");
+      const formA = JSON.parse(localStorage.getItem("formA")) || {};
+      const formB = JSON.parse(localStorage.getItem("formB")) || {};
+      const formC = JSON.parse(localStorage.getItem("formC")) || {};
+      const formD = JSON.parse(localStorage.getItem("formD")) || {};
+      const formE = JSON.parse(localStorage.getItem("formE")) || {};
+      const formF = JSON.parse(localStorage.getItem("formF")) || {};
 
-      const formDataObj = new FormData();
+      // Upload files to backend first and get URLs
+      const uploadedFiles = {};
 
-      // ---------------- SECTION A ----------------
-      const formA = forms.formA;
-      if (formA.organizationName) formDataObj.append("organizationName", formA.organizationName);
-      if (formA.yearEstablished) formDataObj.append("yearEstablished", formA.yearEstablished);
-      if (formA.registrationNumber) formDataObj.append("registrationNumber", formA.registrationNumber);
-      if (formA.organizationType?.length) formDataObj.append("organizationType", formA.organizationType[0]);
-      if (formA.membershipTier) formDataObj.append("membershipTier", formA.membershipTier);
-      if (formA.sectorFocus) formDataObj.append("sectorFocus", formA.sectorFocus);
-      if (formA.employeesGhana) formDataObj.append("employeesGhana", formA.employeesGhana);
-      if (formA.employeesGlobal) formDataObj.append("employeesGlobal", formA.employeesGlobal);
+      if (formE.files?.registrationCertificate?.data) {
+        const blob = await fetch(formE.files.registrationCertificate.data).then(r => r.blob());
+        const form = new FormData();
+        form.append("file", blob, formE.files.registrationCertificate.name);
 
-      // ---------------- SECTION B ----------------
-      const formB = forms.formB;
-      if (formB.headOfOrganizationName) formDataObj.append("primaryContactName", formB.headOfOrganizationName);
-      if (formB.jobTitle) formDataObj.append("jobTitle", formB.jobTitle);
-      if (formB.email) formDataObj.append("email", formB.email);
-      if (formB.phone) formDataObj.append("phone", formB.phone);
-      if (formB.companyWebsite) formDataObj.append("website", formB.companyWebsite);
-      if (formB.companyAddress) formDataObj.append("PostalAddress", formB.companyAddress);
-      if (formB.contactEmail) formDataObj.append("CompanyEmail", formB.contactEmail);
-      if (formB.contactPhone) formDataObj.append("CompanyPhone", formB.contactPhone);
-
-      // ---------------- SECTION C ----------------
-      const formC = forms.formC;
-      if (formC.nominatedRepName) formDataObj.append("nominatedRepresentative", formC.nominatedRepName);
-      if (formC.nominatedRepPosition) formDataObj.append("position", formC.nominatedRepPosition);
-      if (formC.nominatedRepEmail) formDataObj.append("NomEmail", formC.nominatedRepEmail);
-      if (formC.nominatedRepPhone) formDataObj.append("NomPhone", formC.nominatedRepPhone);
-      if (formC.alternateRepName) formDataObj.append("alternateRepresentative", formC.alternateRepName);
-      if (formC.alternateRepPosition) formDataObj.append("altPosition", formC.alternateRepPosition);
-      if (formC.alternateRepEmail) formDataObj.append("AltEmail", formC.alternateRepEmail);
-
-      // ---------------- SECTION D ----------------
-      const formD = forms.formD;
-      formDataObj.append("agreesConstitution", formD.agreesConstitution || false);
-      formDataObj.append("accurateInformation", formD.accurateInformation || false);
-      formDataObj.append("commitsParticipation", formD.commitsParticipation || false);
-      formDataObj.append("agreesFeePayment", formD.agreesFeePayment || false);
-      formDataObj.append("BosagApproval", formD.BosagApproval || false);
-
-      // ---------------- SECTION E ----------------
-      const formE = forms.formE;
-      if (formE.companyProfile) formDataObj.append("companyProfile", formE.companyProfile);
-
-      const files = formE.files || {};
-      if (files.registrationCertificate?.data) {
-        const blob = await fetch(files.registrationCertificate.data).then(r => r.blob());
-        formDataObj.append("registrationCertificate", blob, files.registrationCertificate.name);
-      }
-      if (files.logo?.data) {
-        const blob = await fetch(files.logo.data).then(r => r.blob());
-        formDataObj.append("logo", blob, files.logo.name);
-      }
-      if (files.brochure?.data) {
-        const blob = await fetch(files.brochure.data).then(r => r.blob());
-        formDataObj.append("brochure", blob, files.brochure.name);
+        const resp = await axios.post(
+          "https://bosag-backend.onrender.com/api/upload",
+          form,
+          { headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" } }
+        );
+        uploadedFiles.registrationCertificate = resp.data.url;
       }
 
-      // ---------------- SECTION F ----------------
-      const formF = forms.formF;
-      if (formC.nominatedRepName) formDataObj.append("representativeName", formC.nominatedRepName);
-      if (formC.nominatedRepName) formDataObj.append("authorizedSignatory", formC.nominatedRepName);
+      if (formE.files?.logo?.data) {
+        const blob = await fetch(formE.files.logo.data).then(r => r.blob());
+        const form = new FormData();
+        form.append("file", blob, formE.files.logo.name);
+
+        const resp = await axios.post(
+          "https://bosag-backend.onrender.com/api/upload",
+          form,
+          { headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" } }
+        );
+        uploadedFiles.logo = resp.data.url;
+      }
+
+      if (formE.files?.brochure?.data) {
+        const blob = await fetch(formE.files.brochure.data).then(r => r.blob());
+        const form = new FormData();
+        form.append("file", blob, formE.files.brochure.name);
+
+        const resp = await axios.post(
+          "https://bosag-backend.onrender.com/api/upload",
+          form,
+          { headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" } }
+        );
+        uploadedFiles.brochure = resp.data.url;
+      }
+
       const today = new Date().toISOString().split("T")[0];
-      formDataObj.append("dateSigned", today);
 
-      // ---------------- HANDLE UPDATE ON SUBMIT ----------------
-      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/onboarding/update`, {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formDataObj,
-      });
+      const payload = {
+        // Section A
+        organizationName: formA.organizationName || "",
+        organizationType: formA.organizationType || [],
+        yearEstablished: formA.yearEstablished || null,
+        registrationNumber: formA.registrationNumber || "",
+        membershipTier: formA.membershipTier || "",
+        sectorFocus: formA.sectorFocus || "",
+        employeesGhana: formA.employeesGhana || 0,
+        employeesGlobal: formA.employeesGlobal || 0,
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        // Section B
+        email: formB.email || "",
+        contactEmail: formB.contactEmail || "",
+        headOfOrganizationName: formB.headOfOrganizationName || "",
+        jobTitle: formB.jobTitle || "",
+        phone: formB.phone || "",
+        companyWebsite: formB.companyWebsite || "",
+        companyAddress: formB.companyAddress || "",
+        contactPhone: formB.contactPhone || "",
+
+        // Section C
+        nominatedRep: formC.nominatedRepName || "",
+        nomPositionRole: formC.nominatedRepPosition || "",
+        nomPhoneNumber: formC.nominatedRepPhone || "",
+        nomEmailAddress: formC.nominatedRepEmail || "",
+        alternateRep: formC.alternateRepName || "",
+        altPositionRole: formC.altPositionRole || "",
+        altPhoneNumber: formC.altPhoneNumber || "",
+        altEmailAddress: formC.altEmailAddress || "",
+
+        // Section D
+        agreesConstitution: !!formD.agreesConstitution,
+        accurateInformation: !!formD.accurateInformation,
+        commitsParticipation: !!formD.commitsParticipation,
+        agreesFeePayment: !!formD.agreesFeePayment,
+        BosagApproval: !!formD.BosagApproval,
+
+        // Section E
+        companyProfile: formE.companyProfile || "",
+        registrationCertificate: uploadedFiles.registrationCertificate || "",
+        logo: uploadedFiles.logo || "",
+        brochure: uploadedFiles.brochure || "",
+
+        // Section F
+        acknowledged: !!formF.acknowledged,
+        authorizedSignatory: formC.nominatedRepName || "",
+        dateSigned: today,
+
+        // Admin
+        status: "Pending",
+        remarks: "",
+      };
+
+      const response = await axios.post(
+        "https://bosag-backend.onrender.com/api/onboarding/submit",
+        payload,
+        {
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+        }
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        toast.success("✅ Application submitted successfully!");
+        navigate("/onboarding/application");
       }
-
-      alert("✅ Application submitted successfully!");
-      navigate("/onboarding/application");
-
     } catch (err) {
-      console.error("Error submitting application:", err);
+      console.error(err);
       setError(err.message);
-      alert(`❌ Error: ${err.message}`);
+      toast.error(`❌ Error: ${err.message}`);
     } finally {
       setSubmitting(false);
     }
   };
-  
- const handlePostSubmit = async (e) => {
-  e.preventDefault();
-  setSubmitting(true);
-  setError(null);
-
-  const token = localStorage.getItem("bosagToken");
-  if (!token) {
-    alert("No authentication token found. Please log in again.");
-    setSubmitting(false);
-    return;
-  }
-
-  try {
-    // Collect all form sections from localStorage
-    const formA = JSON.parse(localStorage.getItem("formA")) || {};
-    const formB = JSON.parse(localStorage.getItem("formB")) || {};
-    const formC = JSON.parse(localStorage.getItem("formC")) || {};
-    const formD = JSON.parse(localStorage.getItem("formD")) || {};
-    const formE = JSON.parse(localStorage.getItem("formE")) || {};
-    const formF = JSON.parse(localStorage.getItem("formF")) || {};
-
-    // ✅ Build the payload exactly as your Mongoose schema expects
-    const payload = {
-      // ----- REQUIRED FIELDS -----
-      organizationName: formA.organizationName || "",
-      organizationType: formA.organizationType || [],
-      email: formB.email || "",
-      contactEmail: formB.contactEmail || "",
-      headOfOrganizatioName: formB.headOfOrganizationName || "", // ⚠️ match your schema spelling
-      user: formA.user || undefined, // optional; your backend may set req.user automatically
-
-      // ----- OPTIONAL FIELDS -----
-      yearEstablished: formA.yearEstablished || null,
-      registrationNumber: formA.registrationNumber || "",
-      otherOrganizationType: formA.otherOrganizationType || "",
-      membershipTier: formA.membershipTier || "",
-      sectorFocus: formA.sectorFocus || "",
-      employeesGhana: formA.employeesGhana || 0,
-      employeesGlobal: formA.employeesGlobal || 0,
-
-      // ORGANIZATION & CONTACT
-      jobTitle: formB.jobTitle || "",
-      phone: formB.phone || "",
-      companyWebsite: formB.companyWebsite || "",
-      companyAddress: formB.companyAddress || "",
-      contactPhone: formB.contactPhone || "",
-
-      // GOVERNANCE
-      nominatedRep: formC.nominatedRepName || "",
-      nomPositionRole: formC.nominatedRepPosition || "",
-      nomPhoneNumber: formC.nominatedRepPhone || "",
-      nomEmailAddress: formC.nominatedRepEmail || "",
-      alternateRep: formC.alternateRepName || "",
-      altPositionRole: formC.alternateRepPosition || "",
-      altPhoneNumber: formC.alternateRepPhone || "",
-      altEmailAddress: formC.alternateRepEmail || "",
-
-      // DECLARATIONS
-      agreesConstitution: !!formD.agreesConstitution,
-      accurateInformation: !!formD.accurateInformation,
-      commitsParticipation: !!formD.commitsParticipation,
-      BosagApproval: !!formD.BosagApproval,
-      agreesFeePayment: !!formD.agreesFeePayment,
-
-      // FILE ATTACHMENTS (store as URLs, or backend handles upload)
-      registrationCertificate: formE.files?.registrationCertificate?.url || "",
-      companyProfile: formE.companyProfile || "",
-      logo: formE.files?.logo?.url || "",
-      brochure: formE.files?.brochure?.url || "",
-
-      // ACKNOWLEDGEMENT
-      acknowledged: !!formF.acknowledged,
-
-      // ADMIN (optional defaults)
-      status: "Pending",
-      remarks: "",
-    };
-
-    // ✅ Post the aligned payload
-    const response = await axios.post(
-      "https://bosag-backend.onrender.com/api/onboarding/submit",
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (response.status === 200 || response.status === 201) {
-      alert("✅ Application submitted successfully!");
-      navigate("/onboarding/application");
-    }
-  } catch (err) {
-    console.error("Error during post-submission:", err);
-    setError(err.message);
-    alert(`❌ Error: ${err.message}`);
-  } finally {
-    setSubmitting(false);
-  }
-};
 
   return (
     <div className="flex bg-gray-50 min-h-screen">
+      <Toaster position="top-right" />
       <aside className="fixed top-0 left-0 h-full w-64 bg-white shadow-md z-20">
         <Sidebar />
       </aside>
@@ -247,8 +183,7 @@ export default function SummaryPage() {
             Application Review: Final Submission
           </h1>
           <p className="text-gray-600 mt-1">
-            Please verify all information below is accurate before submitting
-            your application for Due Diligence.
+            Please verify all information below is accurate before submitting your application for Due Diligence.
           </p>
         </div>
 
@@ -259,10 +194,10 @@ export default function SummaryPage() {
         )}
 
         <div className="bg-green-50 border border-green-300 text-green-800 px-5 py-3 rounded-md mb-8 text-sm font-medium">
-          ✅ <span className="font-semibold">Status:</span> All Sections
-          Completed & Ready for Submission
+          ✅ <span className="font-semibold">Status:</span> All Sections Completed & Ready for Submission
         </div>
 
+        {/* Summary Sections */}
         <SummarySection title="Section A: Organisational Details" data={forms.formA} onEdit={() => handleEdit("/onboarding/form-a")} />
         <SummarySection title="Section B: Organization Contact Information" data={forms.formB} onEdit={() => handleEdit("/onboarding/form-b")} />
         <SummarySection title="Section C: Governance and Representation" data={forms.formC} onEdit={() => handleEdit("/onboarding/form-c")} />
@@ -278,7 +213,7 @@ export default function SummaryPage() {
           >
             Go Back
           </button>
-          
+
           <button
             onClick={handlePostSubmit}
             disabled={submitting}
@@ -292,9 +227,9 @@ export default function SummaryPage() {
   );
 }
 
+// ===================== SUMMARY SECTION =====================
 const SummarySection = ({ title, data, onEdit }) => {
   if (!data || Object.keys(data).length === 0) return null;
-
   const isSectionD = title.includes("Commitment and Declarations");
   const isSectionE = title.startsWith("Section E");
   const isSectionF = title.includes("Consent and Disclaimer");
@@ -311,6 +246,7 @@ const SummarySection = ({ title, data, onEdit }) => {
         </button>
       </div>
 
+      {/* Section content */}
       {isSectionD ? (
         <div className="space-y-4 text-sm">
           {Object.entries(data)
@@ -326,44 +262,22 @@ const SummarySection = ({ title, data, onEdit }) => {
         <div className="space-y-6 text-sm">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <p className="text-gray-600 text-sm mb-1">
-                Company Profile Overview Statement (Text)
-              </p>
-              <p className="text-gray-900 font-medium">
-                {data.companyProfile ? `${data.companyProfile.trim().split(/\s+/).length}/500 words entered` : "No text provided"}
-              </p>
+              <p className="text-gray-600 text-sm mb-1">Company Profile Overview Statement (Text)</p>
+              <p className="text-gray-900 font-medium">{data.companyProfile ? `${data.companyProfile.trim().split(/\s+/).length}/500 words entered` : "No text provided"}</p>
             </div>
             <div>
               <p className="text-gray-600 text-sm mb-1">Company Registration Certificate</p>
-              <p className="font-medium">
-                {data.files?.registrationCertificate ? (
-                  <span className="text-teal-600">File Uploaded: {data.files.registrationCertificate.name}</span>
-                ) : (
-                  <span className="text-gray-500">No File Uploaded</span>
-                )}
-              </p>
+              <p className="font-medium">{data.files?.registrationCertificate ? <span className="text-teal-600">File Uploaded: {data.files.registrationCertificate.name}</span> : <span className="text-gray-500">No File Uploaded</span>}</p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <p className="text-gray-600 text-sm mb-1">Logo (High-res PNG or vector)</p>
-              <p className="font-medium">
-                {data.files?.logo ? (
-                  <span className="text-teal-600">File Uploaded: {data.files.logo.name}</span>
-                ) : (
-                  <span className="text-gray-500">No File Uploaded</span>
-                )}
-              </p>
+              <p className="font-medium">{data.files?.logo ? <span className="text-teal-600">File Uploaded: {data.files.logo.name}</span> : <span className="text-gray-500">No File Uploaded</span>}</p>
             </div>
             <div>
               <p className="text-gray-600 text-sm mb-1">Relevant Brochure or Marketing Material (Optional)</p>
-              <p className="font-medium">
-                {data.files?.marketingMaterial ? (
-                  <span className="text-teal-600">File Uploaded: {data.files.marketingMaterial.name}</span>
-                ) : (
-                  <span className="text-gray-500">No File Uploaded</span>
-                )}
-              </p>
+              <p className="font-medium">{data.files?.marketingMaterial ? <span className="text-teal-600">File Uploaded: {data.files.marketingMaterial.name}</span> : <span className="text-gray-500">No File Uploaded</span>}</p>
             </div>
           </div>
         </div>
@@ -371,9 +285,7 @@ const SummarySection = ({ title, data, onEdit }) => {
         <div className="text-sm">
           <div className="pb-2">
             <p className="text-gray-700 mb-1">Terms Acknowledgement</p>
-            <p className="font-medium">
-              {data.acknowledged ? <span className="text-teal-600">Confirmed</span> : <span className="text-gray-500">Not Confirmed</span>}
-            </p>
+            <p className="font-medium">{data.acknowledged ? <span className="text-teal-600">Confirmed</span> : <span className="text-gray-500">Not Confirmed</span>}</p>
           </div>
         </div>
       ) : (
@@ -392,6 +304,7 @@ const SummarySection = ({ title, data, onEdit }) => {
   );
 };
 
+// ===================== HELPER FUNCTIONS =====================
 function formatLabel(label) {
   return label.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase()).replaceAll("_", " ");
 }
