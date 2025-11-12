@@ -5,6 +5,16 @@ import FormProgressBar from "../../components/form-header.jsx";
 import Sidebar from "../../components/sidebar.jsx";
 import { Link } from "react-router";
 
+// ✅ Base64 helper (outside component)
+const fileToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
 export default function FormStep5() {
   const navigate = useNavigate();
   const [wordCount, setWordCount] = useState(0);
@@ -13,7 +23,15 @@ export default function FormStep5() {
     const saved = localStorage.getItem("formE");
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        // Clean old object URLs (they're not valid after reload)
+        const cleanFiles = {};
+        for (const key in parsed.files) {
+          const val = parsed.files[key];
+          // Keep only base64 strings or null
+          cleanFiles[key] = typeof val === "string" && val.startsWith("data:") ? val : null;
+        }
+        return { ...parsed, files: cleanFiles };
       } catch (err) {
         console.error("Failed to parse formE", err);
       }
@@ -34,15 +52,13 @@ export default function FormStep5() {
   }, [formData.companyProfile]);
 
   useEffect(() => {
+    // Only store base64 strings (they're safe in localStorage)
     const safeFiles = {};
-    Object.entries(formData.files).forEach(([key, file]) => {
-      safeFiles[key] = typeof file === "string" ? file : null;
-    });
-
-    localStorage.setItem(
-      "formE",
-      JSON.stringify({ ...formData, files: safeFiles })
-    );
+    for (const key in formData.files) {
+      const val = formData.files[key];
+      safeFiles[key] = typeof val === "string" && val.startsWith("data:") ? val : null;
+    }
+    localStorage.setItem("formE", JSON.stringify({ ...formData, files: safeFiles }));
   }, [formData]);
 
   const handleTextChange = (e) => {
@@ -54,13 +70,19 @@ export default function FormStep5() {
     }
   };
 
-  const handleFileChange = (key, file) => {
+  // ✅ FIXED: Convert file to Base64 instead of object URL
+  const handleFileChange = async (key, file) => {
     if (!file) return;
-    const tempUrl = URL.createObjectURL(file); 
-    setFormData((prev) => ({
-      ...prev,
-      files: { ...prev.files, [key]: tempUrl },
-    }));
+    try {
+      const base64 = await fileToBase64(file);
+      setFormData((prev) => ({
+        ...prev,
+        files: { ...prev.files, [key]: base64 },
+      }));
+    } catch (err) {
+      console.error("Failed to read file:", err);
+      alert("Failed to load file. Please try again.");
+    }
   };
 
   const handleFileRemove = (key) => {
@@ -89,7 +111,6 @@ export default function FormStep5() {
       return;
     }
 
-    // Mark step 5 completed
     const completed = JSON.parse(localStorage.getItem("completedSteps")) || [];
     if (!completed.includes(5)) {
       completed.push(5);
@@ -100,7 +121,7 @@ export default function FormStep5() {
   };
 
   const UploadField = ({ label, name, required, optional, accept }) => {
-    const fileUrl = formData.files[name];
+    const fileUrl = formData.files[name]; // Now a base64 string (safe for <img> and display)
     const inputId = `file-input-${name}`;
 
     return (
@@ -121,7 +142,7 @@ export default function FormStep5() {
           </label>
           <input
             id={inputId}
-            type=""
+            type="file"
             accept={accept}
             className="hidden"
             onChange={(e) => e.target.files[0] && handleFileChange(name, e.target.files[0])}
