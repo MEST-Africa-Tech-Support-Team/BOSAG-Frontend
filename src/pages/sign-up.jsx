@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import signup from "../assets/images/signup.png";
 import { registerUser } from "../services/authService";
-import GoogleButton from "../components/google-button.jsx";
+
+
+
 import BOSAGpdf from "../assets/BOSAG.pdf";
+
+
+
+
+
+
 
 export default function BosagSignUpPage() {
   const navigate = useNavigate();
@@ -40,19 +48,19 @@ export default function BosagSignUpPage() {
     setLoading(true);
     try {
       const response = await registerUser({ firstName, lastName, email, password });
-      
+
       // Save user data to localStorage after successful signup
       localStorage.setItem("user", JSON.stringify({
         firstName,
         lastName,
         email
       }));
-      
+
       // If the API returns a token, save it too
       if (response && response.token) {
         localStorage.setItem("authToken", response.token);
       }
-      
+
       // Show success toast with email verification message
       toast.success("Account created successfully! Please verify your email to continue.", {
         position: "top-right",
@@ -62,7 +70,7 @@ export default function BosagSignUpPage() {
         pauseOnHover: true,
         draggable: true,
       });
-      
+
       setFormData({
         firstName: "",
         lastName: "",
@@ -70,7 +78,7 @@ export default function BosagSignUpPage() {
         password: "",
         agreedToTerms: false,
       });
-      
+
       // Navigate to login after a short delay
       // setTimeout(() => {
       //   navigate("/login");
@@ -86,11 +94,33 @@ export default function BosagSignUpPage() {
     }
   };
 
+  useEffect(() => {
+    google.accounts.id.initialize({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      callback: handleCredentialLogin,
+    });
+
+    google.accounts.id.renderButton(
+      document.getElementById("googleSignInDiv"),
+      { theme: "outline", size: "large" }
+    );
+  }, []);
+
+  const handleCredentialLogin = async (response) => {
+    console.log("response-token", response);
+
+    if (response.credential) {
+      localStorage.setItem("bosagToken", response.credential);
+      navigate("/dashboard");
+    }
+  };
+
+
   return (
     <div className="flex min-h-screen">
       {/* Toast Container */}
       <ToastContainer />
-      
+
       {/* Left Side - Brand Section */}
       <div className="hidden lg:flex lg:w-[45%] bg-[#191970] text-white items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute top-20 right-20 w-32 h-32 bg-indigo-700 rounded-full opacity-30"></div>
@@ -195,7 +225,7 @@ export default function BosagSignUpPage() {
               />
               <label className="ml-2 text-sm text-gray-700">
                 I've read and agree with{" "}
-                <a href= {BOSAGpdf} target="_blank" rel="noopener noreferrer" className="text-indigo-900 hover:text-indigo-700 font-medium underline">
+                <a href={BOSAGpdf} target="_blank" rel="noopener noreferrer" className="text-indigo-900 hover:text-indigo-700 font-medium underline">
                   Terms of Service
                 </a>{" "}
                 {/* and our{" "}
@@ -222,7 +252,13 @@ export default function BosagSignUpPage() {
           </div>
 
           {/* Social Auth */}
-          <GoogleButton />
+          
+          <div className="flex items-center justify-center w-[80%] mx-auto">
+            <div id="googleSignInDiv"></div>
+          </div>
+
+
+
 
           {/* Login Link */}
           <div className="text-center mt-6">
