@@ -9,6 +9,7 @@ export default function FormStep5() {
   const navigate = useNavigate();
   const [wordCount, setWordCount] = useState(0);
 
+  // Load formE from localStorage
   const [formData, setFormData] = useState(() => {
     const saved = localStorage.getItem("formE");
     if (saved) {
@@ -28,17 +29,18 @@ export default function FormStep5() {
     };
   });
 
+  // Update word count when companyProfile changes
   useEffect(() => {
-    if (formData.companyProfile) {
-      const words = formData.companyProfile.trim().split(/\s+/).filter(Boolean);
-      setWordCount(words.length);
-    }
-  }, []);
+    const words = formData.companyProfile.trim().split(/\s+/).filter(Boolean);
+    setWordCount(words.length);
+  }, [formData.companyProfile]);
 
+  // Save formE in localStorage on change
   useEffect(() => {
     localStorage.setItem("formE", JSON.stringify(formData));
   }, [formData]);
 
+  // Handle text area change
   const handleTextChange = (e) => {
     const value = e.target.value;
     const words = value.trim().split(/\s+/).filter(Boolean);
@@ -48,16 +50,17 @@ export default function FormStep5() {
     }
   };
 
-  // NEW: save temporary URL for preview
+  // Handle file selection for preview
   const handleFileChange = (key, file) => {
     if (!file) return;
-    const tempUrl = URL.createObjectURL(file); // for preview only
+    const tempUrl = URL.createObjectURL(file); // for UI preview
     setFormData((prev) => ({
       ...prev,
       files: { ...prev.files, [key]: tempUrl },
     }));
   };
 
+  // Remove selected file
   const handleFileRemove = (key) => {
     setFormData((prev) => ({
       ...prev,
@@ -65,6 +68,7 @@ export default function FormStep5() {
     }));
   };
 
+  // Form validation
   const validateForm = () => {
     const errors = [];
     if (!formData.companyProfile.trim()) errors.push("Company profile is required");
@@ -73,6 +77,7 @@ export default function FormStep5() {
     return errors;
   };
 
+  // Submit handler for Next button
   const handleSubmit = (e) => {
     e.preventDefault();
     const errors = validateForm();
@@ -81,7 +86,18 @@ export default function FormStep5() {
       return;
     }
 
-    localStorage.setItem("formE", JSON.stringify(formData));
+    // Save form data safely (do not store File objects in localStorage)
+    const safeFormData = {
+      ...formData,
+      files: {
+        registrationCertificate: formData.files.registrationCertificate || null,
+        logo: formData.files.logo || null,
+        brochure: formData.files.brochure || null,
+      },
+    };
+    localStorage.setItem("formE", JSON.stringify(safeFormData));
+
+    // Mark step 5 as completed
     const completed = JSON.parse(localStorage.getItem("completedSteps")) || [];
     if (!completed.includes(5)) {
       completed.push(5);
@@ -91,6 +107,7 @@ export default function FormStep5() {
     navigate("/onboarding/summary");
   };
 
+  // File upload UI component
   const UploadField = ({ label, name, required, optional, accept }) => {
     const fileUrl = formData.files[name];
     const inputId = `file-input-${name}`;
@@ -204,7 +221,10 @@ export default function FormStep5() {
             </div>
 
             <Link to="/onboarding/form-f">
-              <button className="bg-[#191970] hover:bg-[#14145a] text-white font-medium px-8 py-2 rounded-md shadow-sm transition-colors mt-6">
+              <button
+                type="button"
+                className="bg-[#191970] hover:bg-[#14145a] text-white font-medium px-8 py-2 rounded-md shadow-sm transition-colors mt-6"
+              >
                 View Consent and Disclaimer
               </button>
             </Link>
