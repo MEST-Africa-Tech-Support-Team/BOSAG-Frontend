@@ -54,23 +54,29 @@ export default function FormStep1() {
     localStorage.setItem("formA", JSON.stringify(formData));
   }, [formData]);
 
-  // Input changes
+  // ✅ Handle text inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Checkbox changes
+  // ✅ Handle checkbox group for organizationType (array)
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
+
     setFormData((prev) => {
-      const updated = checked
-        ? [...(prev.organizationType || []), value]
-        : (prev.organizationType || []).filter((item) => item !== value);
+      let updatedTypes = [...(prev.organizationType || [])];
+
+      if (checked) {
+        if (!updatedTypes.includes(value)) updatedTypes.push(value);
+      } else {
+        updatedTypes = updatedTypes.filter((item) => item !== value);
+      }
 
       return {
         ...prev,
-        organizationType: updated,
+        organizationType: updatedTypes,
+        // Clear other text if "Other" unchecked
         otherOrganizationText:
           value === "Other (Please specify)" && !checked
             ? ""
@@ -79,16 +85,16 @@ export default function FormStep1() {
     });
   };
 
-  // Radio changes
+  // ✅ Handle membership tier radio buttons
   const handleRadioChange = (e) => {
     setFormData((prev) => ({ ...prev, membershipTier: e.target.value }));
   };
 
-  // Submit handler
+  // ✅ Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Save final Section A data
+    // Save form section A
     localStorage.setItem("formA", JSON.stringify(formData));
 
     // Mark step completed
@@ -214,7 +220,7 @@ export default function FormStep1() {
               </div>
             </div>
 
-            {/* Organization Type */}
+            {/* Organization Type (Array) */}
             <div className="mb-8">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Type of Organization
@@ -228,22 +234,23 @@ export default function FormStep1() {
                         <input
                           type="checkbox"
                           value={type}
-                          checked={formData.organizationType?.includes(type)}
+                          checked={formData.organizationType.includes(type)}
                           onChange={handleCheckboxChange}
                         />
                         <span>{type}</span>
                       </label>
 
-                      {isOther && formData.organizationType?.includes(type) && (
-                        <input
-                          type="text"
-                          name="otherOrganizationText"
-                          value={formData.otherOrganizationText}
-                          onChange={handleChange}
-                          placeholder="Please specify"
-                          className="mt-1 border border-gray-300 rounded-md p-1 text-sm w-full placeholder-gray-400"
-                        />
-                      )}
+                      {isOther &&
+                        formData.organizationType.includes(type) && (
+                          <input
+                            type="text"
+                            name="otherOrganizationText"
+                            value={formData.otherOrganizationText}
+                            onChange={handleChange}
+                            placeholder="Please specify"
+                            className="mt-1 border border-gray-300 rounded-md p-1 text-sm w-full placeholder-gray-400"
+                          />
+                        )}
                     </div>
                   );
                 })}

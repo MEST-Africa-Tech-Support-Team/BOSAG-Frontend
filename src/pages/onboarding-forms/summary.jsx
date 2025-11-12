@@ -4,11 +4,14 @@ import Sidebar from "../../components/sidebar.jsx";
 import toast, { Toaster } from "react-hot-toast";
 import bosagApi from "../../api/bosagApi.js";
 
+// ✅ Cloudinary frontend upload config
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
 export default function SummaryPage() {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
-
   const [forms, setForms] = useState({
     formA: {},
     formB: {},
@@ -30,6 +33,33 @@ export default function SummaryPage() {
   }, []);
 
   const handleEdit = (path) => navigate(path);
+
+  // ✅ Upload file to Cloudinary
+  const uploadToCloudinary = async (file) => {
+    if (!CLOUD_NAME || !UPLOAD_PRESET) {
+      throw new Error("Cloudinary not configured");
+    }
+
+    // If file is already a URL string, return as-is (assume backend URL)
+    if (typeof file === "string" && file.startsWith("blob:") === false) return file;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", UPLOAD_PRESET);
+    formData.append("folder", "membership_applications");
+
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      throw new Error(error.error?.message || "Cloudinary upload failed");
+    }
+    const result = await res.json();
+    return result.secure_url;
+  };
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
@@ -57,65 +87,53 @@ export default function SummaryPage() {
       formData.append("organizationName", formA.organizationName || "");
       formData.append("yearEstablished", formA.yearEstablished?.toString() || "");
       formData.append("registrationNumber", formA.registrationNumber || "");
-      formData.append("organizationType", formA.organizationType || "");
-      if (formA.organizationType === "Other") {
+
+      if (Array.isArray(formA.organizationType)) {
+        formA.organizationType.forEach((type) => formData.append("organizationType[]", type));
+      } else if (formA.organizationType) {
+        formData.append("organizationType[]", formA.organizationType);
+      }
+
+      if (formA.organizationType?.includes("Other")) {
         formData.append("otherOrganizationType", formA.otherOrganizationType || "");
       }
+
       formData.append("membershipTier", formA.membershipTier || "");
       formData.append("sectorFocus", formA.sectorFocus || "");
       formData.append("employeesGhana", formA.employeesGhana?.toString() || "");
       formData.append("employeesGlobal", formA.employeesGlobal?.toString() || "");
 
       // Section B
-      formData.append("headOfOrganizatioName", formB.headOfOrganizationName || "");
-      formData.append("jobTitle", formB.jobTitle || "");
-      formData.append("email", formB.email || "");
-      formData.append("phone", formB.phone || "");
-      formData.append("companyWebsite", formB.companyWebsite || "");
-      formData.append("companyAddress", formB.companyAddress || "");
-      formData.append("contactEmail", formB.contactEmail || "");
-      formData.append("contactPhone", formB.contactPhone || "");
+      Object.entries(formB).forEach(([key, value]) => formData.append(key, value || ""));
 
       // Section C
-      formData.append("nominatedRepresentative", formC.nominatedRepName || "");
-      formData.append("nomPositionRole", formC.nominatedRepPosition || "");
-      formData.append("nomPhoneNumber", formC.nominatedRepPhone || "");
-      formData.append("nomEmailAddress", formC.nominatedRepEmail || "");
-      formData.append("alternateRepresentative", formC.alternateRepName || "");
-      formData.append("altPositionRole", formC.altPositionRole || "");
-      formData.append("altPhoneNumber", formC.altPhoneNumber || "");
-      formData.append("altEmailAddress", formC.altEmailAddress || "");
+      Object.entries(formC).forEach(([key, value]) => formData.append(key, value || ""));
 
       // Section D
-      formData.append("agreesConstitution", formD.agreesConstitution ? "true" : "false");
-      formData.append("accurateInformation", formD.accurateInformation ? "true" : "false");
-      formData.append("commitsParticipation", formD.commitsParticipation ? "true" : "false");
-      formData.append("agreesFeePayment", formD.agreesFeePayment ? "true" : "false");
-      formData.append("BosagApproval", formD.BosagApproval ? "true" : "false");
+      Object.entries(formD).forEach(([key, value]) => formData.append(key, value ? "true" : "false"));
 
-      // Section E – now just URLs!
-      if (formE.files?.registrationCertificate) {
-        formData.append("registrationCertificate", formE.files.registrationCertificate);
-      }
-      if (formE.files?.logo) {
-        formData.append("logo", formE.files.logo);
-      }
-      if (formE.files?.brochure) {
-        formData.append("brochure", formE.files.brochure);
+      // Section E – files & company profile
+      const fileKeys = ["registrationCertificate", "logo", "brochure"];
+      for (const key of fileKeys) {
+        if (formE.files?.[key]) {
+          const uploadedUrl = await uploadToCloudinary(formE.files[key]);
+          formData.append(key, uploadedUrl);
+        }
       }
       formData.append("companyProfile", formE.companyProfile || "");
 
       // Section F
       formData.append("acknowledged", formF.acknowledged ? "true" : "false");
 
-      // ✅ CORRECT ENDPOINT
+      // ✅ POST to backend
       await bosagApi.post("/onboarding/submit", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
       });
 
-      // Clear localStorage and redirect
+      // Clear localStorage
       ["formA", "formB", "formC", "formD", "formE", "formF"].forEach((key) =>
         localStorage.removeItem(key)
       );
@@ -126,10 +144,7 @@ export default function SummaryPage() {
     } catch (err) {
       console.error("Submission error:", err);
       const message =
-        err.response?.data?.message ||
-        err.response?.statusText ||
-        err.message ||
-        "Failed to submit application.";
+        err.response?.data?.message || err.response?.statusText || err.message || "Failed to submit application.";
       toast.error(`❌ ${message}`);
       setError(message);
     } finally {
@@ -193,7 +208,7 @@ export default function SummaryPage() {
   );
 }
 
-// ===================== SUMMARY SECTION =====================
+// ===================== SUMMARY SECTION (unchanged UI) =====================
 const SummarySection = ({ title, data, onEdit }) => {
   if (!data || Object.keys(data).length === 0) return null;
   const isSectionD = title.includes("Commitment and Declarations");
@@ -235,22 +250,18 @@ const SummarySection = ({ title, data, onEdit }) => {
             <div>
               <p className="text-gray-600 text-sm mb-1">Registration Certificate</p>
               <p className="font-medium text-teal-600">
-                {data.files?.registrationCertificate ? "Uploaded" : "Missing"}
+                {data.files?.registrationCertificate ? "File Selected" : "Missing"}
               </p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <p className="text-gray-600 text-sm mb-1">Logo</p>
-              <p className="font-medium text-teal-600">
-                {data.files?.logo ? "Uploaded" : "Missing"}
-              </p>
+              <p className="font-medium text-teal-600">{data.files?.logo ? "File Selected" : "Missing"}</p>
             </div>
             <div>
               <p className="text-gray-600 text-sm mb-1">Brochure</p>
-              <p className="font-medium">
-                {data.files?.brochure ? "Uploaded" : "Not provided (optional)"}
-              </p>
+              <p className="font-medium">{data.files?.brochure ? "File Selected" : "Not provided (optional)"}</p>
             </div>
           </div>
         </div>
@@ -259,11 +270,7 @@ const SummarySection = ({ title, data, onEdit }) => {
           <div className="pb-2">
             <p className="text-gray-700 mb-1">Terms Acknowledgement</p>
             <p className="font-medium">
-              {data.acknowledged ? (
-                <span className="text-teal-600">Confirmed</span>
-              ) : (
-                <span className="text-gray-500">Not Confirmed</span>
-              )}
+              {data.acknowledged ? <span className="text-teal-600">Confirmed</span> : <span className="text-gray-500">Not Confirmed</span>}
             </p>
           </div>
         </div>
