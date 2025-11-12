@@ -3,12 +3,12 @@ import DashboardHeader from "../../components/dashboard-header";
 import DashboardStatsCard from "../../components/dashboardstats-card";
 import MemberCategoryCard from "../../components/member-category-card";
 import PendingApplicationsTable from "../../components/pending-applications-table";
-import Sidebar from "../../components/sidebar";
+import AdminSidebar from "../../components/admin-sidebar";
 
 export default function MembershipApproval() {
   return (
     <div className="flex">
-      <Sidebar />
+      <AdminSidebar />
       <div className="flex-1 ml-64 p-6 space-y-6">
       {/* Header */}
       <DashboardHeader
