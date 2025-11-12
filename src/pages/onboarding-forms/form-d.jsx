@@ -12,16 +12,35 @@ export default function FormStep4() {
     return saved
       ? JSON.parse(saved)
       : {
-          declarations: [false, false, false, false, false],
+          agreesConstitution: false,
+          commitsParticipation: false,
+          agreesFeePayment: false,
+          accurateInformation: false,
+          BosagApproval: false,
         };
   });
 
   const declarationItems = [
-    "We have reviewed and agree to abide by BOSAG Constitution.",
-    "We consent to active participation in BOSAG activities and initiatives.",
-    "We agree to pay membership dues as determined by BOSAG Board.",
-    "We ensure that all submitted information in this application is accurate and complete.",
-    "We understand that membership is subject to approval by the BOSAG Board.",
+    {
+      text: "We have reviewed and agree to abide by BOSAG Constitution.",
+      name: "agreesConstitution"
+    },
+    {
+      text: "We consent to active participation in BOSAG activities and initiatives.",
+      name: "commitsParticipation"
+    },
+    {
+      text: "We agree to pay membership dues as determined by BOSAG Board.",
+      name: "agreesFeePayment"
+    },
+    {
+      text: "We ensure that all submitted information in this application is accurate and complete.",
+      name: "accurateInformation"
+    },
+    {
+      text: "We understand that membership is subject to approval by the BOSAG Board.",
+      name: "BosagApproval"
+    },
   ];
 
   // ✅ Save to localStorage every time declarations change
@@ -29,12 +48,11 @@ export default function FormStep4() {
     localStorage.setItem("formD", JSON.stringify(formData));
   }, [formData]);
 
-  const handleCheckboxChange = (index) => {
-    setFormData((prev) => {
-      const updated = [...prev.declarations];
-      updated[index] = !updated[index];
-      return { declarations: updated };
-    });
+  const handleCheckboxChange = (name) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: !prev[name]
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -42,7 +60,7 @@ export default function FormStep4() {
 
     localStorage.setItem("formD", JSON.stringify(formData));
 
-    const allChecked = formData.declarations.every(Boolean);
+    const allChecked = Object.values(formData).every(Boolean);
 
     // ✅ Mark Section D as completed only when all are checked
     const completed = JSON.parse(localStorage.getItem("completedSteps")) || [];
@@ -79,7 +97,7 @@ export default function FormStep4() {
             </h2>
 
             <p className="text-sm text-gray-600 mb-6">
-              Please tick to confirm your organization’s agreement with the following:
+              Please tick to confirm your organization's agreement with the following:
             </p>
 
             <div className="space-y-4">
@@ -89,13 +107,14 @@ export default function FormStep4() {
                   className="flex justify-between items-start border rounded-md p-3 cursor-pointer hover:border-[#191970] transition"
                 >
                   <span className="text-sm text-gray-700 leading-5 pr-4">
-                    {item}
+                    {item.text}
                   </span>
 
                   <input
                     type="checkbox"
-                    checked={formData.declarations[index]}
-                    onChange={() => handleCheckboxChange(index)}
+                    name={item.name}
+                    checked={formData[item.name]}
+                    onChange={() => handleCheckboxChange(item.name)}
                     className="w-4 h-4 border-gray-400 accent-[#F58220]"
                   />
                 </label>

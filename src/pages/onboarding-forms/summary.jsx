@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Sidebar from "../../components/sidebar.jsx";
+import bosagApi from "../../api/bosagApi.js";
+import axios from "axios";
+
 
 export default function SummaryPage() {
   const navigate = useNavigate();
@@ -35,17 +38,17 @@ export default function SummaryPage() {
     setError(null);
 
     try {
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("bosagToken");
       if (!token) throw new Error("No authentication token found. Please log in.");
 
       const formDataObj = new FormData();
 
       // ---------------- SECTION A ----------------
       const formA = forms.formA;
-      if (formA.organisationName) formDataObj.append("organizationName", formA.organisationName);
-      if (formA.yearOfEstablishment) formDataObj.append("yearEstablished", formA.yearOfEstablishment);
-      if (formA.companyRegNumber) formDataObj.append("registrationNumber", formA.companyRegNumber);
-      if (formA.organisationTypes?.length) formDataObj.append("organizationType", formA.organisationTypes[0]);
+      if (formA.organizationName) formDataObj.append("organizationName", formA.organizationName);
+      if (formA.yearEstablished) formDataObj.append("yearEstablished", formA.yearEstablished);
+      if (formA.registrationNumber) formDataObj.append("registrationNumber", formA.registrationNumber);
+      if (formA.organizationType?.length) formDataObj.append("organizationType", formA.organizationType[0]);
       if (formA.membershipTier) formDataObj.append("membershipTier", formA.membershipTier);
       if (formA.sectorFocus) formDataObj.append("sectorFocus", formA.sectorFocus);
       if (formA.employeesGhana) formDataObj.append("employeesGhana", formA.employeesGhana);
@@ -93,9 +96,9 @@ export default function SummaryPage() {
         const blob = await fetch(files.logo.data).then(r => r.blob());
         formDataObj.append("logo", blob, files.logo.name);
       }
-      if (files.marketingMaterial?.data) {
-        const blob = await fetch(files.marketingMaterial.data).then(r => r.blob());
-        formDataObj.append("brochure", blob, files.marketingMaterial.name);
+      if (files.brochure?.data) {
+        const blob = await fetch(files.brochure.data).then(r => r.blob());
+        formDataObj.append("brochure", blob, files.brochure.name);
       }
 
       // ---------------- SECTION F ----------------
@@ -105,7 +108,7 @@ export default function SummaryPage() {
       const today = new Date().toISOString().split("T")[0];
       formDataObj.append("dateSigned", today);
 
-      // ---------------- SEND REQUEST ----------------
+      // ---------------- HANDLE UPDATE ON SUBMIT ----------------
       const response = await fetch(`${import.meta.env.VITE_BASE_URL}/onboarding/update`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
@@ -128,6 +131,109 @@ export default function SummaryPage() {
       setSubmitting(false);
     }
   };
+  
+ const handlePostSubmit = async (e) => {
+  e.preventDefault();
+  setSubmitting(true);
+  setError(null);
+
+  const token = localStorage.getItem("bosagToken");
+  if (!token) {
+    alert("No authentication token found. Please log in again.");
+    setSubmitting(false);
+    return;
+  }
+
+  try {
+    // Collect all form sections from localStorage
+    const formA = JSON.parse(localStorage.getItem("formA")) || {};
+    const formB = JSON.parse(localStorage.getItem("formB")) || {};
+    const formC = JSON.parse(localStorage.getItem("formC")) || {};
+    const formD = JSON.parse(localStorage.getItem("formD")) || {};
+    const formE = JSON.parse(localStorage.getItem("formE")) || {};
+    const formF = JSON.parse(localStorage.getItem("formF")) || {};
+
+    // ✅ Build the payload exactly as your Mongoose schema expects
+    const payload = {
+      // ----- REQUIRED FIELDS -----
+      organizationName: formA.organizationName || "",
+      organizationType: formA.organizationType || [],
+      email: formB.email || "",
+      contactEmail: formB.contactEmail || "",
+      headOfOrganizatioName: formB.headOfOrganizationName || "", // ⚠️ match your schema spelling
+      user: formA.user || undefined, // optional; your backend may set req.user automatically
+
+      // ----- OPTIONAL FIELDS -----
+      yearEstablished: formA.yearEstablished || null,
+      registrationNumber: formA.registrationNumber || "",
+      otherOrganizationType: formA.otherOrganizationType || "",
+      membershipTier: formA.membershipTier || "",
+      sectorFocus: formA.sectorFocus || "",
+      employeesGhana: formA.employeesGhana || 0,
+      employeesGlobal: formA.employeesGlobal || 0,
+
+      // ORGANIZATION & CONTACT
+      jobTitle: formB.jobTitle || "",
+      phone: formB.phone || "",
+      companyWebsite: formB.companyWebsite || "",
+      companyAddress: formB.companyAddress || "",
+      contactPhone: formB.contactPhone || "",
+
+      // GOVERNANCE
+      nominatedRep: formC.nominatedRepName || "",
+      nomPositionRole: formC.nominatedRepPosition || "",
+      nomPhoneNumber: formC.nominatedRepPhone || "",
+      nomEmailAddress: formC.nominatedRepEmail || "",
+      alternateRep: formC.alternateRepName || "",
+      altPositionRole: formC.alternateRepPosition || "",
+      altPhoneNumber: formC.alternateRepPhone || "",
+      altEmailAddress: formC.alternateRepEmail || "",
+
+      // DECLARATIONS
+      agreesConstitution: !!formD.agreesConstitution,
+      accurateInformation: !!formD.accurateInformation,
+      commitsParticipation: !!formD.commitsParticipation,
+      BosagApproval: !!formD.BosagApproval,
+      agreesFeePayment: !!formD.agreesFeePayment,
+
+      // FILE ATTACHMENTS (store as URLs, or backend handles upload)
+      registrationCertificate: formE.files?.registrationCertificate?.url || "",
+      companyProfile: formE.companyProfile || "",
+      logo: formE.files?.logo?.url || "",
+      brochure: formE.files?.brochure?.url || "",
+
+      // ACKNOWLEDGEMENT
+      acknowledged: !!formF.acknowledged,
+
+      // ADMIN (optional defaults)
+      status: "Pending",
+      remarks: "",
+    };
+
+    // ✅ Post the aligned payload
+    const response = await axios.post(
+      "https://bosag-backend.onrender.com/api/onboarding/submit",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.status === 200 || response.status === 201) {
+      alert("✅ Application submitted successfully!");
+      navigate("/onboarding/application");
+    }
+  } catch (err) {
+    console.error("Error during post-submission:", err);
+    setError(err.message);
+    alert(`❌ Error: ${err.message}`);
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <div className="flex bg-gray-50 min-h-screen">
@@ -172,8 +278,9 @@ export default function SummaryPage() {
           >
             Go Back
           </button>
+          
           <button
-            onClick={handleSubmit}
+            onClick={handlePostSubmit}
             disabled={submitting}
             className="px-6 py-2 bg-[#F58220] hover:bg-[#e16e10] text-white font-medium rounded-md transition disabled:bg-gray-400 disabled:cursor-not-allowed"
           >

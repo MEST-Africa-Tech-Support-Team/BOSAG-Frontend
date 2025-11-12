@@ -19,7 +19,7 @@ export default function FormStep5() {
           files: parsed.files || {
             registrationCertificate: null,
             logo: null,
-            marketingMaterial: null,
+            brochure: null,
           },
         };
       } catch (err) {
@@ -31,7 +31,7 @@ export default function FormStep5() {
       files: {
         registrationCertificate: null,
         logo: null,
-        marketingMaterial: null,
+        brochure: null,
       },
     };
   });
@@ -282,7 +282,7 @@ export default function FormStep5() {
               />
               <UploadField 
                 label="Any relevant brochures or marketing material"
-                name="marketingMaterial"
+                name="brochure"
                 optional
                 accept=".pdf,.jpg,.jpeg,.png"
               />
