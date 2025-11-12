@@ -79,7 +79,7 @@ export default function FormStep5() {
     if (!formData.files.logo) errors.push("Company logo is required");
     return errors;
   };
-
+   
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -121,7 +121,7 @@ export default function FormStep5() {
           </label>
           <input
             id={inputId}
-            type="file"
+            type=""
             accept={accept}
             className="hidden"
             onChange={(e) => e.target.files[0] && handleFileChange(name, e.target.files[0])}

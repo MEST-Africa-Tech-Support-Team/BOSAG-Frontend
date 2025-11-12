@@ -87,8 +87,8 @@ const StrategicPlan = () => {
 
         <div className="mt-12">
           <a
-            href="/BOSAG 5 YR STRATEGIC PLAN_final.pdf"
-            download="BOSAG 5 YR STRATEGIC PLAN_final.pdf"
+            href="/bosag-5yr-plan.pdf"
+            download="bosag-5yr-plan.pdf"
             className="flex items-center justify-center gap-2 mx-auto bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-3 rounded-md shadow-md transition-colors w-fit"
           >
             <Download size={18} /> Download Full Strategic Plan (PDF)
