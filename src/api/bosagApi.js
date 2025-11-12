@@ -7,7 +7,7 @@ const bosagApi = axios.create({
 });
 
 bosagApi.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("bosagToken");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
