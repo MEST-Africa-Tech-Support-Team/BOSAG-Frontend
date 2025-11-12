@@ -3,14 +3,15 @@ import { NavLink, useNavigate } from "react-router";
 import { LayoutDashboard, BookOpen, User, LogOut } from "lucide-react";
 import logo from "../assets/images/logo2.png";
 import { Link } from "react-router";
-import toast, { Toaster } from "react-hot-toast"; // ✅ Import both toast and Toaster
+import toast, { Toaster } from "react-hot-toast";
 
 const Sidebar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear all auth and form data
+    // ✅ Clear all auth and form data (including any potential extra keys)
     localStorage.removeItem("bosagToken");
+    localStorage.removeItem("userProfile"); // 👈 optional but safe
     localStorage.removeItem("formA");
     localStorage.removeItem("formB");
     localStorage.removeItem("formC");
@@ -36,11 +37,9 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* ✅ Toaster included right here — no need to add it elsewhere */}
       <Toaster position="top-right" reverseOrder={false} />
 
       <aside className="fixed top-0 left-0 h-screen w-64 bg-[#191970] text-white flex flex-col shadow-lg">
-        {/* Logo Section */}
         <div className="flex flex-col items-center pt-6 pb-4 border-b border-[#2e2e86]">
           <Link to="/">
             <img src={logo} alt="BOSAG" className="w-28 mb-2" />
@@ -50,7 +49,6 @@ const Sidebar = () => {
           </p>
         </div>
 
-        {/* Navigation Section */}
         <nav className="mt-6 flex flex-col gap-1 px-4 flex-1">
           {navItems.map((item) => (
             <NavLink
@@ -72,7 +70,6 @@ const Sidebar = () => {
             </NavLink>
           ))}
 
-          {/* Logout Button */}
           <button
             onClick={handleLogout}
             className="flex items-center gap-2 px-4 py-2 mt-4 text-sm text-gray-200 hover:bg-[#23236b] hover:text-white transition-colors rounded-md"

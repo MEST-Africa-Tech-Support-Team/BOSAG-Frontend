@@ -48,22 +48,24 @@ export default function SummaryPage() {
 
       const formData = new FormData();
 
-      // Section A
+      // Append Sections
       appendFormA(formData);
-      // Section B & C
       appendFormBC(formData);
-      // Section D
       appendFormD(formData);
-      // Section E
+
+      // Section E: companyProfile (text) + files
       formData.append("companyProfile", formE.companyProfile || "");
-      Object.entries(filesForBackend).forEach(([key, fileOrUrl]) => {
-        if (!fileOrUrl) return;
-        formData.append(key, fileOrUrl instanceof File ? fileOrUrl : fileOrUrl);
+      Object.entries(filesForBackend).forEach(([key, file]) => {
+        if (file) {
+          formData.append(key, file);
+        }
       });
+
       // Section F
       const formF = JSON.parse(localStorage.getItem("formF")) || {};
       formData.append("acknowledged", formF.acknowledged ? "true" : "false");
 
+      // Submit to backend
       await bosagApi.post("/onboarding/submit", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -71,18 +73,19 @@ export default function SummaryPage() {
         },
       });
 
-      // Clear storage
-      ["formA", "formB", "formC", "formD", "formE", "formF"].forEach((key) =>
+      // ✅ Clear localStorage
+      ["formA", "formB", "formC", "formD", "formE", "formF", "completedSteps"].forEach((key) =>
         localStorage.removeItem(key)
       );
-      localStorage.removeItem("completedSteps");
 
       toast.success("✅ Application submitted successfully!");
-      navigate("/onboarding/application");
+      navigate("/onboarding/application"); // ✅ Always route here on success
     } catch (err) {
       console.error("Submission error:", err);
       const message =
-        err.response?.data?.message || err.response?.statusText || err.message || "Failed to submit application.";
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to submit application. Please try again.";
       toast.error(`❌ ${message}`);
       setError(message);
     } finally {
@@ -90,26 +93,37 @@ export default function SummaryPage() {
     }
   };
 
-  // ==================== FILES CONVERSION ====================
+  // ==================== CONVERT BASE64 TO FILE OBJECTS ====================
   const convertFilesForBackend = async (files) => {
     const result = {};
-    for (const [key, fileOrUrl] of Object.entries(files || {})) {
-      if (!fileOrUrl) continue;
-      if (typeof fileOrUrl === "string" && fileOrUrl.startsWith("blob:")) {
-        const blob = await fetch(fileOrUrl).then((res) => res.blob());
-        result[key] = new File([blob], key);
-      } else {
-        result[key] = fileOrUrl;
+    for (const [key, value] of Object.entries(files || {})) {
+      if (!value || typeof value !== "string") continue;
+
+      // Handle Base64 strings (from FormStep5)
+      if (value.startsWith("")) {
+        try {
+          const mimeType = value.match(/^([^;]+);/)?.[1] || "application/octet-stream";
+          const ext = mimeType.split("/")[1] || "bin";
+          const filename = `${key}.${ext}`;
+
+          const res = await fetch(value);
+          const blob = await res.blob();
+          result[key] = new File([blob], filename, { type: mimeType });
+        } catch (err) {
+          console.warn(`⚠️ Failed to convert ${key} from Base64`, err);
+          // Skip invalid files
+        }
       }
+      // Ignore blob: URLs or non-string values (not used anymore)
     }
     return result;
   };
 
-  // ==================== SECTION APPEND HELPERS ====================
+  // ==================== SECTION APPENDERS ====================
   const appendFormA = (formData) => {
     const formA = JSON.parse(localStorage.getItem("formA")) || {};
     formData.append("organizationName", formA.organizationName || "");
-    formData.append("yearEstablished", formA.yearEstablished?.toString() || "");
+    if (formA.yearEstablished) formData.append("yearEstablished", formA.yearEstablished.toString());
     formData.append("registrationNumber", formA.registrationNumber || "");
     if (Array.isArray(formA.organizationType)) {
       formA.organizationType.forEach((type) => formData.append("organizationType[]", type));
@@ -121,23 +135,31 @@ export default function SummaryPage() {
     }
     formData.append("membershipTier", formA.membershipTier || "");
     formData.append("sectorFocus", formA.sectorFocus || "");
-    formData.append("employeesGhana", formA.employeesGhana?.toString() || "");
-    formData.append("employeesGlobal", formA.employeesGlobal?.toString() || "");
+    if (formA.employeesGhana !== undefined) formData.append("employeesGhana", formA.employeesGhana.toString());
+    if (formA.employeesGlobal !== undefined) formData.append("employeesGlobal", formA.employeesGlobal.toString());
   };
 
   const appendFormBC = (formData) => {
     const formB = JSON.parse(localStorage.getItem("formB")) || {};
     const formC = JSON.parse(localStorage.getItem("formC")) || {};
-    Object.entries(formB).forEach(([key, value]) => formData.append(key, value || ""));
-    Object.entries(formC).forEach(([key, value]) => formData.append(key, value || ""));
+    Object.entries(formB).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) formData.append(key, value.toString());
+    });
+    Object.entries(formC).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) formData.append(key, value.toString());
+    });
   };
 
   const appendFormD = (formData) => {
     const formD = JSON.parse(localStorage.getItem("formD")) || {};
-    Object.entries(formD).forEach(([key, value]) => formData.append(key, value ? "true" : "false"));
+    Object.entries(formD).forEach(([key, value]) => {
+      if (typeof value === "boolean") {
+        formData.append(key, value ? "true" : "false");
+      }
+    });
   };
 
-  // ==================== SUMMARY UI ====================
+  // ==================== UI (UNCHANGED) ====================
   return (
     <div className="flex bg-gray-50 min-h-screen">
       <Toaster position="top-right" />
