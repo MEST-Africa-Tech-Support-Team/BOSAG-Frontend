@@ -13,8 +13,8 @@ const strategies = [
   {
     id: 1,
     icon: <Globe2 className="text-white w-6 h-6" />,
-    title: "Raise International Visibility & Client Engagement",
-    pillar: "Pillar 1: Enable Sector Research & Knowledge Sharing",
+    title: "Enable Sector Research & Knowledge Sharing",
+    pillar: "Pillar 1: Raise International Visibility & Client Engagement",
     content:
       "BOSAG will activate a strategic global visibility plan including the launch of the national Ghana GBS/BPO Value Proposition, international client events, and the establishment of overseas offices in priority markets. It will also produce case studies, success stories, and client conversion tools. Notably, a concierge support programme for visiting investors will be established to strengthen conversion and confidence. This pillar is the primary lever for attracting new international demand (including GBS/BPO buyers, Global Capability Centres (GCCs), and remote work platforms) and will be central to job growth.",
   },
