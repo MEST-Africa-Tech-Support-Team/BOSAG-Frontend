@@ -28,17 +28,14 @@ export default function FormStep5() {
     };
   });
 
-  // Word count update
   useEffect(() => {
     const words = formData.companyProfile.trim().split(/\s+/).filter(Boolean);
     setWordCount(words.length);
   }, [formData.companyProfile]);
 
-  // Save to localStorage (safe version, no File objects)
   useEffect(() => {
     const safeFiles = {};
     Object.entries(formData.files).forEach(([key, file]) => {
-      // Save only blob URL or existing URL
       safeFiles[key] = typeof file === "string" ? file : null;
     });
 
@@ -59,7 +56,7 @@ export default function FormStep5() {
 
   const handleFileChange = (key, file) => {
     if (!file) return;
-    const tempUrl = URL.createObjectURL(file); // preview only
+    const tempUrl = URL.createObjectURL(file); 
     setFormData((prev) => ({
       ...prev,
       files: { ...prev.files, [key]: tempUrl },
@@ -82,7 +79,7 @@ export default function FormStep5() {
     if (!formData.files.logo) errors.push("Company logo is required");
     return errors;
   };
-
+   
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -124,7 +121,7 @@ export default function FormStep5() {
           </label>
           <input
             id={inputId}
-            type="file"
+            type=""
             accept={accept}
             className="hidden"
             onChange={(e) => e.target.files[0] && handleFileChange(name, e.target.files[0])}

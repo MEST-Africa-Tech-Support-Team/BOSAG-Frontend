@@ -13,8 +13,8 @@ const strategies = [
   {
     id: 1,
     icon: <Globe2 className="text-white w-6 h-6" />,
-    title: "Raise International Visibility & Client Engagement",
-    pillar: "Pillar 1: Enable Sector Research & Knowledge Sharing",
+    title: "Enable Sector Research & Knowledge Sharing",
+    pillar: "Pillar 1: Raise International Visibility & Client Engagement",
     content:
       "BOSAG will activate a strategic global visibility plan including the launch of the national Ghana GBS/BPO Value Proposition, international client events, and the establishment of overseas offices in priority markets. It will also produce case studies, success stories, and client conversion tools. Notably, a concierge support programme for visiting investors will be established to strengthen conversion and confidence. This pillar is the primary lever for attracting new international demand (including GBS/BPO buyers, Global Capability Centres (GCCs), and remote work platforms) and will be central to job growth.",
   },
@@ -87,8 +87,8 @@ const StrategicPlan = () => {
 
         <div className="mt-12">
           <a
-            href="/BOSAG 5 YR STRATEGIC PLAN_final.pdf"
-            download="BOSAG 5 YR STRATEGIC PLAN_final.pdf"
+            href="/bosag-5yr-plan.pdf"
+            download="bosag-5yr-plan.pdf"
             className="flex items-center justify-center gap-2 mx-auto bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-3 rounded-md shadow-md transition-colors w-fit"
           >
             <Download size={18} /> Download Full Strategic Plan (PDF)
