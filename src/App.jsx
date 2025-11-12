@@ -105,11 +105,11 @@ const router = createBrowserRouter(
       <Route
         path="/onboarding/application"
         element={
-                  <ProtectedRoute>
-                <ApplicationProgress />
-              </ProtectedRoute>
+          <ProtectedRoute>
+            <ApplicationProgress />
+          </ProtectedRoute>
         }
-                 />
+      />
 
       {/* <Route path="/dashboard" element={<DashboardHome />} /> */}
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
@@ -127,25 +127,25 @@ const router = createBrowserRouter(
       <Route path="/onboarding/form-e" element={<FormE />} />
       <Route path="/onboarding/form-f" element={<FormF />} />
       <Route path="/onboarding/summary" element={<Summary />} />
-      
+
       <Route path="/onboarding/resource-hub" element={<ResourceHub />} />
       <Route path="/onboarding/manage-profile" element={<ManageProfile />} />
       <Route path="/admin-login" element={<BosagAdminLogin />} />
       <Route path="/admin-signup" element={<BosagAdminSignup />} />
 
-{/* //       <Route path="/bosagmembership" element={<BosagMembership />} /> */}
+      {/* //       <Route path="/bosagmembership" element={<BosagMembership />} /> */}
       <Route path="/event" element={<Event />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
       <Route path="/verify/:id" element={<Verified />} />
 
       <Route path="/kojo" element={<KojoProfile />} />
-        <Route path="/david" element={<DavidProfile />} />
-        <Route path="/matthew" element={<MatthewProfile/>} />
-         <Route path="/rolana" element={<RolanaProfile/>} />
-        <Route path="/deborah" element={<DeborahProfile />} />
-        <Route path="/ryan" element={<RyanProfile />} />
-        <Route path="/mavis" element={<MavisProfile />} />
-      
+      <Route path="/david" element={<DavidProfile />} />
+      <Route path="/matthew" element={<MatthewProfile />} />
+      <Route path="/rolana" element={<RolanaProfile />} />
+      <Route path="/deborah" element={<DeborahProfile />} />
+      <Route path="/ryan" element={<RyanProfile />} />
+      <Route path="/mavis" element={<MavisProfile />} />
+
       <Route path="*" element={<NotFound />} />
     </Route>
   )

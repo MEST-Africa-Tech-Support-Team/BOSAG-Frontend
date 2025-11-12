@@ -53,17 +53,17 @@ export const loginUser = async (credentials) => {
 
 
 // SOCIAL LOGIN
-export const socialLogin = (provider) => {
-  const urls = {
-    google: "https://bosag-backend.onrender.com/api/users/auth/google",
-  };
+// export const socialLogin = (provider) => {
+//   const urls = {
+//     google: "https://bosag-backend.onrender.com/api/users/auth/google",
+//   };
 
-  if (urls[provider]) {
-    window.location.href = urls[provider]; // redirects user to backend OAuth
-  } else {
-    console.error(`Unsupported provider: ${provider}`);
-  }
-};
+//   if (urls[provider]) {
+//     window.location.href = urls[provider]; // redirects user to backend OAuth
+//   } else {
+//     console.error(`Unsupported provider: ${provider}`);
+//   }
+// };
 
 
 
