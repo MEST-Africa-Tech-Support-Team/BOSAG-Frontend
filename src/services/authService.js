@@ -80,11 +80,11 @@ export const forgotPassword = async (email) => {
 
 
 // Reset Password
-export const resetPassword = async (token, newPassword) => {
+export const resetPassword = async (token, password) => {
   try {
-    const response = await axios.post(`${BASE_URL}/reset-password`, {
-        token,
-        newPassword,
+    const response = await axios.put(`${BASE_URL}/reset-password/${token}`, {
+        
+        password,
     });
     return response.data;
   } catch (error) {

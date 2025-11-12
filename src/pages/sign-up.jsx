@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import signup from "../assets/images/signup.png";
 import { registerUser } from "../services/authService";
 import GoogleButton from "../components/google-button.jsx";
+import BOSAGpdf from "../assets/BOSAG.pdf";
 
 export default function BosagSignUpPage() {
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ export default function BosagSignUpPage() {
       // Show success toast with email verification message
       toast.success("Account created successfully! Please verify your email to continue.", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 8000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -71,9 +72,9 @@ export default function BosagSignUpPage() {
       });
       
       // Navigate to login after a short delay
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+      // setTimeout(() => {
+      //   navigate("/login");
+      // }, 2000);
     } catch (error) {
       console.error("Signup error:", error);
       toast.error("Signup failed. Please check your details or try again later.", {
@@ -194,13 +195,13 @@ export default function BosagSignUpPage() {
               />
               <label className="ml-2 text-sm text-gray-700">
                 I've read and agree with{" "}
-                <a href="#" className="text-indigo-900 hover:text-indigo-700 font-medium underline">
+                <a href= {BOSAGpdf} target="_blank" rel="noopener noreferrer" className="text-indigo-900 hover:text-indigo-700 font-medium underline">
                   Terms of Service
                 </a>{" "}
-                and our{" "}
+                {/* and our{" "}
                 <a href="#" className="text-indigo-900 hover:text-indigo-700 font-medium underline">
                   Privacy Policy
-                </a>
+                </a> */}
               </label>
             </div>
 

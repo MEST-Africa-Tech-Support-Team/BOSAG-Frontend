@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Sidebar from "../../components/sidebar.jsx";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function SummaryPage() {
   const navigate = useNavigate();
@@ -17,7 +19,6 @@ export default function SummaryPage() {
   });
 
   useEffect(() => {
-    // Load all form data from localStorage
     setForms({
       formA: JSON.parse(localStorage.getItem("formA")) || {},
       formB: JSON.parse(localStorage.getItem("formB")) || {},
@@ -30,100 +31,94 @@ export default function SummaryPage() {
 
   const handleEdit = (path) => navigate(path);
 
-  const handleSubmit = async () => {
+  const handlePostSubmit = async (e) => {
+    e.preventDefault();
     setSubmitting(true);
     setError(null);
 
+    const token = localStorage.getItem("bosagToken");
+    if (!token) {
+      toast.error("No authentication token found. Please log in again.");
+      setSubmitting(false);
+      return;
+    }
+
     try {
-      const token = localStorage.getItem("authToken");
-      if (!token) throw new Error("No authentication token found. Please log in.");
+      const formA = JSON.parse(localStorage.getItem("formA")) || {};
+      const formB = JSON.parse(localStorage.getItem("formB")) || {};
+      const formC = JSON.parse(localStorage.getItem("formC")) || {};
+      const formD = JSON.parse(localStorage.getItem("formD")) || {};
+      const formE = JSON.parse(localStorage.getItem("formE")) || {};
+      const formF = JSON.parse(localStorage.getItem("formF")) || {};
 
-      const formDataObj = new FormData();
+      const formData = new FormData();
 
-      // ---------------- SECTION A ----------------
-      const formA = forms.formA;
-      if (formA.organisationName) formDataObj.append("organizationName", formA.organisationName);
-      if (formA.yearOfEstablishment) formDataObj.append("yearEstablished", formA.yearOfEstablishment);
-      if (formA.companyRegNumber) formDataObj.append("registrationNumber", formA.companyRegNumber);
-      if (formA.organisationTypes?.length) formDataObj.append("organizationType", formA.organisationTypes[0]);
-      if (formA.membershipTier) formDataObj.append("membershipTier", formA.membershipTier);
-      if (formA.sectorFocus) formDataObj.append("sectorFocus", formA.sectorFocus);
-      if (formA.employeesGhana) formDataObj.append("employeesGhana", formA.employeesGhana);
-      if (formA.employeesGlobal) formDataObj.append("employeesGlobal", formA.employeesGlobal);
+      // ===================== Section A =====================
+      formData.append("organizationName", formA.organizationName || "");
+      formData.append("yearEstablished", formA.yearEstablished || "");
+      formData.append("registrationNumber", formA.registrationNumber || "");
+      formData.append("organizationType", formA.organizationType || "");
+      formData.append("membershipTier", formA.membershipTier || "");
+      formData.append("sectorFocus", formA.sectorFocus || "");
+      formData.append("employeesGhana", formA.employeesGhana || "");
+      formData.append("employeesGlobal", formA.employeesGlobal || "");
 
-      // ---------------- SECTION B ----------------
-      const formB = forms.formB;
-      if (formB.headOfOrganizationName) formDataObj.append("primaryContactName", formB.headOfOrganizationName);
-      if (formB.jobTitle) formDataObj.append("jobTitle", formB.jobTitle);
-      if (formB.email) formDataObj.append("email", formB.email);
-      if (formB.phone) formDataObj.append("phone", formB.phone);
-      if (formB.companyWebsite) formDataObj.append("website", formB.companyWebsite);
-      if (formB.companyAddress) formDataObj.append("PostalAddress", formB.companyAddress);
-      if (formB.contactEmail) formDataObj.append("CompanyEmail", formB.contactEmail);
-      if (formB.contactPhone) formDataObj.append("CompanyPhone", formB.contactPhone);
+      // ===================== Section B =====================
+      formData.append("primaryContactName", formB.headOfOrganizationName || "");
+      formData.append("jobTitle", formB.jobTitle || "");
+      formData.append("email", formB.email || "");
+      formData.append("phone", formB.phone || "");
+      formData.append("website", formB.companyWebsite || "");
+      formData.append("PostalAddress", formB.companyAddress || "");
+      formData.append("CompanyEmail", formB.contactEmail || "");
+      formData.append("CompanyPhone", formB.contactPhone || "");
 
-      // ---------------- SECTION C ----------------
-      const formC = forms.formC;
-      if (formC.nominatedRepName) formDataObj.append("nominatedRepresentative", formC.nominatedRepName);
-      if (formC.nominatedRepPosition) formDataObj.append("position", formC.nominatedRepPosition);
-      if (formC.nominatedRepEmail) formDataObj.append("NomEmail", formC.nominatedRepEmail);
-      if (formC.nominatedRepPhone) formDataObj.append("NomPhone", formC.nominatedRepPhone);
-      if (formC.alternateRepName) formDataObj.append("alternateRepresentative", formC.alternateRepName);
-      if (formC.alternateRepPosition) formDataObj.append("altPosition", formC.alternateRepPosition);
-      if (formC.alternateRepEmail) formDataObj.append("AltEmail", formC.alternateRepEmail);
+      // ===================== Section C =====================
+      formData.append("nominatedRepresentative", formC.nominatedRepName || "");
+      formData.append("position", formC.nominatedRepPosition || "");
+      formData.append("NomPhone", formC.nominatedRepPhone || "");
+      formData.append("NomEmail", formC.nominatedRepEmail || "");
+      formData.append("alternateRepresentative", formC.alternateRepName || "");
+      formData.append("altPosition", formC.altPositionRole || "");
+      formData.append("AltPhone", formC.altPhoneNumber || "");
+      formData.append("AltEmail", formC.altEmailAddress || "");
 
-      // ---------------- SECTION D ----------------
-      const formD = forms.formD;
-      formDataObj.append("agreesConstitution", formD.agreesConstitution || false);
-      formDataObj.append("accurateInformation", formD.accurateInformation || false);
-      formDataObj.append("commitsParticipation", formD.commitsParticipation || false);
-      formDataObj.append("agreesFeePayment", formD.agreesFeePayment || false);
-      formDataObj.append("BosagApproval", formD.BosagApproval || false);
+      // ===================== Section D =====================
+      formData.append("agreesConstitution", !!formD.agreesConstitution);
+      formData.append("accurateInformation", !!formD.accurateInformation);
+      formData.append("commitsParticipation", !!formD.commitsParticipation);
+      formData.append("agreesFeePayment", !!formD.agreesFeePayment);
+      formData.append("BosagApproval", !!formD.BosagApproval);
 
-      // ---------------- SECTION E ----------------
-      const formE = forms.formE;
-      if (formE.companyProfile) formDataObj.append("companyProfile", formE.companyProfile);
+      // ===================== Section E =====================
+      if (formE.files?.registrationCertificate) formData.append("registrationCertificate", formE.files.registrationCertificate);
+      if (formE.files?.logo) formData.append("logo", formE.files.logo);
+      if (formE.files?.brochure) formData.append("brochure", formE.files.brochure);
+      formData.append("companyProfile", formE.companyProfile || "");
 
-      const files = formE.files || {};
-      if (files.registrationCertificate?.data) {
-        const blob = await fetch(files.registrationCertificate.data).then(r => r.blob());
-        formDataObj.append("registrationCertificate", blob, files.registrationCertificate.name);
-      }
-      if (files.logo?.data) {
-        const blob = await fetch(files.logo.data).then(r => r.blob());
-        formDataObj.append("logo", blob, files.logo.name);
-      }
-      if (files.marketingMaterial?.data) {
-        const blob = await fetch(files.marketingMaterial.data).then(r => r.blob());
-        formDataObj.append("brochure", blob, files.marketingMaterial.name);
-      }
+      // ===================== Section F =====================
+      formData.append("representativeName", formC.nominatedRepName || "");
+      formData.append("authorizedSignatory", formF.authorizedSignatory || "");
+      formData.append("dateSigned", new Date().toISOString().split("T")[0]);
 
-      // ---------------- SECTION F ----------------
-      const formF = forms.formF;
-      if (formC.nominatedRepName) formDataObj.append("representativeName", formC.nominatedRepName);
-      if (formC.nominatedRepName) formDataObj.append("authorizedSignatory", formC.nominatedRepName);
-      const today = new Date().toISOString().split("T")[0];
-      formDataObj.append("dateSigned", today);
+      // ===================== Submit =====================
+      await axios.put(
+        "https://bosag-backend.onrender.com/onboarding/update",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-      // ---------------- SEND REQUEST ----------------
-      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/onboarding/update`, {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formDataObj,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-      }
-
-      alert("✅ Application submitted successfully!");
+      toast.success("✅ Application submitted successfully!");
       navigate("/onboarding/application");
-
     } catch (err) {
-      console.error("Error submitting application:", err);
+      console.error(err);
       setError(err.message);
-      alert(`❌ Error: ${err.message}`);
+      toast.error(`❌ Error: ${err.message}`);
     } finally {
       setSubmitting(false);
     }
@@ -131,6 +126,7 @@ export default function SummaryPage() {
 
   return (
     <div className="flex bg-gray-50 min-h-screen">
+      <Toaster position="top-right" />
       <aside className="fixed top-0 left-0 h-full w-64 bg-white shadow-md z-20">
         <Sidebar />
       </aside>
@@ -141,8 +137,7 @@ export default function SummaryPage() {
             Application Review: Final Submission
           </h1>
           <p className="text-gray-600 mt-1">
-            Please verify all information below is accurate before submitting
-            your application for Due Diligence.
+            Please verify all information below is accurate before submitting your application for Due Diligence.
           </p>
         </div>
 
@@ -153,10 +148,10 @@ export default function SummaryPage() {
         )}
 
         <div className="bg-green-50 border border-green-300 text-green-800 px-5 py-3 rounded-md mb-8 text-sm font-medium">
-          ✅ <span className="font-semibold">Status:</span> All Sections
-          Completed & Ready for Submission
+          ✅ <span className="font-semibold">Status:</span> All Sections Completed & Ready for Submission
         </div>
 
+        {/* Summary Sections */}
         <SummarySection title="Section A: Organisational Details" data={forms.formA} onEdit={() => handleEdit("/onboarding/form-a")} />
         <SummarySection title="Section B: Organization Contact Information" data={forms.formB} onEdit={() => handleEdit("/onboarding/form-b")} />
         <SummarySection title="Section C: Governance and Representation" data={forms.formC} onEdit={() => handleEdit("/onboarding/form-c")} />
@@ -172,8 +167,9 @@ export default function SummaryPage() {
           >
             Go Back
           </button>
+
           <button
-            onClick={handleSubmit}
+            onClick={handlePostSubmit}
             disabled={submitting}
             className="px-6 py-2 bg-[#F58220] hover:bg-[#e16e10] text-white font-medium rounded-md transition disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
@@ -185,9 +181,9 @@ export default function SummaryPage() {
   );
 }
 
+// ===================== SUMMARY SECTION =====================
 const SummarySection = ({ title, data, onEdit }) => {
   if (!data || Object.keys(data).length === 0) return null;
-
   const isSectionD = title.includes("Commitment and Declarations");
   const isSectionE = title.startsWith("Section E");
   const isSectionF = title.includes("Consent and Disclaimer");
@@ -204,6 +200,7 @@ const SummarySection = ({ title, data, onEdit }) => {
         </button>
       </div>
 
+      {/* Section content */}
       {isSectionD ? (
         <div className="space-y-4 text-sm">
           {Object.entries(data)
@@ -219,44 +216,22 @@ const SummarySection = ({ title, data, onEdit }) => {
         <div className="space-y-6 text-sm">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <p className="text-gray-600 text-sm mb-1">
-                Company Profile Overview Statement (Text)
-              </p>
-              <p className="text-gray-900 font-medium">
-                {data.companyProfile ? `${data.companyProfile.trim().split(/\s+/).length}/500 words entered` : "No text provided"}
-              </p>
+              <p className="text-gray-600 text-sm mb-1">Company Profile Overview Statement (Text)</p>
+              <p className="text-gray-900 font-medium">{data.companyProfile ? `${data.companyProfile.trim().split(/\s+/).length}/500 words entered` : "No text provided"}</p>
             </div>
             <div>
               <p className="text-gray-600 text-sm mb-1">Company Registration Certificate</p>
-              <p className="font-medium">
-                {data.files?.registrationCertificate ? (
-                  <span className="text-teal-600">File Uploaded: {data.files.registrationCertificate.name}</span>
-                ) : (
-                  <span className="text-gray-500">No File Uploaded</span>
-                )}
-              </p>
+              <p className="font-medium">{data.files?.registrationCertificate ? <span className="text-teal-600">File Uploaded: {data.files.registrationCertificate.name}</span> : <span className="text-gray-500">No File Uploaded</span>}</p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <p className="text-gray-600 text-sm mb-1">Logo (High-res PNG or vector)</p>
-              <p className="font-medium">
-                {data.files?.logo ? (
-                  <span className="text-teal-600">File Uploaded: {data.files.logo.name}</span>
-                ) : (
-                  <span className="text-gray-500">No File Uploaded</span>
-                )}
-              </p>
+              <p className="font-medium">{data.files?.logo ? <span className="text-teal-600">File Uploaded: {data.files.logo.name}</span> : <span className="text-gray-500">No File Uploaded</span>}</p>
             </div>
             <div>
               <p className="text-gray-600 text-sm mb-1">Relevant Brochure or Marketing Material (Optional)</p>
-              <p className="font-medium">
-                {data.files?.marketingMaterial ? (
-                  <span className="text-teal-600">File Uploaded: {data.files.marketingMaterial.name}</span>
-                ) : (
-                  <span className="text-gray-500">No File Uploaded</span>
-                )}
-              </p>
+              <p className="font-medium">{data.files?.marketingMaterial ? <span className="text-teal-600">File Uploaded: {data.files.marketingMaterial.name}</span> : <span className="text-gray-500">No File Uploaded</span>}</p>
             </div>
           </div>
         </div>
@@ -264,9 +239,7 @@ const SummarySection = ({ title, data, onEdit }) => {
         <div className="text-sm">
           <div className="pb-2">
             <p className="text-gray-700 mb-1">Terms Acknowledgement</p>
-            <p className="font-medium">
-              {data.acknowledged ? <span className="text-teal-600">Confirmed</span> : <span className="text-gray-500">Not Confirmed</span>}
-            </p>
+            <p className="font-medium">{data.acknowledged ? <span className="text-teal-600">Confirmed</span> : <span className="text-gray-500">Not Confirmed</span>}</p>
           </div>
         </div>
       ) : (
@@ -285,6 +258,7 @@ const SummarySection = ({ title, data, onEdit }) => {
   );
 };
 
+// ===================== HELPER FUNCTIONS =====================
 function formatLabel(label) {
   return label.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase()).replaceAll("_", " ");
 }

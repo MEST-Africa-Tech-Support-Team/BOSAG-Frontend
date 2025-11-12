@@ -43,14 +43,11 @@ export default function AddEvent() {
 
       <div className="ml-12 md:ml-64 flex-1 bg-gray-50 min-h-screen">
         <DashboardHeader
-          title="Event Management"
-          subtitle="Manage and organize your events"
+          title="Add Event"
+          subtitle="Create and manage your event details."
         />
 
         <main className="flex-1 p-6">
-          <h1 className="text-2xl font-semibold text-gray-800">Add Event</h1>
-          <p className="text-gray-500 mb-6">Create and manage your event details.</p>
-
           {/* Main Card */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-8">
             {/* Basic Information */}

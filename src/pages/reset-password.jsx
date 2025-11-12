@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import { resetPassword } from "../services/authService";
+import { toast } from "react-toastify";
 
 export default function ResetPasswordPage() {
   const { token } = useParams(); // get the token from the URL
@@ -12,11 +13,19 @@ export default function ResetPasswordPage() {
     setLoading(true);
     try {
       await resetPassword(token, password);
-      alert("Password has been reset successfully!");
+
+      toast.success('Password has been reset successfully!', {
+              position: 'top-right',
+              autoClose: 2000,
+            });
       setPassword("");
     } catch (error) {
       console.error("Reset error:", error);
-      alert("Failed to reset password. Try again or check your link.");
+      
+      toast.error('Failed to reset password. Try again or check your link.', {
+              position: 'top-right',
+              autoClose: 2000,
+            });
     } finally {
       setLoading(false);
     }

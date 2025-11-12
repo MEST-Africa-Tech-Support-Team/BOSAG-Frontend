@@ -17,56 +17,74 @@ export default function FormStep1() {
     "Other (Please specify)",
   ];
 
-  // Load saved data from localStorage if available
+  // ✅ Load saved data safely from localStorage
   const [formData, setFormData] = useState(() => {
-    const saved = localStorage.getItem("formA");
-    return saved
-      ? JSON.parse(saved)
-      : {
-          organisationName: "",
-          yearOfEstablishment: "",
-          companyRegNumber: "",
-          sectorFocus: "",
-          employeesGhana: "",
-          employeesGlobal: "",
-          organisationTypes: [],
-          otherOrganisationText: "",
-          membershipTier: "",
-        };
+    try {
+      const saved = JSON.parse(localStorage.getItem("formA"));
+      return {
+        organizationName: saved?.organizationName || "",
+        yearEstablished: saved?.yearEstablished || "",
+        registrationNumber: saved?.registrationNumber || "",
+        sectorFocus: saved?.sectorFocus || "",
+        employeesGhana: saved?.employeesGhana || "",
+        employeesGlobal: saved?.employeesGlobal || "",
+        organizationType: Array.isArray(saved?.organizationType)
+          ? saved.organizationType
+          : [],
+        otherOrganizationText: saved?.otherOrganizationText || "",
+        membershipTier: saved?.membershipTier || "",
+      };
+    } catch {
+      return {
+        organizationName: "",
+        yearEstablished: "",
+        registrationNumber: "",
+        sectorFocus: "",
+        employeesGhana: "",
+        employeesGlobal: "",
+        organizationType: [],
+        otherOrganizationText: "",
+        membershipTier: "",
+      };
+    }
   });
 
-  // Save form data to localStorage on every change
+  // ✅ Auto-save form data to localStorage
   useEffect(() => {
     localStorage.setItem("formA", JSON.stringify(formData));
   }, [formData]);
 
+  // Input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Checkbox changes
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
     setFormData((prev) => {
       const updated = checked
-        ? [...prev.organisationTypes, value]
-        : prev.organisationTypes.filter((item) => item !== value);
+        ? [...(prev.organizationType || []), value]
+        : (prev.organizationType || []).filter((item) => item !== value);
 
       return {
         ...prev,
-        organisationTypes: updated,
-        otherOrganisationText:
+        organizationType: updated,
+        otherOrganizationText:
           value === "Other (Please specify)" && !checked
             ? ""
-            : prev.otherOrganisationText,
+            : prev.otherOrganizationText,
       };
     });
   };
 
+  // Radio changes
   const handleRadioChange = (e) => {
     setFormData((prev) => ({ ...prev, membershipTier: e.target.value }));
   };
 
+  // Submit handler
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -105,18 +123,18 @@ export default function FormStep1() {
             className="bg-white shadow-md border border-gray-200 rounded-lg p-8 md:p-10 w-full"
           >
             <h2 className="text-xl font-semibold text-[#191970] mb-8">
-              Section A: Organisational Details
+              Section A: Organizational Details
             </h2>
 
-            {/* Organisation Name */}
+            {/* Organization Name */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Organisation Name
+                Organization Name
               </label>
               <input
                 type="text"
-                name="organisationName"
-                value={formData.organisationName}
+                name="organizationName"
+                value={formData.organizationName}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md p-2"
               />
@@ -130,9 +148,9 @@ export default function FormStep1() {
                 </label>
                 <input
                   type="text"
-                  name="yearOfEstablishment"
+                  name="yearEstablished"
                   placeholder="YYYY"
-                  value={formData.yearOfEstablishment}
+                  value={formData.yearEstablished}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-md p-2 placeholder-gray-400"
                 />
@@ -144,8 +162,8 @@ export default function FormStep1() {
                 </label>
                 <input
                   type="text"
-                  name="companyRegNumber"
-                  value={formData.companyRegNumber}
+                  name="registrationNumber"
+                  value={formData.registrationNumber}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-md p-2"
                 />
@@ -196,10 +214,10 @@ export default function FormStep1() {
               </div>
             </div>
 
-            {/* Organisation Type */}
+            {/* Organization Type */}
             <div className="mb-8">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Type of Organisation
+                Type of Organization
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {ORG_TYPES.map((type) => {
@@ -210,17 +228,17 @@ export default function FormStep1() {
                         <input
                           type="checkbox"
                           value={type}
-                          checked={formData.organisationTypes.includes(type)}
+                          checked={formData.organizationType?.includes(type)}
                           onChange={handleCheckboxChange}
                         />
                         <span>{type}</span>
                       </label>
 
-                      {isOther && formData.organisationTypes.includes(type) && (
+                      {isOther && formData.organizationType?.includes(type) && (
                         <input
                           type="text"
-                          name="otherOrganisationText"
-                          value={formData.otherOrganisationText}
+                          name="otherOrganizationText"
+                          value={formData.otherOrganizationText}
                           onChange={handleChange}
                           placeholder="Please specify"
                           className="mt-1 border border-gray-300 rounded-md p-1 text-sm w-full placeholder-gray-400"
