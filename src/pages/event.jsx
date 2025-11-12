@@ -42,6 +42,16 @@ const Event = () => {
       target: "_blank",
       categories: ["Past Events"],
     },
+     {
+          date: "15 November, 2024",
+          title: "BOSAG officially unveiled; positioning Ghana as Africa's premier BPO destination.",
+          description:
+            "BOSAG officially launched, marking a significant milestone in establishing Ghana as a leading BPO hub in Africa.",
+          image: SustainabilityConference,
+          path: "https://myjoyonline.com/bosag-officially-unveiled-positioning-ghana-as-africas-premier-bpo-destination/",
+          target: "_blank",
+          categories: ["Past Events", "Annual Events"],
+        },
   ];
 
   // ✅ Filter: include event if activeTab is in its categories (or "All Events")

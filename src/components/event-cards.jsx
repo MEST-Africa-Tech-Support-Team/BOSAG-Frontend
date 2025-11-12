@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import ComLeadership from "../assets/images/report3.jpg";
 import YouthMentorship from "../assets/images/report1.jpg";
 import SustainabilityConference from "../assets/images/hero2.jpg";
+import Man from "../assets/images/hero3.jpg";
 
 const EventCards = () => {
   const events = [
@@ -29,8 +30,17 @@ const EventCards = () => {
       title: "BOSAG Joins GBS Roadshow in Berlin to Showcase Ghana's Outsorcing Potential.",
       description:
         "BOSAG hightlights  Ghana's growing  BPO market, skilled workforce and competitive edge, attracting global outsourcing investment.",
-      image: SustainabilityConference,
+      image: Man,
       path: "https://www.linkedin.com/feed/update/urn:li:activity:7334358921140170752",
+      target: "_blank",
+    },
+    {
+      date: "15 November, 2024",
+      title: "BOSAG officially unveiled; positioning Ghana as Africa's premier BPO destination.",
+      description:
+        "BOSAG officially launched, marking a significant milestone in establishing Ghana as a leading BPO hub in Africa.",
+      image: SustainabilityConference,
+      path: "https://myjoyonline.com/bosag-officially-unveiled-positioning-ghana-as-africas-premier-bpo-destination/",
       target: "_blank",
     },
   ];
@@ -53,7 +63,7 @@ const EventCards = () => {
         </div>
 
         {/* Event Cards */}
-        <div className="grid md:grid-cols-3 gap-6 overflow-x-auto md:overflow-visible scrollbar-hide">
+        <div className="grid md:grid-cols-4 gap-6 overflow-x-auto md:overflow-visible scrollbar-hide">
           {events.map((event, index) => (
             <Link
               to={event.path}
