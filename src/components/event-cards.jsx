@@ -45,7 +45,7 @@ const EventCards = () => {
           </h2>
 
           <Link
-            to="/events"
+            to="/event"
             className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2.5 rounded-md transition-colors"
           >
             View All Events
