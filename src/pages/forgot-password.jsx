@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { forgotPassword } from "../services/authService";
+import { toast } from "react-toastify";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -11,11 +12,19 @@ export default function ForgotPasswordPage() {
 
     try {
       await forgotPassword(email);
-      alert("Password reset link sent! Check your inbox.");
+     
+       toast.success('Password reset link sent! Check your inbox.', {
+                    position: 'top-right',
+                    autoClose: 2000,
+                  });
       setEmail("");
     } catch (error) {
       console.error("Forgot password error:", error);
-      alert("Failed to send reset email. Please try again.");
+      alert("");
+      toast.error('Failed to send reset email. Please try again.', {
+                    position: 'top-right',
+                    autoClose: 2000,
+                  });
     } finally {
       setLoading(false);
     }

@@ -66,6 +66,7 @@ import MavisProfile from "./components/profiles/mavis-profile.jsx";
 
 
 import AuthCallback from "./pages/auth-callback.jsx";
+import Verified from "./pages/verified.jsx";
 
 
 const router = createBrowserRouter(
@@ -110,7 +111,7 @@ const router = createBrowserRouter(
         }
                  />
 
-      <Route path="/dashboard" element={<DashboardHome />} />
+      {/* <Route path="/dashboard" element={<DashboardHome />} /> */}
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/member-dashboardpage" element={<MembershipApproval />} />
       <Route path="/event-management" element={<EventManagement />} />
@@ -135,6 +136,7 @@ const router = createBrowserRouter(
 {/* //       <Route path="/bosagmembership" element={<BosagMembership />} /> */}
       <Route path="/event" element={<Event />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
+      <Route path="/verify/:id" element={<Verified />} />
 
       <Route path="/kojo" element={<KojoProfile />} />
         <Route path="/david" element={<DavidProfile />} />

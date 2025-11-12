@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router"; // ✅ use react-router-dom, not react-router
+import { useNavigate } from "react-router"; 
 
 export default function AuthCallback() {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ export default function AuthCallback() {
     const token = params.get("token");
 
     if (token) {
-      localStorage.setItem("token", token); // ✅ consistent key
+      localStorage.setItem("token", token);
       navigate("/dashboard", { replace: true });
     } else {
       navigate("/login", { replace: true });
