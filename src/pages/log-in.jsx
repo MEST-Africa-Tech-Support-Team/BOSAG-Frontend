@@ -17,8 +17,7 @@ export default function BosagLoginPage() {
 
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("bosagToken");
-  if (token) return <Navigate to="/dashboard" replace />;
+  
 
   const handleChange = (e) => {
     setFormData({
@@ -29,6 +28,8 @@ export default function BosagLoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("bosagToken");
+  
 
     // Validate fields
     if (!formData.email || !formData.password) {
@@ -52,6 +53,7 @@ export default function BosagLoginPage() {
           email: response.user.email
         }));
       }
+     
 
       // Token is already saved by loginUser function in authService
 
@@ -61,10 +63,10 @@ export default function BosagLoginPage() {
         autoClose: 2000,
       });
 
-      // Navigate to dashboard after short delay
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 1500);
+      if(localStorage.getItem("bosagToken")){
+navigate("/dashboard")
+}
+
 
     } catch (error) {
       console.error('Login error:', error);
@@ -152,7 +154,7 @@ export default function BosagLoginPage() {
             </div>
 
             <div className="text-right">
-              <a href="#" className="text-sm text-indigo-900 hover:text-indigo-700 font-medium">
+              <a href="/forgot-password" className="text-sm text-indigo-900 hover:text-indigo-700 font-medium">
                 Forgot Password?
               </a>
             </div>
@@ -171,7 +173,7 @@ export default function BosagLoginPage() {
             </div>
 
             {/* Social Auth */}
-            <GoogleButton navigate={navigate} />
+            <GoogleButton />
 
             <div className="text-center mt-6">
               <p className="text-gray-600">
