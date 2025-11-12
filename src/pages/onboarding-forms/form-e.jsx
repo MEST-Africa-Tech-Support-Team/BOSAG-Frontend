@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { Upload, X, Loader } from "lucide-react";
+import { Upload, X } from "lucide-react";
 import FormProgressBar from "../../components/form-header.jsx";
 import Sidebar from "../../components/sidebar.jsx";
 import { Link } from "react-router";
 
-// 🔧 Replace with your Cloudinary details
-const CLOUD_NAME = "your_cloud_name"; // e.g., "bosag-gh"
-const UPLOAD_PRESET = "bosag_uploads"; // must be unsigned preset
-
 export default function FormStep5() {
   const navigate = useNavigate();
-  const [uploading, setUploading] = useState({});
+  const [wordCount, setWordCount] = useState(0);
 
   const [formData, setFormData] = useState(() => {
     const saved = localStorage.getItem("formE");
@@ -32,8 +28,6 @@ export default function FormStep5() {
     };
   });
 
-  const [wordCount, setWordCount] = useState(0);
-
   useEffect(() => {
     if (formData.companyProfile) {
       const words = formData.companyProfile.trim().split(/\s+/).filter(Boolean);
@@ -45,49 +39,6 @@ export default function FormStep5() {
     localStorage.setItem("formE", JSON.stringify(formData));
   }, [formData]);
 
-  // ✅ Upload file to Cloudinary and return URL
-  const uploadFile = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", UPLOAD_PRESET);
-    formData.append("folder", "membership_applications");
-
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!res.ok) throw new Error("Upload failed");
-    const data = await res.json();
-    return data.secure_url;
-  };
-
-  // ✅ Handle file selection & upload
-  const handleFileChange = async (key, file) => {
-    if (!file) return;
-
-    setUploading((prev) => ({ ...prev, [key]: true }));
-    try {
-      const url = await uploadFile(file);
-      setFormData((prev) => ({
-        ...prev,
-        files: { ...prev.files, [key]: url },
-      }));
-    } catch (error) {
-      console.error(`Upload error for ${key}:`, error);
-      alert(`Failed to upload ${key}. Please try again.`);
-    } finally {
-      setUploading((prev) => ({ ...prev, [key]: false }));
-    }
-  };
-
-  const handleFileRemove = (key) => {
-    setFormData((prev) => ({
-      ...prev,
-      files: { ...prev.files, [key]: null },
-    }));
-  };
-
   const handleTextChange = (e) => {
     const value = e.target.value;
     const words = value.trim().split(/\s+/).filter(Boolean);
@@ -95,6 +46,23 @@ export default function FormStep5() {
       setFormData((prev) => ({ ...prev, companyProfile: value }));
       setWordCount(words.length);
     }
+  };
+
+  // NEW: save temporary URL for preview
+  const handleFileChange = (key, file) => {
+    if (!file) return;
+    const tempUrl = URL.createObjectURL(file); // for preview only
+    setFormData((prev) => ({
+      ...prev,
+      files: { ...prev.files, [key]: tempUrl },
+    }));
+  };
+
+  const handleFileRemove = (key) => {
+    setFormData((prev) => ({
+      ...prev,
+      files: { ...prev.files, [key]: null },
+    }));
   };
 
   const validateForm = () => {
@@ -125,7 +93,6 @@ export default function FormStep5() {
 
   const UploadField = ({ label, name, required, optional, accept }) => {
     const fileUrl = formData.files[name];
-    const isUploading = uploading[name];
     const inputId = `file-input-${name}`;
 
     return (
@@ -139,14 +106,10 @@ export default function FormStep5() {
         <div className="flex items-center space-x-3">
           <label
             htmlFor={inputId}
-            className={`inline-flex items-center space-x-2 text-sm font-medium px-4 py-2 rounded-md cursor-pointer transition-colors ${
-              isUploading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-[#191970] hover:bg-[#14145a] text-white"
-            }`}
+            className="inline-flex items-center space-x-2 text-sm font-medium px-4 py-2 rounded-md cursor-pointer bg-[#191970] hover:bg-[#14145a] text-white"
           >
-            {isUploading ? <Loader className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-            <span>{isUploading ? "Uploading..." : "Upload File"}</span>
+            <Upload className="w-4 h-4" />
+            <span>Upload File</span>
           </label>
           <input
             id={inputId}
@@ -154,17 +117,12 @@ export default function FormStep5() {
             accept={accept}
             className="hidden"
             onChange={(e) => e.target.files[0] && handleFileChange(name, e.target.files[0])}
-            disabled={isUploading}
           />
 
           <div className="flex-1 min-w-0">
             <div className="border border-gray-200 rounded-md px-4 py-2 bg-gray-50 text-sm flex items-center justify-between">
               <span className={`truncate ${fileUrl ? "text-gray-700" : "text-gray-400"}`}>
-                {fileUrl
-                  ? typeof fileUrl === "string"
-                    ? "Uploaded successfully"
-                    : fileUrl.name
-                  : "No file selected"}
+                {fileUrl ? "File selected" : "No file selected"}
               </span>
               {fileUrl && (
                 <button
