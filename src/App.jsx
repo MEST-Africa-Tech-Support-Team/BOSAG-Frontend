@@ -86,7 +86,7 @@ const router = createBrowserRouter(
 
       <Route path="/dashboard" element={<DashboardHome />} />
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
-      <Route path="/member-dashboardpage" element={<MembershipApproval />} />
+      <Route path="/membership-dashboardpage" element={<MembershipApproval />} />
       <Route path="/event-management" element={<EventManagement />} />
       <Route path="/admin-members-dashboard" element={<AdminMembersDashboard />} />
       <Route path="/add-event" element={<AddEvent />} />

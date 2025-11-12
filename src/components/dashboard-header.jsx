@@ -3,7 +3,7 @@ import { Bell } from "lucide-react";
 
 export default function DashboardHeader({ title, subtitle }) {
   return (
-    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 p-4 border-b border-gray-200 shadow-b">
       {/* Left: Title & Subtitle */}
       <div>
         <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
