@@ -32,7 +32,7 @@ export default function GoogleButton() {
 
   return (
     <div className="space-y-3">
-      <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
+      {/* <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} /> */}
 
       {/* <button
   onClick={() => socialLogin("google")}
