@@ -95,7 +95,7 @@ const BosagExecutive = () => {
               href="https://www.linkedin.com/in/david-gowu-9158027/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md"
+              className="inline-flex items-center bg-[#191970] hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

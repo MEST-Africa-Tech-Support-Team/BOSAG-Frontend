@@ -71,59 +71,62 @@ export default function EventManagement() {
     <div className="flex">
       <AdminSidebar />
 
-      <div className="ml-16 md:ml-64 flex-1 bg-gray-50 w-full min-h-screen p-6 transition-all duration-300">
-        <DashboardHeader />
-        {/* Top Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
-          <StatCard
-            icon={<FaCalendarDays size={24} />}
-            label="Total Events"
-            value={24}
-            iconBg="bg-purple-100"
-            iconColor="text-purple-800"
-          />
-          <StatCard
-            icon={<FaClock size={24} />}
-            label="Upcoming"
-            value={8}
-            iconBg="bg-orange-100"
-            iconColor="text-orange-700"
-          />
-          <StatCard
-            icon={<FaCheck size={24} />}
-            label="Past Events"
-            value={16}
-            iconBg="bg-gray-100"
-            iconColor="text-gray-700"
-          />
-          <StatCard
-            icon={<FaUsers size={24} />}
-            label="Total Attendees"
-            value={1246}
-            iconBg="bg-green-100"
-            iconColor="text-green-800"
-          />
-        </div>
-
-        {/* Filter Bar */}
-        <AdminEventFilter
-          filter={filter}
-          setFilter={setFilter}
-          search={search}
-          setSearch={setSearch}
+      <div className="ml-16 md:ml-64 flex-1 bg-gray-50 w-full min-h-screen transition-all duration-300">
+        <DashboardHeader
+          title="Event Management"
+          subtitle="Manage and organize your events"
         />
-
-        {/* Event Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {filteredEvents.length > 0 ? (
-            filteredEvents.map((event) => (
-              <EventmanagementCard key={event.id} event={event} />
-            ))
-          ) : (
-            <p className="text-gray-500 col-span-full text-center">
-              No events found.
-            </p>
-          )}
+        <div className="mt-6 p-4">
+          {/* Top Stats */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+            <StatCard
+              icon={<FaCalendarDays size={24} />}
+              label="Total Events"
+              value={24}
+              iconBg="bg-purple-100"
+              iconColor="text-purple-800"
+            />
+            <StatCard
+              icon={<FaClock size={24} />}
+              label="Upcoming"
+              value={8}
+              iconBg="bg-orange-100"
+              iconColor="text-orange-700"
+            />
+            <StatCard
+              icon={<FaCheck size={24} />}
+              label="Past Events"
+              value={16}
+              iconBg="bg-gray-100"
+              iconColor="text-gray-700"
+            />
+            <StatCard
+              icon={<FaUsers size={24} />}
+              label="Total Attendees"
+              value={1246}
+              iconBg="bg-green-100"
+              iconColor="text-green-800"
+            />
+          </div>
+          {/* Filter Bar */}
+          <AdminEventFilter
+            filter={filter}
+            setFilter={setFilter}
+            search={search}
+            setSearch={setSearch}
+          />
+          {/* Event Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {filteredEvents.length > 0 ? (
+              filteredEvents.map((event) => (
+                <EventmanagementCard key={event.id} event={event} />
+              ))
+            ) : (
+              <p className="text-gray-500 col-span-full text-center">
+                No events found.
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>

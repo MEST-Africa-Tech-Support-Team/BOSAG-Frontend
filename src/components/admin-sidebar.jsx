@@ -15,13 +15,13 @@ export default function Sidebar() {
     }`;
 
   return (
-    <aside className="bg-[#191970] h-screen text-white flex flex-col fixed transition-all duration-300 w-16 md:w-64">
+    <aside className="bg-[#191970] h-screen text-white flex flex-col fixed transition-all duration-300 w-16 md:w-60">
       {/* Logo */}
       <div className="p-3 flex justify-center md:justify-center border-b border-gray-700">
         <img
           src={logo}
           alt="BOSAG"
-          className="rounded-md w-8 h-8 md:w-auto md:h-auto"
+          className="rounded-md h-8 w-auto md:w-40 md:h-auto"
         />
       </div>
 
@@ -29,14 +29,14 @@ export default function Sidebar() {
       <nav className="mt-6 flex-1 px-1 md:px-3">
         <ul className="space-y-1">
           <li>
-            <NavLink to="/admin-dash" className={linkClass}>
+            <NavLink to="/admin-dashboard" className={linkClass}>
               <GoGraph className="w-5 h-5" />
               <span className="hidden md:inline-block ml-3">Dashboard</span>
             </NavLink>
           </li>
 
           <li>
-            <NavLink to="/approval" className={linkClass}>
+            <NavLink to="/membership-dashboardpage" className={linkClass}>
               <FaUserCheck className="w-5 h-5" />
               <span className="hidden md:inline-block ml-3">
                 Membership Approval
@@ -61,7 +61,7 @@ export default function Sidebar() {
           </li>
 
           <li>
-            <NavLink to="/settings" className={linkClass}>
+            <NavLink to="/admin-settings" className={linkClass}>
               <IoMdSettings className="w-5 h-5" />
               <span className="hidden md:inline-block ml-3">Settings</span>
             </NavLink>
