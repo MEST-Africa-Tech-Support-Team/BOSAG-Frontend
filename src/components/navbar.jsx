@@ -4,19 +4,12 @@ import { ChevronDown, Menu, X } from "lucide-react";
 import Logo from "../assets/images/logo.png";
 
 const Navbar = () => {
-  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openDropdownDesktop, setOpenDropdownDesktop] = useState(null);
+  const [openDropdownMobile, setOpenDropdownMobile] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
-
-  const handleNavClick = (path) => {
-  navigate(path);
-  setOpenDropdown(null);
-  setMenuOpen(false); 
-  window.scrollTo(0, 0);
-};
-
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -44,8 +37,23 @@ const Navbar = () => {
     },
   ];
 
-  const toggleDropdown = (name) => {
-    setOpenDropdown((prev) => (prev === name ? null : name));
+  const handleNavClick = (path) => {
+    navigate(path);
+    setOpenDropdownDesktop(null);
+    setOpenDropdownMobile(null);
+    setMenuOpen(false);
+  };
+
+  const toggleMobileDropdown = (name) => {
+    
+    if (openDropdownMobile === name) {
+      const link = navLinks.find((l) => l.name === name);
+      if (link) {
+        handleNavClick(link.path);
+      }
+    } else {
+      setOpenDropdownMobile(name);
+    }
   };
 
   const isActive = (path) => location.pathname === path;
@@ -53,7 +61,7 @@ const Navbar = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setOpenDropdown(null);
+        setOpenDropdownDesktop(null);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -64,22 +72,24 @@ const Navbar = () => {
     <nav className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 sm:px-10">
         <div className="flex items-center justify-between h-16">
-
           <Link to="/" className="flex items-center">
             <img src={Logo} alt="BOSAG" className="h-20 sm:h-30" />
           </Link>
 
+          {/* Desktop Nav */}
           <ul
             className="hidden md:flex items-center gap-8 text-[16px] font-medium"
             ref={dropdownRef}
           >
             {navLinks.map((link) => (
               <li key={link.name} className="relative">
-                {link.name === "About" ? (
-                  <div onMouseEnter={() => setOpenDropdown("About")}>
-                    <Link
-                      to={link.path}
-                      onClick={() => handleNavClick("/about")}
+                {link.dropdown ? (
+                  <div
+                    onMouseEnter={() => setOpenDropdownDesktop(link.name)}
+                    onMouseLeave={() => {}}
+                  >
+                    <button
+                      onClick={() => handleNavClick(link.path)}
                       className={`flex items-center gap-1 transition-colors border-b-2 ${
                         isActive(link.path)
                           ? "text-[#0a0a3a] border-[#0a0a3a]"
@@ -88,9 +98,9 @@ const Navbar = () => {
                     >
                       {link.name}
                       <ChevronDown size={18} />
-                    </Link>
+                    </button>
 
-                    {link.dropdown && openDropdown === "About" && (
+                    {openDropdownDesktop === link.name && (
                       <div className="absolute left-0 top-full mt-2 w-64 bg-white border border-[#f8f9ff] shadow-md text-center z-50 rounded-lg">
                         <ul className="divide-y divide-[#191970]/30">
                           {link.dropdown.map((item) => (
@@ -110,20 +120,7 @@ const Navbar = () => {
                       </div>
                     )}
                   </div>
-                ) : link.dropdown ? (
-                  <button
-                    onClick={() => toggleDropdown(link.name)}
-                    className={`flex items-center gap-1 transition-colors border-b-2 ${
-                      isActive(link.path)
-                        ? "text-[#0a0a3a] border-[#0a0a3a]"
-                        : "text-[#191970] border-transparent hover:text-[#0a0a3a] hover:border-[#0a0a3a]"
-                    }`}
-                  >
-                    {link.name}
-                    <ChevronDown size={18} />
-                  </button>
                 ) : (
-
                   <Link
                     to={link.path}
                     onClick={() => handleNavClick(link.path)}
@@ -136,33 +133,9 @@ const Navbar = () => {
                     {link.name}
                   </Link>
                 )}
-
-
-                {link.dropdown &&
-                  openDropdown === link.name &&
-                  link.name !== "About" && (
-                    <div className="absolute left-0 top-full mt-2 w-64 bg-white border border-[#f8f9ff] shadow-md text-center z-50 rounded-lg">
-                      <ul className="divide-y divide-[#191970]/30">
-                        {link.dropdown.map((item) => (
-                          <li key={item.name}>
-                            <Link
-                              to={item.path}
-                              onClick={() => handleNavClick(item.path)}
-                              className={`block py-3 text-[15px] text-[#191970] hover:bg-[#f8f9ff] transition-colors ${
-                                isActive(item.path) ? "font-semibold" : ""
-                              }`}
-                            >
-                              {item.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
               </li>
             ))}
           </ul>
-
 
           <div className="hidden md:flex items-center gap-3">
             <Link to="/signup">
@@ -177,7 +150,6 @@ const Navbar = () => {
             </Link>
           </div>
 
-
           <button
             className="md:hidden text-[#191970]"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -187,47 +159,63 @@ const Navbar = () => {
           </button>
         </div>
 
-
+        {/* Mobile Nav */}
         {menuOpen && (
           <div className="md:hidden mt-2 bg-white border-t border-gray-200 rounded-b-lg shadow-md">
             <ul className="flex flex-col text-[16px] font-medium">
               {navLinks.map((link) => (
                 <li key={link.name} className="relative">
-                  <button
-                    onClick={() =>
-                      link.dropdown
-                        ? toggleDropdown(link.name)
-                        : handleNavClick(link.path)
-                    }
-                    className={`block px-6 py-3 w-full text-left ${
-                      isActive(link.path)
-                        ? "text-[#0a0a3a]"
-                        : "text-[#191970] hover:text-[#0a0a3a]"
-                    }`}
-                  >
-                    {link.name}
-                    {link.dropdown && (
-                      <ChevronDown className="inline ml-2" size={16} />
-                    )}
-                  </button>
-
-                  {link.dropdown && openDropdown === link.name && (
-                    <div className="pl-8 border-l border-[#191970]/30">
-                      {link.dropdown.map((item) => (
-                        <Link
-                          key={item.name}
-                          to={item.path}
-                          onClick={() => handleNavClick(item.path)}
-                          className={`block py-2 text-[15px] ${
-                            isActive(item.path)
-                              ? "text-[#0a0a3a] font-semibold"
-                              : "text-[#191970]"
+                  {link.dropdown ? (
+                    <>
+                      <button
+                        onClick={() => toggleMobileDropdown(link.name)}
+                        className={`block px-6 py-3 w-full text-left ${
+                          isActive(link.path)
+                            ? "text-[#0a0a3a]"
+                            : "text-[#191970] hover:text-[#0a0a3a]"
+                        }`}
+                      >
+                        {link.name}
+                        <ChevronDown
+                          className={`inline ml-2 transition-transform ${
+                            openDropdownMobile === link.name
+                              ? "rotate-180"
+                              : ""
                           }`}
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
+                          size={16}
+                        />
+                      </button>
+                      {openDropdownMobile === link.name && (
+                        <div className="pl-8 border-l border-[#191970]/30">
+                          {link.dropdown.map((item) => (
+                            <Link
+                              key={item.name}
+                              to={item.path}
+                              onClick={() => handleNavClick(item.path)}
+                              className={`block py-2 text-[15px] ${
+                                isActive(item.path)
+                                  ? "text-[#0a0a3a] font-semibold"
+                                  : "text-[#191970]"
+                              }`}
+                            >
+                              {item.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <Link
+                      to={link.path}
+                      onClick={() => handleNavClick(link.path)}
+                      className={`block px-6 py-3 w-full text-left ${
+                        isActive(link.path)
+                          ? "text-[#0a0a3a]"
+                          : "text-[#191970] hover:text-[#0a0a3a]"
+                      }`}
+                    >
+                      {link.name}
+                    </Link>
                   )}
                 </li>
               ))}
