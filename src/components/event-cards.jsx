@@ -1,34 +1,37 @@
 import React from "react";
 import { Link } from "react-router";
-import ComLeadership from "../assets/images/hero4.jpg";
-import YouthMentorship from "../assets/images/hero6.jpg";
+import ComLeadership from "../assets/images/report3.jpg";
+import YouthMentorship from "../assets/images/report1.jpg";
 import SustainabilityConference from "../assets/images/hero2.jpg";
 
 const EventCards = () => {
   const events = [
     {
-      date: "March 15, 2025",
-      title: "Community Leadership Workshop",
+      date: "June, 16, 2025",
+      title: "BOSAG Hosts Workshop to Shape the Future of Ghana's Outsourcing Industry",
       description:
-        "Empowering local leaders with essential skills for community development.",
+        "BOSAG's three-days workshop unites industry leaders to shape Ghana's outsourcing future, driving innovation, jobs and global competitiveness.",
       image: ComLeadership,
-      path: "/events/community-leadership-workshop",
+      path: "https://www.linkedin.com/feed/update/urn:li:activity:7341936512277561344",
+      target: "_blank",
     },
     {
-      date: "March 22, 2025",
-      title: "Youth Mentorship Program",
+      date: "4 months ago",
+      title: "Ghana's BPO Growth Spotlighted on Good Morning BSS World Podcast.",
       description:
-        "Connecting experienced professionals with aspiring young leaders.",
+        "David Gowu discusses why Ghana is emerging as a top outsourcing hub, highlighting talent, innovation and investment opportunity .",
       image: YouthMentorship,
-      path: "/events/youth-mentorship-program",
+      path: "https://www.linkedin.com/feed/update/urn:li:activity:7335353813886758913",
+      target: "_blank",
     },
     {
-      date: "April 5, 2025",
-      title: "Sustainability Conference",
+      date: "5 months ago",
+      title: "BOSAG Joins GBS Roadshow in Berlin to Showcase Ghana's Outsorcing Potential.",
       description:
-        "Exploring innovative solutions for environmental challenges.",
+        "BOSAG hightlights  Ghana's growing  BPO market, skilled workforce and competitive edge, attracting global outsourcing investment.",
       image: SustainabilityConference,
-      path: "/events/sustainability-conference",
+      path: "https://www.linkedin.com/feed/update/urn:li:activity:7334358921140170752",
+      target: "_blank",
     },
   ];
 
@@ -61,7 +64,7 @@ const EventCards = () => {
                 <img
                   src={event.image}
                   alt={event.title}
-                  className="w-full h-48 object-cover transform transition-transform duration-500 hover:scale-105"
+                  className="w-full h-60 object-cover transform transition-transform duration-500 hover:scale-105"
                 />
               </div>
 
