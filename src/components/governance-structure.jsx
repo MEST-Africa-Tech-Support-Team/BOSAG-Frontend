@@ -13,7 +13,7 @@ export default function GovernanceStructure() {
 
   
   return (
-    <div className="bg-gray-50 py-10 px-6 lg:h-[140vh] mb-2 ">
+    <div className="bg-gray-50 py-10 px-6 lg:h-[150vh] mb-2 ">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">

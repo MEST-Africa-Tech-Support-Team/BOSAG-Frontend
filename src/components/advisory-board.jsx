@@ -19,9 +19,9 @@ const AdvisoryBoard = () => {
     {
       name: "Ghana Digital Centres Limited",
       logo: gdcl,
-      subtitle: "",
+      subtitle: "Government Agency",
       description:
-        "NOT AVAILABLE",
+        "To position Ghana as a regional digital hub that will enable a leap into the digital age and facilitate the transition to a knowledge-based economy.",
     },
     {
       name: "24-Hour Economy Secretariat",
