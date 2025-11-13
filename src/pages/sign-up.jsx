@@ -246,16 +246,16 @@ export default function BosagSignUpPage() {
           </form>
 
           {/* Divider */}
-          <div className="relative flex items-center justify-center my-6">
+          {/* <div className="relative flex items-center justify-center my-6">
             <div className="border-t border-gray-300 w-full"></div>
             <span className="bg-white px-4 text-sm text-gray-500 absolute">OR</span>
-          </div>
+          </div> */}
 
           {/* Social Auth */}
           
-          <div className="flex items-center justify-center w-[80%] mx-auto">
+          {/* <div className="flex items-center justify-center w-[80%] mx-auto">
             <div id="googleSignInDiv"></div>
-          </div>
+          </div> */}
 
 
 

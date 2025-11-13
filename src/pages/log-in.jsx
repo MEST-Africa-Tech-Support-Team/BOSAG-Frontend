@@ -167,13 +167,13 @@ navigate("/dashboard")
               {loading ? 'Logging in...' : 'Log In'}
             </button>
 
-            <div className="relative flex items-center justify-center my-6">
+            {/* <div className="relative flex items-center justify-center my-6">
               <div className="border-t border-gray-300 w-full"></div>
               <span className="bg-white px-4 text-sm text-gray-500 absolute">OR</span>
-            </div>
+            </div> */}
 
             {/* Social Auth */}
-            <GoogleButton />
+            {/* <GoogleButton /> */}
 
             <div className="text-center mt-6">
               <p className="text-gray-600">
