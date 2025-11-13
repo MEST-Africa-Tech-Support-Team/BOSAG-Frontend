@@ -1,7 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router";
-import { socialLogin } from "../services/authService";
+// import { socialLogin } from "../services/authService";
 
 export default function GoogleButton() {
   const navigate = useNavigate(); // ✅ define it here
@@ -11,12 +11,12 @@ export default function GoogleButton() {
     const decoded = jwtDecode(credentialResponse.credential);
     const email = decoded.email;
 
-    const result = await socialLogin(email, "google");
+    // const result = await socialLogin(email, "google");
 
     // ✅ Save token before navigating
-    if (result?.token) {
-      localStorage.setItem("token", result.token);
-    }
+    // if (result?.token) {
+    //   localStorage.setItem("token", result.token);
+    // }
 
     // alert(Welcome ${result.user?.firstName || "user"}!);
     navigate("/dashboard");
@@ -32,7 +32,7 @@ export default function GoogleButton() {
 
   return (
     <div className="space-y-3">
-      {/* <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} /> */}
+      <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
 
       {/* <button
   onClick={() => socialLogin("google")}

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router";
 import signup from "../../assets/images/signup.png";
-import { registerAdmin, socialLogin } from "../../services/authService"; // API helper
-import { jwtDecode } from "jwt-decode";
-import { GoogleLogin } from "@react-oauth/google";
+import { registerAdmin} from "../../services/authService"; // API helper
+// import { jwtDecode } from "jwt-decode";
+// import { GoogleLogin } from "@react-oauth/google";
 
 export default function BosagAdminSignUp() {
   const navigate = useNavigate();
@@ -55,23 +55,23 @@ export default function BosagAdminSignUp() {
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
-    try {
-      const decoded = jwtDecode(credentialResponse.credential);
-      const email = decoded.email;
-      const result = await socialLogin(email, "google");
-      alert(`Welcome ${result.user?.firstName || "user"}!`);
-      console.log("Logged in:", result);
-      navigate("/admin-dashboard");
-    } catch (error) {
-      console.error("Google login failed:", error);
-      alert("Google sign-in failed!");
-    }
-  };
+  // const handleGoogleSuccess = async (credentialResponse) => {
+  //   try {
+  //     const decoded = jwtDecode(credentialResponse.credential);
+  //     const email = decoded.email;
+  //     const result = await socialLogin(email, "google");
+  //     alert(`Welcome ${result.user?.firstName || "user"}!`);
+  //     console.log("Logged in:", result);
+  //     navigate("/admin-dashboard");
+  //   } catch (error) {
+  //     console.error("Google login failed:", error);
+  //     alert("Google sign-in failed!");
+  //   }
+  // };
 
-  const handleGoogleError = () => {
-    alert("Google sign-in was cancelled or failed.");
-  };
+  // const handleGoogleError = () => {
+  //   alert("Google sign-in was cancelled or failed.");
+  // };
 
   return (
     <div className="flex min-h-screen">
@@ -207,7 +207,10 @@ export default function BosagAdminSignUp() {
 
           {/* Social Auth */}
           <div className="space-y-3">
-            <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
+            <div className="flex items-center justify-center w-[80%] mx-auto">
+            <div id="googleSignInDiv"></div>
+          </div>
+
 
             <button
               onClick={() => alert("Facebook login coming soon!")}

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
+import { Link } from "react-router"; 
 import Sidebar from "../../components/sidebar.jsx";
 
 const Submitted = () => {
@@ -151,25 +152,24 @@ const Submitted = () => {
               </div>
 
               <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* ✅ View Summary Card — Clean & Functional */}
                 <div className="border border-gray-200 rounded-md p-6 flex flex-col justify-between">
                   <div>
-                    
-                    <Link to="/onboarding/summary"><button className="text-sm font-semibold text-[#0a0a3a] mb-2">
+                    <h3 className="text-sm font-semibold text-[#0a0a3a] mb-2">
                       View Application Summary
-                    </button></Link>
-
+                    </h3>
                     <p className="text-xs text-gray-500 mb-4">
                       Review the details you submitted
                     </p>
                   </div>
-                  <button
-                    onClick={() => navigate("/onboarding/summary")}
-                    className="inline-flex items-center justify-center w-full md:w-auto bg-[#F58220] hover:bg-[#e36b0a] text-white text-sm font-medium px-6 py-2 rounded-md shadow"
-                  >
-                    View Summary
-                  </button>
+                  <Link to="/onboarding/summary" className="w-full">
+                    <button className="inline-flex items-center justify-center w-full md:w-auto bg-[#F58220] hover:bg-[#e36b0a] text-white text-sm font-medium px-6 py-2 rounded-md shadow transition">
+                      View Summary
+                    </button>
+                  </Link>
                 </div>
 
+                {/* Contact Us Card */}
                 <div className="border border-gray-200 rounded-md p-6 flex flex-col justify-between">
                   <div>
                     <h3 className="text-sm font-semibold text-[#0a0a3a] mb-2">

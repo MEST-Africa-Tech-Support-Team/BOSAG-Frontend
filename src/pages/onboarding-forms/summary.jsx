@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Sidebar from "../../components/sidebar.jsx";
-import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import bosagApi from "../../api/bosagApi.js";
 
 export default function SummaryPage() {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
-
   const [forms, setForms] = useState({
     formA: {},
     formB: {},
@@ -44,86 +43,123 @@ export default function SummaryPage() {
     }
 
     try {
-      const formA = JSON.parse(localStorage.getItem("formA")) || {};
-      const formB = JSON.parse(localStorage.getItem("formB")) || {};
-      const formC = JSON.parse(localStorage.getItem("formC")) || {};
-      const formD = JSON.parse(localStorage.getItem("formD")) || {};
       const formE = JSON.parse(localStorage.getItem("formE")) || {};
-      const formF = JSON.parse(localStorage.getItem("formF")) || {};
+      const filesForBackend = await convertFilesForBackend(formE.files || {});
 
       const formData = new FormData();
 
-      // ===================== Section A =====================
-      formData.append("organizationName", formA.organizationName || "");
-      formData.append("yearEstablished", formA.yearEstablished || "");
-      formData.append("registrationNumber", formA.registrationNumber || "");
-      formData.append("organizationType", formA.organizationType || "");
-      formData.append("membershipTier", formA.membershipTier || "");
-      formData.append("sectorFocus", formA.sectorFocus || "");
-      formData.append("employeesGhana", formA.employeesGhana || "");
-      formData.append("employeesGlobal", formA.employeesGlobal || "");
+      // Append Sections
+      appendFormA(formData);
+      appendFormBC(formData);
+      appendFormD(formData);
 
-      // ===================== Section B =====================
-      formData.append("primaryContactName", formB.headOfOrganizationName || "");
-      formData.append("jobTitle", formB.jobTitle || "");
-      formData.append("email", formB.email || "");
-      formData.append("phone", formB.phone || "");
-      formData.append("website", formB.companyWebsite || "");
-      formData.append("PostalAddress", formB.companyAddress || "");
-      formData.append("CompanyEmail", formB.contactEmail || "");
-      formData.append("CompanyPhone", formB.contactPhone || "");
-
-      // ===================== Section C =====================
-      formData.append("nominatedRepresentative", formC.nominatedRepName || "");
-      formData.append("position", formC.nominatedRepPosition || "");
-      formData.append("NomPhone", formC.nominatedRepPhone || "");
-      formData.append("NomEmail", formC.nominatedRepEmail || "");
-      formData.append("alternateRepresentative", formC.alternateRepName || "");
-      formData.append("altPosition", formC.altPositionRole || "");
-      formData.append("AltPhone", formC.altPhoneNumber || "");
-      formData.append("AltEmail", formC.altEmailAddress || "");
-
-      // ===================== Section D =====================
-      formData.append("agreesConstitution", !!formD.agreesConstitution);
-      formData.append("accurateInformation", !!formD.accurateInformation);
-      formData.append("commitsParticipation", !!formD.commitsParticipation);
-      formData.append("agreesFeePayment", !!formD.agreesFeePayment);
-      formData.append("BosagApproval", !!formD.BosagApproval);
-
-      // ===================== Section E =====================
-      if (formE.files?.registrationCertificate) formData.append("registrationCertificate", formE.files.registrationCertificate);
-      if (formE.files?.logo) formData.append("logo", formE.files.logo);
-      if (formE.files?.brochure) formData.append("brochure", formE.files.brochure);
+      // Section E: companyProfile (text) + files
       formData.append("companyProfile", formE.companyProfile || "");
-
-      // ===================== Section F =====================
-      formData.append("representativeName", formC.nominatedRepName || "");
-      formData.append("authorizedSignatory", formF.authorizedSignatory || "");
-      formData.append("dateSigned", new Date().toISOString().split("T")[0]);
-
-      // ===================== Submit =====================
-      await axios.put(
-        "https://bosag-backend.onrender.com/onboarding/update",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
+      Object.entries(filesForBackend).forEach(([key, file]) => {
+        if (file) {
+          formData.append(key, file);
         }
+      });
+
+      // Section F
+      const formF = JSON.parse(localStorage.getItem("formF")) || {};
+      formData.append("acknowledged", formF.acknowledged ? "true" : "false");
+
+      // Submit to backend
+      await bosagApi.post("/onboarding/submit", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // ✅ Clear localStorage
+      ["formA", "formB", "formC", "formD", "formE", "formF", "completedSteps"].forEach((key) =>
+        localStorage.removeItem(key)
       );
 
       toast.success("✅ Application submitted successfully!");
-      navigate("/onboarding/application");
+      navigate("/onboarding/application"); // ✅ Always route here on success
     } catch (err) {
-      console.error(err);
-      setError(err.message);
-      toast.error(`❌ Error: ${err.message}`);
+      console.error("Submission error:", err);
+      const message =
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to submit application. Please try again.";
+      toast.error(`❌ ${message}`);
+      setError(message);
     } finally {
       setSubmitting(false);
     }
   };
 
+  // ==================== CONVERT BASE64 TO FILE OBJECTS ====================
+  const convertFilesForBackend = async (files) => {
+    const result = {};
+    for (const [key, value] of Object.entries(files || {})) {
+      if (!value || typeof value !== "string") continue;
+
+      // Handle Base64 strings (from FormStep5)
+      if (value.startsWith("")) {
+        try {
+          const mimeType = value.match(/^([^;]+);/)?.[1] || "application/octet-stream";
+          const ext = mimeType.split("/")[1] || "bin";
+          const filename = `${key}.${ext}`;
+
+          const res = await fetch(value);
+          const blob = await res.blob();
+          result[key] = new File([blob], filename, { type: mimeType });
+        } catch (err) {
+          console.warn(`⚠️ Failed to convert ${key} from Base64`, err);
+          // Skip invalid files
+        }
+      }
+      // Ignore blob: URLs or non-string values (not used anymore)
+    }
+    return result;
+  };
+
+  // ==================== SECTION APPENDERS ====================
+  const appendFormA = (formData) => {
+    const formA = JSON.parse(localStorage.getItem("formA")) || {};
+    formData.append("organizationName", formA.organizationName || "");
+    if (formA.yearEstablished) formData.append("yearEstablished", formA.yearEstablished.toString());
+    formData.append("registrationNumber", formA.registrationNumber || "");
+    if (Array.isArray(formA.organizationType)) {
+      formA.organizationType.forEach((type) => formData.append("organizationType[]", type));
+    } else if (formA.organizationType) {
+      formData.append("organizationType[]", formA.organizationType);
+    }
+    if (formA.organizationType?.includes("Other")) {
+      formData.append("otherOrganizationType", formA.otherOrganizationType || "");
+    }
+    formData.append("membershipTier", formA.membershipTier || "");
+    formData.append("sectorFocus", formA.sectorFocus || "");
+    if (formA.employeesGhana !== undefined) formData.append("employeesGhana", formA.employeesGhana.toString());
+    if (formA.employeesGlobal !== undefined) formData.append("employeesGlobal", formA.employeesGlobal.toString());
+  };
+
+  const appendFormBC = (formData) => {
+    const formB = JSON.parse(localStorage.getItem("formB")) || {};
+    const formC = JSON.parse(localStorage.getItem("formC")) || {};
+    Object.entries(formB).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) formData.append(key, value.toString());
+    });
+    Object.entries(formC).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) formData.append(key, value.toString());
+    });
+  };
+
+  const appendFormD = (formData) => {
+    const formD = JSON.parse(localStorage.getItem("formD")) || {};
+    Object.entries(formD).forEach(([key, value]) => {
+      if (typeof value === "boolean") {
+        formData.append(key, value ? "true" : "false");
+      }
+    });
+  };
+
+  // ==================== UI (UNCHANGED) ====================
   return (
     <div className="flex bg-gray-50 min-h-screen">
       <Toaster position="top-right" />
@@ -132,26 +168,8 @@ export default function SummaryPage() {
       </aside>
 
       <main className="flex-1 ml-64 px-10 py-10">
-        <div className="mb-6">
-          <h1 className="text-[#191970] font-bold text-2xl">
-            Application Review: Final Submission
-          </h1>
-          <p className="text-gray-600 mt-1">
-            Please verify all information below is accurate before submitting your application for Due Diligence.
-          </p>
-        </div>
+        <Header error={error} />
 
-        {error && (
-          <div className="bg-red-50 border border-red-300 text-red-800 px-5 py-3 rounded-md mb-8 text-sm">
-            ❌ <span className="font-semibold">Error:</span> {error}
-          </div>
-        )}
-
-        <div className="bg-green-50 border border-green-300 text-green-800 px-5 py-3 rounded-md mb-8 text-sm font-medium">
-          ✅ <span className="font-semibold">Status:</span> All Sections Completed & Ready for Submission
-        </div>
-
-        {/* Summary Sections */}
         <SummarySection title="Section A: Organisational Details" data={forms.formA} onEdit={() => handleEdit("/onboarding/form-a")} />
         <SummarySection title="Section B: Organization Contact Information" data={forms.formB} onEdit={() => handleEdit("/onboarding/form-b")} />
         <SummarySection title="Section C: Governance and Representation" data={forms.formC} onEdit={() => handleEdit("/onboarding/form-c")} />
@@ -181,9 +199,26 @@ export default function SummaryPage() {
   );
 }
 
-// ===================== SUMMARY SECTION =====================
+// ==================== HEADER ====================
+const Header = ({ error }) => (
+  <div className="mb-6">
+    <h1 className="text-[#191970] font-bold text-2xl">Application Review: Final Submission</h1>
+    <p className="text-gray-600 mt-1">Please verify all information below is accurate before submitting.</p>
+    {error && (
+      <div className="bg-red-50 border border-red-300 text-red-800 px-5 py-3 rounded-md mt-3 text-sm">
+        ❌ <span className="font-semibold">Error:</span> {error}
+      </div>
+    )}
+    <div className="bg-green-50 border border-green-300 text-green-800 px-5 py-3 rounded-md mt-3 text-sm font-medium">
+      ✅ <span className="font-semibold">Status:</span> All Sections Completed & Ready for Submission
+    </div>
+  </div>
+);
+
+// ==================== SUMMARY SECTION ====================
 const SummarySection = ({ title, data, onEdit }) => {
   if (!data || Object.keys(data).length === 0) return null;
+
   const isSectionD = title.includes("Commitment and Declarations");
   const isSectionE = title.startsWith("Section E");
   const isSectionF = title.includes("Consent and Disclaimer");
@@ -196,87 +231,99 @@ const SummarySection = ({ title, data, onEdit }) => {
           onClick={onEdit}
           className="flex items-center gap-1.5 text-[#d97706] border border-[#d97706] px-3 py-1.5 rounded text-xs font-medium hover:bg-[#d97706] hover:text-white transition"
         >
-          <span>✎</span> Edit Section
+          ✎ Edit Section
         </button>
       </div>
 
-      {/* Section content */}
-      {isSectionD ? (
-        <div className="space-y-4 text-sm">
-          {Object.entries(data)
-            .filter(([key]) => key !== "files" && key !== "attachments")
-            .map(([key, value]) => (
-              <div key={key} className="pb-2">
-                <p className="text-gray-700 mb-1">{formatDeclarationLabel(key)}</p>
-                <p className="text-teal-600 font-medium">{value ? "Confirmed" : "Not Confirmed"}</p>
-              </div>
-            ))}
-        </div>
-      ) : isSectionE ? (
-        <div className="space-y-6 text-sm">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <p className="text-gray-600 text-sm mb-1">Company Profile Overview Statement (Text)</p>
-              <p className="text-gray-900 font-medium">{data.companyProfile ? `${data.companyProfile.trim().split(/\s+/).length}/500 words entered` : "No text provided"}</p>
-            </div>
-            <div>
-              <p className="text-gray-600 text-sm mb-1">Company Registration Certificate</p>
-              <p className="font-medium">{data.files?.registrationCertificate ? <span className="text-teal-600">File Uploaded: {data.files.registrationCertificate.name}</span> : <span className="text-gray-500">No File Uploaded</span>}</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <p className="text-gray-600 text-sm mb-1">Logo (High-res PNG or vector)</p>
-              <p className="font-medium">{data.files?.logo ? <span className="text-teal-600">File Uploaded: {data.files.logo.name}</span> : <span className="text-gray-500">No File Uploaded</span>}</p>
-            </div>
-            <div>
-              <p className="text-gray-600 text-sm mb-1">Relevant Brochure or Marketing Material (Optional)</p>
-              <p className="font-medium">{data.files?.marketingMaterial ? <span className="text-teal-600">File Uploaded: {data.files.marketingMaterial.name}</span> : <span className="text-gray-500">No File Uploaded</span>}</p>
-            </div>
-          </div>
-        </div>
-      ) : isSectionF ? (
-        <div className="text-sm">
-          <div className="pb-2">
-            <p className="text-gray-700 mb-1">Terms Acknowledgement</p>
-            <p className="font-medium">{data.acknowledged ? <span className="text-teal-600">Confirmed</span> : <span className="text-gray-500">Not Confirmed</span>}</p>
-          </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm">
-          {Object.entries(data)
-            .filter(([key]) => key !== "files" && key !== "attachments")
-            .map(([key, value]) => (
-              <div key={key}>
-                <p className="text-gray-600 text-sm mb-1">{formatLabel(key)}</p>
-                <p className="text-gray-900 font-medium">{formatValue(value)}</p>
-              </div>
-            ))}
-        </div>
-      )}
+      {isSectionD ? <SectionD data={data} /> : isSectionE ? <SectionE data={data} /> : isSectionF ? <SectionF data={data} /> : <GenericSection data={data} />}
     </div>
   );
 };
 
-// ===================== HELPER FUNCTIONS =====================
+// ==================== SECTION COMPONENTS ====================
+const SectionD = ({ data }) => (
+  <div className="space-y-4 text-sm">
+    {Object.entries(data)
+      .filter(([key]) => !["files", "attachments"].includes(key))
+      .map(([key, value]) => (
+        <div key={key} className="pb-2">
+          <p className="text-gray-700 mb-1">{formatDeclarationLabel(key)}</p>
+          <p className="text-teal-600 font-medium">{value ? "Confirmed" : "Not Confirmed"}</p>
+        </div>
+      ))}
+  </div>
+);
+
+const SectionE = ({ data }) => (
+  <div className="space-y-6 text-sm">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div>
+        <p className="text-gray-600 text-sm mb-1">Company Profile Overview</p>
+        <p className="text-gray-900 font-medium">
+          {data.companyProfile ? `${data.companyProfile.trim().split(/\s+/).length}/500 words` : "Not provided"}
+        </p>
+      </div>
+      <div>
+        <p className="text-gray-600 text-sm mb-1">Registration Certificate</p>
+        <p className="font-medium text-teal-600">{data.files?.registrationCertificate ? "File Selected" : "Missing"}</p>
+      </div>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div>
+        <p className="text-gray-600 text-sm mb-1">Logo</p>
+        <p className="font-medium text-teal-600">{data.files?.logo ? "File Selected" : "Missing"}</p>
+      </div>
+      <div>
+        <p className="text-gray-600 text-sm mb-1">Brochure</p>
+        <p className="font-medium">{data.files?.brochure ? "File Selected" : "Not provided (optional)"}</p>
+      </div>
+    </div>
+  </div>
+);
+
+const SectionF = ({ data }) => (
+  <div className="text-sm">
+    <div className="pb-2">
+      <p className="text-gray-700 mb-1">Terms Acknowledgement</p>
+      <p className="font-medium">{data.acknowledged ? <span className="text-teal-600">Confirmed</span> : <span className="text-gray-500">Not Confirmed</span>}</p>
+    </div>
+  </div>
+);
+
+const GenericSection = ({ data }) => (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm">
+    {Object.entries(data)
+      .filter(([key]) => !["files", "attachments"].includes(key))
+      .map(([key, value]) => (
+        <div key={key}>
+          <p className="text-gray-600 text-sm mb-1">{formatLabel(key)}</p>
+          <p className="text-gray-900 font-medium">{formatValue(value)}</p>
+        </div>
+      ))}
+  </div>
+);
+
+// ==================== HELPERS ====================
 function formatLabel(label) {
-  return label.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase()).replaceAll("_", " ");
+  return label
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (str) => str.toUpperCase())
+    .replaceAll("_", " ");
 }
 
 function formatDeclarationLabel(label) {
   const labelMap = {
     agreesConstitution: "Reviewed and agreed to abide by the BOSAG Constitution",
-    accurateInformation: "Confirm that all information provided in this application is accurate and complete",
-    commitsParticipation: "Commit to active participation in BOSAG activities and initiatives",
-    agreesFeePayment: "Agree to pay membership fees as determined by the BOSAG Board",
-    BosagApproval: "Understand that membership is subject to approval by the BOSAG Board",
+    accurateInformation: "Confirm that all information provided is accurate",
+    commitsParticipation: "Commit to active participation in BOSAG activities",
+    agreesFeePayment: "Agree to pay membership fees as determined",
+    BosagApproval: "Understand membership is subject to BOSAG Board approval",
   };
   return labelMap[label] || formatLabel(label);
 }
 
 function formatValue(value) {
-  if (typeof value === "boolean") return value ? <span className="text-teal-600 font-medium">Confirmed</span> : <span className="text-gray-500">Not Confirmed</span>;
+  if (typeof value === "boolean") return value ? "Confirmed" : "Not Confirmed";
   if (Array.isArray(value)) return value.join(", ") || "—";
-  if (typeof value === "string") return value.trim() || "—";
-  return "—";
+  return value?.toString().trim() || "—";
 }
