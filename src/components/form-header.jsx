@@ -17,7 +17,6 @@ const FormProgressBar = ({ currentStep }) => {
     text: "#FF6600",
   });
 
-  // 👇 new: track scroll position to shrink/hide progress bar
   const [isShrunk, setIsShrunk] = useState(false);
 
   useEffect(() => {
@@ -26,9 +25,9 @@ const FormProgressBar = ({ currentStep }) => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY > lastScrollY && currentScrollY > 50) {
-        setIsShrunk(true); // scrolling down → shrink
+        setIsShrunk(true);
       } else {
-        setIsShrunk(false); // scrolling up → restore
+        setIsShrunk(false);
       }
       lastScrollY = currentScrollY;
     };
@@ -55,9 +54,8 @@ const FormProgressBar = ({ currentStep }) => {
 
   return (
     <div
-      className={`w-full bg-white border-b border-gray-200 px-4 py-6 md:px-10 rounded-t-xl transition-all duration-500 ${
-        isShrunk ? "py-2 opacity-80 scale-[0.98]" : "py-6 opacity-100 scale-100"
-      }`}
+      className={`w-full bg-white border-b border-gray-200 px-4 py-6 md:px-10 rounded-t-xl transition-all duration-500 ${isShrunk ? "py-2 opacity-80 scale-[0.98]" : "py-6 opacity-100 scale-100"
+        }`}
     >
       <div className="max-w-6xl mx-auto flex flex-col gap-4">
         <div className="flex items-center justify-between">
@@ -94,32 +92,31 @@ const FormProgressBar = ({ currentStep }) => {
               >
                 {index > 0 && (
                   <div
-                    className={`absolute top-4 left-[-50%] w-full h-[2px] ${
-                      isCompleted
-                        ? "bg-[#0A0A3A]"
-                        : isCurrent
+                    className={`absolute top-4 left-[-50%] w-full h-[2px] z-0 ${isCompleted
+                      ? "bg-[#0A0A3A]"
+                      : isCurrent
                         ? "bg-[#FF6600]"
                         : "bg-[#D9D9D9]"
-                    }`}
+                      }`}
                   />
+
                 )}
 
                 <div
-                  className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-semibold border transition-all duration-300 ${
-                    isCompleted
+                  className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-semibold border transition-all duration-300 z-10 ${isCompleted
                       ? "bg-[#0A0A3A] border-[#0A0A3A] text-white"
                       : isCurrent
-                      ? "bg-[#FF6600] border-[#FF6600] text-white"
-                      : "bg-white border-[#0A0A3A] text-[#0A0A3A]"
-                  }`}
+                        ? "bg-[#FF6600] border-[#FF6600] text-white"
+                        : "bg-white border-[#0A0A3A] text-[#0A0A3A]"
+                    }`}
                 >
                   {step.id}
                 </div>
 
+
                 <p
-                  className={`mt-1 text-[12px] font-medium ${
-                    isCurrent ? "text-[#FF6600]" : "text-[#0A0A3A]"
-                  }`}
+                  className={`mt-1 text-[12px] font-medium ${isCurrent ? "text-[#FF6600]" : "text-[#0A0A3A]"
+                    }`}
                 >
                   {step.label}
                 </p>
