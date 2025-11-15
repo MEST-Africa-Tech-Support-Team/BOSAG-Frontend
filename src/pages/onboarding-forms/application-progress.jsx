@@ -152,7 +152,6 @@ const Submitted = () => {
               </div>
 
               <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* ✅ View Summary Card — Clean & Functional */}
                 <div className="border border-gray-200 rounded-md p-6 flex flex-col justify-between">
                   <div>
                     <h3 className="text-sm font-semibold text-[#0a0a3a] mb-2">
@@ -169,7 +168,6 @@ const Submitted = () => {
                   </Link>
                 </div>
 
-                {/* Contact Us Card */}
                 <div className="border border-gray-200 rounded-md p-6 flex flex-col justify-between">
                   <div>
                     <h3 className="text-sm font-semibold text-[#0a0a3a] mb-2">

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Crown, Building, Users, User } from "lucide-react";
 import Sidebar from "../../components/sidebar.jsx";
-import bosagApi from "../../api/bosagApi"; // Adjust path as needed
+import bosagApi from "../../api/bosagApi";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 const CompanyProfileSettings = () => {
   const [activeTab, setActiveTab] = useState("Company Info");
@@ -16,16 +17,17 @@ const CompanyProfileSettings = () => {
     numberOfEmployees: "",
   });
 
-  // Fetch user profile on mount
+  const fileInputRef = useRef(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await bosagApi.get("/onboarding/me"); // or /auth/me
+        const response = await bosagApi.get("/onboarding/me");
         const userData = response.data;
 
         setUser(userData);
 
-        // Populate form with real data (use empty string if missing)
         setFormData({
           companyName: userData.organizationName || "",
           companyAddress: userData.companyAddress || "",
@@ -36,9 +38,8 @@ const CompanyProfileSettings = () => {
           ),
         });
       } catch (error) {
-        console.error("Failed to fetch user profile:", error);
         toast.error("Unable to load profile. Please log in again.");
-        // Redirect to login if needed
+        navigate("/auth/login");
       } finally {
         setLoading(false);
       }
@@ -47,7 +48,6 @@ const CompanyProfileSettings = () => {
     fetchUserProfile();
   }, []);
 
-  // Helper: Convert employee count to range string
   const getEmployeeRange = (count) => {
     if (count <= 10) return "1-10";
     if (count <= 50) return "11-50";
@@ -56,6 +56,13 @@ const CompanyProfileSettings = () => {
     if (count <= 500) return "251-500";
     if (count <= 1000) return "501-1000";
     return "1000+";
+  };
+
+  const getInitials = (name) => {
+    if (!name) return "U";
+    const parts = name.trim().split(" ");
+    if (parts.length === 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
   };
 
   const handleInputChange = (e) => {
@@ -68,36 +75,42 @@ const CompanyProfileSettings = () => {
 
   const handleSaveChanges = async () => {
     try {
-      // Prepare payload for update
       const payload = new FormData();
       payload.append("organizationName", formData.companyName);
       payload.append("companyAddress", formData.companyAddress);
       payload.append("companyWebsite", formData.website);
       payload.append("sectorFocus", formData.sectorFocus);
-      // Note: numberOfEmployees is derived; you may not send it back
 
-      // Add all required fields from original schema to avoid validation errors
-      // (You may need to fetch full data and merge)
-      await bosagApi.put("/onboarding/update", payload, {
+      const response = await bosagApi.put("/onboarding/update", payload, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      toast.success("✅ Changes saved successfully!");
+      toast.success("Changes saved successfully!");
     } catch (error) {
-      console.error("Save failed:", error);
-      toast.error("Failed to save changes. Please try again.");
+      toast.error("Failed to save changes.");
     }
   };
 
   const handleUploadDocument = () => {
-    // You can implement file upload here later
-    toast.info("Document upload coming soon!");
+    fileInputRef.current.click();
   };
 
-  // Extract first name from full name
-  const getFirstName = (fullName) => {
-    if (!fullName) return "User";
-    return fullName.split(" ")[0] || "User";
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      const form = new FormData();
+      form.append("document", file);
+
+      await bosagApi.post("/documents/upload", form, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      toast.success("Document uploaded successfully!");
+    } catch (error) {
+      toast.error("Failed to upload document.");
+    }
   };
 
   if (loading) {
@@ -110,29 +123,32 @@ const CompanyProfileSettings = () => {
 
   return (
     <div className="flex min-h-screen bg-[#F9FAFB] font-sans">
-      {/* Sidebar */}
+      
       <div className="fixed left-0 top-0 h-full z-10">
         <Sidebar />
       </div>
 
-      {/* Main content */}
+      
       <div className="flex-1 flex flex-col ml-64">
-        {/* Navbar */}
+        
         <div className="flex justify-end items-center h-16 px-8 bg-white border-b border-gray-200 shadow-sm">
           <div className="flex items-center space-x-3">
             <span className="text-[#F58220] text-sm">●</span>
+
+            
             <div className="w-9 h-9 rounded-full bg-[#1a1f71] flex items-center justify-center text-white text-sm font-medium">
-              <User size={16} />
+              {getInitials(user?.headOfOrganizatioName || user?.name)}
             </div>
+
             <span className="font-medium text-gray-800 text-sm">
-              {user ? getFirstName(user.headOfOrganizatioName || user.name || "User") : "User"}
+              {user?.headOfOrganizatioName || user?.name}
             </span>
           </div>
         </div>
 
-        {/* Page content */}
+       
         <div className="p-6 md:p-8 max-w-4xl w-full">
-          {/* Header */}
+          
           <div className="mb-6">
             <h1 className="text-2xl font-semibold text-gray-900">
               Manage Company Profile & Settings
@@ -142,7 +158,6 @@ const CompanyProfileSettings = () => {
             </p>
           </div>
 
-          {/* Platinum Member Badge (you can fetch tier from user data) */}
           <div className="bg-gradient-to-r from-[#F58220] to-[#ff9940] rounded-lg p-5 mb-6 flex items-center justify-between text-white">
             <div className="flex items-center gap-3">
               <div className="bg-white/20 p-2 rounded-lg">
@@ -152,19 +167,19 @@ const CompanyProfileSettings = () => {
                 <h3 className="font-semibold text-base">
                   {user?.membershipTier || "Member"}
                 </h3>
-                <p className="text-sm text-white/90">Membership with full access</p>
+                <p className="text-sm text-white/90">
+                  Membership with full access
+                </p>
               </div>
             </div>
-            {/* Optional: show expiry if available */}
             <div className="text-right">
               <p className="text-xs text-white/80">Status</p>
               <p className="font-semibold">Active</p>
             </div>
           </div>
 
-          {/* Main Card */}
           <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-            {/* Tabs */}
+            
             <div className="border-b border-gray-200 px-6">
               <div className="flex gap-6">
                 <button
@@ -180,6 +195,7 @@ const CompanyProfileSettings = () => {
                     <span>Company Info</span>
                   </div>
                 </button>
+
                 <button
                   onClick={() => setActiveTab("Contacts")}
                   className={`py-4 px-2 text-sm font-medium border-b-2 transition-colors ${
@@ -196,7 +212,6 @@ const CompanyProfileSettings = () => {
               </div>
             </div>
 
-            {/* Form Content */}
             {activeTab === "Company Info" && (
               <div className="p-6 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -209,9 +224,10 @@ const CompanyProfileSettings = () => {
                       name="companyName"
                       value={formData.companyName}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#1a1f71] focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[#1a1f71]"
                     />
                   </div>
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Website
@@ -221,7 +237,7 @@ const CompanyProfileSettings = () => {
                       name="website"
                       value={formData.website}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#1a1f71] focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[#1a1f71]"
                     />
                   </div>
                 </div>
@@ -235,7 +251,7 @@ const CompanyProfileSettings = () => {
                     name="companyAddress"
                     value={formData.companyAddress}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#1a1f71] focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[#1a1f71]"
                   />
                 </div>
 
@@ -249,9 +265,10 @@ const CompanyProfileSettings = () => {
                       name="sectorFocus"
                       value={formData.sectorFocus}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#1a1f71] focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[#1a1f71]"
                     />
                   </div>
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Number of Employees (Ghana)
@@ -260,7 +277,7 @@ const CompanyProfileSettings = () => {
                       name="numberOfEmployees"
                       value={formData.numberOfEmployees}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#1a1f71] focus:border-transparent bg-white"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:ring-2 focus:ring-[#1a1f71]"
                     >
                       <option value="1-10">1-10</option>
                       <option value="11-50">11-50</option>
@@ -273,16 +290,24 @@ const CompanyProfileSettings = () => {
                   </div>
                 </div>
 
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  onChange={handleFileUpload}
+                />
+
                 <div className="flex gap-3 pt-4">
                   <button
                     onClick={handleUploadDocument}
-                    className="px-5 py-2.5 bg-[#F58220] text-white text-sm font-medium rounded-md hover:bg-[#e37010] transition-all"
+                    className="px-5 py-2.5 bg-[#F58220] text-white text-sm font-medium rounded-md hover:bg-[#e37010]"
                   >
                     Update Document
                   </button>
+
                   <button
                     onClick={handleSaveChanges}
-                    className="px-5 py-2.5 bg-[#1a1f71] text-white text-sm font-medium rounded-md hover:bg-[#151a5f] transition-all"
+                    className="px-5 py-2.5 bg-[#1a1f71] text-white text-sm font-medium rounded-md hover:bg-[#151a5f]"
                   >
                     Save Changes
                   </button>
@@ -291,19 +316,21 @@ const CompanyProfileSettings = () => {
             )}
 
             {activeTab === "Contacts" && (
-              <div className="p-6">
-                <div className="text-center py-12">
-                  <Users size={48} className="mx-auto text-gray-400 mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">
-                    Manage Your Contacts
-                  </h3>
-                  <p className="text-gray-600 text-sm mb-6">
-                    Add and manage company contacts and representatives
-                  </p>
-                  <button className="px-5 py-2.5 bg-[#1a1f71] text-white text-sm font-medium rounded-md hover:bg-[#151a5f] transition-all">
-                    Add New Contact
-                  </button>
-                </div>
+              <div className="p-6 text-center">
+                <Users size={48} className="mx-auto text-gray-400 mb-4" />
+
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  Manage Your Contacts
+                </h3>
+                <p className="text-gray-600 text-sm mb-6">
+                  Add and manage company contacts and representatives
+                </p>
+
+                <button
+                  className="px-5 py-2.5 bg-[#1a1f71] text-white text-sm font-medium rounded-md hover:bg-[#151a5f]"
+                >
+                  Add New Contact
+                </button>
               </div>
             )}
           </div>

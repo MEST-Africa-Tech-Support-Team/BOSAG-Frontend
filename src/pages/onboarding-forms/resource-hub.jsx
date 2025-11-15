@@ -1,48 +1,92 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, Download } from "lucide-react";
+import { useNavigate } from "react-router";
 import Sidebar from "../../components/sidebar.jsx";
+import bosagApi from "../../api/bosagApi.js";
 
 const MemberResourceHub = () => {
+  const navigate = useNavigate();
+
   const tabs = ["All", "Annual Reports", "Quarterly Dashboards", "Case Studies"];
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
+ 
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    checkAuth();  
+    fetchUser();
+  }, []);
+
+  
+  async function checkAuth() {
+    try {
+      await bosagApi.get("/user/profile");
+    } catch (error) {
+      console.log("Auth failed → redirecting to login");
+      navigate("/login");
+    }
+  }
+
+  async function fetchUser() {
+    try {
+      const res = await bosagApi.get("/user/profile");
+      setUser(res.data);
+    } catch (err) {
+      console.log("Error fetching user:", err);
+    }
+  }
+
+  const fullName = user ? `${user.firstName} ${user.lastName}` : "Loading...";
+  const initials =
+    user && user.firstName && user.lastName
+      ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
+      : "";
+
+  
   const documents = [
     {
       title: "2023 State-of-Sector Report",
       date: "December 15, 2023",
       desc: "Comprehensive analysis of sector performance and market trends.",
       category: "Annual Reports",
+      file: "/docs/report1.pdf",
     },
     {
       title: "Q4 2023 Dashboard",
       date: "January 5, 2024",
       desc: "Key performance indicators and quarterly summaries.",
       category: "Quarterly Dashboards",
+      file: "/docs/dashboard_q4.pdf",
     },
     {
       title: "Cost Analysis Study 2024",
       date: "January 8, 2024",
       desc: "Detailed cost structure analysis and operational benchmarks.",
       category: "Case Studies",
+      file: "/docs/case_study.pdf",
     },
     {
       title: "Market Outlook 2024",
       date: "March 4, 2024",
       desc: "Forward-looking analysis of market conditions and opportunities.",
       category: "Annual Reports",
+      file: "/docs/outlook_2024.pdf",
     },
     {
       title: "Regulatory Update Brief",
       date: "March 8, 2024",
       desc: "Latest regulatory changes and compliance requirements.",
       category: "Quarterly Dashboards",
+      file: "/docs/regulatory_update.pdf",
     },
     {
       title: "Q1 2024 Performance",
       date: "March 12, 2024",
       desc: "Quarterly performance metrics and trend analysis.",
       category: "Quarterly Dashboards",
+      file: "/docs/q1_perf.pdf",
     },
   ];
 
@@ -54,33 +98,42 @@ const MemberResourceHub = () => {
     return matchesTab && matchesSearch;
   });
 
+  
+  const handleDownload = (fileUrl) => {
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = fileUrl.split("/").pop();
+    link.click();
+  };
+
   return (
     <div className="flex min-h-screen bg-[#F9FAFB] font-sans">
-      {/* Sidebar */}
+      
       <div className="fixed left-0 top-0 h-full z-10">
         <Sidebar />
       </div>
 
-      {/* Main content */}
+      
       <div className="flex-1 flex flex-col ml-64">
-        {/* Navbar */}
+       
         <div className="flex justify-end items-center h-16 px-8 bg-white border-b border-gray-200 shadow-sm">
           <div className="flex items-center space-x-3">
             <span className="text-[#F58220] text-sm">●</span>
-            <img
-              src="https://randomuser.me/api/portraits/women/44.jpg"
-              alt="User"
-              className="w-9 h-9 rounded-full object-cover"
-            />
+
+            
+            <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center font-semibold text-gray-700">
+              {initials}
+            </div>
+
             <span className="font-medium text-gray-800 text-sm">
-              Sarah Johnson
+              {fullName}
             </span>
           </div>
         </div>
 
-        {/* Page content */}
+        
         <div className="p-6 md:p-8 max-w-6xl w-full space-y-6">
-          {/* Header */}
+         
           <div>
             <h1 className="text-xl md:text-2xl font-semibold text-gray-900">
               Exclusive Member Resource Hub
@@ -90,7 +143,6 @@ const MemberResourceHub = () => {
             </p>
           </div>
 
-          {/* Featured Article */}
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
             <div className="flex flex-col md:flex-row">
               <img
@@ -109,26 +161,26 @@ const MemberResourceHub = () => {
                   Musa Interview: 2024 Market Trends & Forecast
                 </h2>
                 <p className="text-gray-600 text-sm mb-4 leading-relaxed">
-                  Exclusive insights from industry leader Musa on emerging market opportunities, regulatory changes, and strategic positioning for the upcoming fiscal year. This comprehensive analysis covers key sectors and provides actionable recommendations.
+                  Exclusive insights from industry leader Musa on emerging market opportunities, regulatory changes, and strategic positioning for the upcoming fiscal year.
                 </p>
-                <button className="bg-[#F58220] text-white text-sm font-medium px-4 py-2 rounded hover:bg-[#e37010] transition-all">
+
+                <button
+                  onClick={() => navigate("/blog")}
+                  className="bg-[#F58220] text-white text-sm font-medium px-4 py-2 rounded hover:bg-[#e37010] transition-all"
+                >
                   Read Full Analysis
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Sector Research & Publications */}
           <div className="bg-white p-5 md:p-6 rounded-lg border border-gray-200 shadow-sm">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
               <h3 className="text-base md:text-lg font-semibold text-gray-900">
                 Sector Research & Publications
               </h3>
               <div className="relative mt-3 md:mt-0 w-full md:w-64">
-                <Search
-                  className="absolute left-3 top-2.5 text-gray-400"
-                  size={16}
-                />
+                <Search className="absolute left-3 top-2.5 text-gray-400" size={16} />
                 <input
                   type="text"
                   placeholder="Search documents..."
@@ -156,7 +208,6 @@ const MemberResourceHub = () => {
               ))}
             </div>
 
-            {/* Document grid */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredDocs.length > 0 ? (
                 filteredDocs.map((doc, i) => (
@@ -165,10 +216,14 @@ const MemberResourceHub = () => {
                     className="bg-gray-50 border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-all"
                   >
                     <div className="flex items-start justify-between mb-2">
-                      <div className="bg-white p-2 rounded border border-gray-200">
+                      <div
+                        className="bg-white p-2 rounded border border-gray-200 cursor-pointer"
+                        onClick={() => handleDownload(doc.file)}
+                      >
                         <Download size={18} className="text-gray-600" />
                       </div>
                     </div>
+
                     <h4 className="font-semibold text-gray-900 mb-1 text-sm">
                       {doc.title}
                     </h4>
@@ -176,7 +231,11 @@ const MemberResourceHub = () => {
                     <p className="text-xs text-gray-600 leading-relaxed mb-3">
                       {doc.desc}
                     </p>
-                    <button className="text-[#F58220] text-xs font-medium hover:underline">
+
+                    <button
+                      onClick={() => handleDownload(doc.file)}
+                      className="text-[#F58220] text-xs font-medium hover:underline"
+                    >
                       Download PDF
                     </button>
                   </div>
@@ -189,7 +248,6 @@ const MemberResourceHub = () => {
             </div>
           </div>
 
-          {/* Governance & Compliance */}
           <div className="bg-white p-5 md:p-6 rounded-lg border border-gray-200 shadow-sm">
             <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-4">
               Governance & Compliance
@@ -201,24 +259,28 @@ const MemberResourceHub = () => {
                   version: "v4.0",
                   updated: "January 16, 2024",
                   icon: "📄",
+                  file: "/docs/constitution.pdf",
                 },
                 {
                   title: "Code of Conduct and Ethics",
                   version: "v3.2",
                   updated: "February 1, 2024",
                   icon: "⚖️",
+                  file: "/docs/ethics.pdf",
                 },
                 {
                   title: "Membership Terms & Conditions",
                   version: "v2.8",
                   updated: "March 1, 2024",
                   icon: "📋",
+                  file: "/docs/terms.pdf",
                 },
                 {
                   title: "Governing Council Mandate",
                   version: "v3.2",
                   updated: "December 10, 2023",
                   icon: "📊",
+                  file: "/docs/mandate.pdf",
                 },
               ].map((doc, i) => (
                 <div
@@ -236,7 +298,11 @@ const MemberResourceHub = () => {
                       </p>
                     </div>
                   </div>
-                  <button className="text-[#F58220] text-xs font-medium hover:underline whitespace-nowrap">
+
+                  <button
+                    onClick={() => handleDownload(doc.file)}
+                    className="text-[#F58220] text-xs font-medium hover:underline whitespace-nowrap"
+                  >
                     View/Download
                   </button>
                 </div>

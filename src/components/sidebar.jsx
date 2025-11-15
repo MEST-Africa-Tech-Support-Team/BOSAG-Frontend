@@ -30,7 +30,7 @@ const Sidebar = () => {
   };
 
   const navItems = [
-    { name: "Dashboard", icon: <LayoutDashboard size={16} />, path: "/dashboard" },
+    { name: "Dashboard", icon: <LayoutDashboard size={16} />, path: "/dashboard-overview" },
     { name: "Member Resource Hub", icon: <BookOpen size={16} />, path: "/onboarding/resource-hub" },
     { name: "Manage Profile", icon: <User size={16} />, path: "/onboarding/manage-profile" },
   ];

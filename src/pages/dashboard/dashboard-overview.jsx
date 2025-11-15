@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   Bell,
@@ -8,40 +8,112 @@ import {
   Settings,
 } from "lucide-react";
 import Sidebar from "../../components/sidebar";
+import bosagApi from "../../api/bosagApi";
 
 export default function Dashboard() {
   const navigate = useNavigate();
 
+  const [user, setUser] = useState(null);
+  const [stats, setStats] = useState(null);
+  const [notifications, setNotifications] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+ 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    validateUser();
+  }, []);
+
+  
+  async function validateUser() {
+    try {
+      
+      await bosagApi.get("/auth/me");
+
+      
+      fetchDashboardData();
+    } catch (err) {
+      console.log("Auth failed:", err);
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+  }
+
+  async function fetchDashboardData() {
+    try {
+      const res = await bosagApi.get("/user/profile");
+      setUser(res.data);
+
+      const statRes = await bosagApi.get("/user/membership");
+      setStats(statRes.data);
+
+      const notifRes = await bosagApi.get("/notifications/unread-count");
+      setNotifications(notifRes.data.count);
+    } catch (error) {
+      console.log("Error loading dashboard:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const firstName = user?.firstName || "";
+  const lastName = user?.lastName || "";
+  const fullName = user ? `${firstName} ${lastName}` : "Loading...";
+  const initials =
+    user && firstName && lastName
+      ? `${firstName[0]}${lastName[0]}`.toUpperCase()
+      : "";
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#F9FAFB] text-gray-600">
+        Loading dashboard...
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-[#F9FAFB] text-gray-900">
-      {/* Sidebar */}
+      
       <aside className="hidden lg:block">
         <Sidebar />
       </aside>
 
-      {/* Main Dashboard */}
+      
       <main className="flex-1 lg:ml-64 flex flex-col">
-        {/* Navbar */}
+        
         <nav className="w-full bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center shadow-sm">
           <div className="text-[#1E1E2D] font-bold text-lg">
-            BOSAG <span className="font-normal text-gray-600">Dashboard</span>
+            B
+            <span className="text-orange-400">O</span>
+            SAG <span className="font-normal text-gray-600">Dashboard</span>
           </div>
 
           <div className="flex items-center space-x-6">
+            {/* Notifications */}
             <div className="relative">
               <Bell className="w-5 h-5 text-gray-600 cursor-pointer" />
-              <span className="absolute -top-1 -right-1 bg-[#F58220] text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
-                3
-              </span>
+              {notifications > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#F58220] text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                  {notifications}
+                </span>
+              )}
             </div>
 
+            {/* Profile */}
             <div className="flex items-center space-x-2 cursor-pointer">
-              <img
-                src="/avatar.jpg"
-                alt="Profile"
-                className="w-9 h-9 rounded-full object-cover"
-              />
-              <span className="font-medium text-gray-800 text-sm">Sarah Johnson</span>
+              <div className="w-9 h-9 bg-gray-300 rounded-full flex items-center justify-center text-sm font-semibold text-gray-700">
+                {initials}
+              </div>
+              <span className="font-medium text-gray-800 text-sm">
+                {fullName}
+              </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-4 h-4 text-gray-500"
@@ -60,11 +132,11 @@ export default function Dashboard() {
           </div>
         </nav>
 
-        {/* Header */}
+        
         <header className="flex justify-between items-center px-8 py-6">
           <div>
             <h1 className="text-2xl font-semibold text-[#1E1E2D]">
-              Welcome back, Sarah
+              Welcome back, {firstName || "Member"}
             </h1>
             <p className="text-gray-600 text-sm">
               Here’s what’s happening with your BOSAG membership today.
@@ -73,24 +145,36 @@ export default function Dashboard() {
 
           <div>
             <span className="text-sm font-medium text-green-700 bg-green-100 border border-green-200 px-3 py-1 rounded-md">
-              ● Active Member
+              ● {stats?.status || "Active Member"}
             </span>
           </div>
         </header>
 
-        {/* Main Content */}
         <div className="flex-1 px-8 pb-8 space-y-8 overflow-y-auto">
-          {/* Status Cards */}
           <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatusCard label="Membership Tier" value="Gold Member" badge="PREMIUM" />
-            <StatusCard label="Renewal Date" value="Mar 15, 2025" badge="ACTIVE" />
-            <StatusCard label="Governance Role" value="Committee" badge="ROLE" />
-            <StatusCard label="Events Attended" value="12 Events" badge="THIS YEAR" />
+            <StatusCard
+              label="Membership Tier"
+              value={stats?.tier || "..."}
+              badge="PREMIUM"
+            />
+            <StatusCard
+              label="Renewal Date"
+              value={stats?.renewalDate || "..."}
+              badge="ACTIVE"
+            />
+            <StatusCard
+              label="Governance Role"
+              value={stats?.governanceRole || "..."}
+              badge="ROLE"
+            />
+            <StatusCard
+              label="Events Attended"
+              value={`${stats?.eventsAttended ?? 0} Events`}
+              badge="THIS YEAR"
+            />
           </section>
 
-          {/* Exclusive Content + Events */}
           <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Exclusive Content */}
             <div className="bg-[#1E1E5A] text-white rounded-xl shadow-md p-6 space-y-4 lg:col-span-2">
               <span className="bg-[#F58220] text-white text-[11px] px-2 py-1 rounded font-semibold uppercase tracking-wide">
                 Exclusive Content
@@ -98,8 +182,9 @@ export default function Dashboard() {
 
               <h2 className="text-xl font-semibold">Musa Interview Analysis</h2>
               <p className="text-sm text-gray-200 leading-relaxed">
-                Get exclusive insights from our latest interview with industry leader Musa.
-                Deep-dive analysis covering market trends, strategic decisions, and future outlook.
+                Get exclusive insights from our latest interview with industry
+                leader Musa. Deep-dive analysis covering market trends,
+                strategic decisions, and future outlook.
               </p>
 
               <div className="flex items-center text-sm text-gray-300 space-x-4">
@@ -108,17 +193,19 @@ export default function Dashboard() {
               </div>
 
               <button
-                onClick={() => navigate("/analysis")}
+                onClick={() => navigate("/blog")}
                 className="mt-2 bg-[#F58220] hover:bg-[#e46f15] text-white px-5 py-2 rounded-md text-sm font-medium transition"
               >
                 Access Full Analysis →
               </button>
             </div>
 
-            {/* Upcoming Events */}
+            
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-base font-semibold text-[#1E1E2D]">Upcoming Events</h3>
+                <h3 className="text-base font-semibold text-[#1E1E2D]">
+                  Upcoming Events
+                </h3>
                 <button
                   onClick={() => navigate("/event")}
                   className="text-sm text-[#F58220] font-medium hover:underline"
@@ -153,9 +240,10 @@ export default function Dashboard() {
             </div>
           </section>
 
-          {/* Quick Actions */}
           <section>
-            <h3 className="text-lg font-semibold text-[#1E1E2D] mb-4">Quick Actions</h3>
+            <h3 className="text-lg font-semibold text-[#1E1E2D] mb-4">
+              Quick Actions
+            </h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <QuickAction
                 icon={<FileText size={20} />}
@@ -189,7 +277,6 @@ export default function Dashboard() {
   );
 }
 
-/* ---------------------- Reusable Components ---------------------- */
 
 const StatusCard = ({ label, value, badge }) => (
   <div className="bg-white border border-gray-200 shadow-sm rounded-xl p-5">
@@ -207,7 +294,9 @@ const EventCard = ({ date, month, title, type, time }) => (
   <div className="flex justify-between items-center py-3 hover:bg-gray-50 px-2 rounded-md transition">
     <div className="flex items-center space-x-4">
       <div className="text-center w-8">
-        <div className="text-[#F58220] text-lg font-bold leading-none">{date}</div>
+        <div className="text-[#F58220] text-lg font-bold leading-none">
+          {date}
+        </div>
         <div className="text-gray-500 text-[10px] uppercase">{month}</div>
       </div>
       <div>
